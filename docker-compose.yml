@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  db:
+    build:
+      context: ./db
+    restart: always
+
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
