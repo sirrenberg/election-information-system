@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:20 as build
+FROM node:20.9-bookworm as build
 
 # Set the working directory in the container
 WORKDIR /usr/src/app

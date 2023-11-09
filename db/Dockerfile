@@ -1,5 +1,5 @@
 # Use the official PostgreSQL image from Docker Hub
-FROM postgres:latest
+FROM postgres:16.0-bookworm
 
 # Set environment variables for PostgreSQL
 ENV POSTGRES_DB=mydatabase \
