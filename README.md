@@ -22,3 +22,13 @@ npm run dev
 ```
 
 click on http://localhost:5173/ and count up.
+
+## Setting Up Backend with TypeScript
+
+```
+npm init -y
+npm install --save-dev typescript
+npm install express
+npx tsc
+node dist/app.js
+```
