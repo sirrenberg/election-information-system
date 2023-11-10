@@ -16,5 +16,7 @@ COPY . .
 # Make port 3000 available to the world outside this container
 EXPOSE 3000
 
+RUN npm run build
+
 # Define the command to run your application
-CMD ["npm", "start"]
+CMD ["node", "./dist/app.js"]

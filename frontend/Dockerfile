@@ -1,29 +1,26 @@
 # Use an official Node.js runtime as a parent image
 FROM node:20.9-bookworm as build
 
-# Set the working directory in the container
-WORKDIR /usr/src/app
+# Set the working directory to /app
+WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy the package.json and package-lock.json files to the container
 COPY package*.json ./
 
-# Install app dependencies
+# Install dependencies
 RUN npm install
 
-# Copy the rest of the application code to the working directory
+# Copy the rest of the application files to the container
 COPY . .
 
-# Build the React app
+# Build the application
 RUN npm run build
 
-# Use Nginx for the production image
-FROM nginx:alpine
+# Set the NODE_ENV environment variable to "production"
+ENV NODE_ENV=production
 
-# Copy the build output from the build stage to the Nginx public directory
-COPY --from=build /usr/src/app/build /usr/share/nginx/html
+## EXPOSE [Port you mentioned in the vite.config file]
+EXPOSE 5173
 
-# Expose port 80 to the outside world
-EXPOSE 80
-
-# Define the command to run Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start the server
+CMD ["npm", "run", "dev"]

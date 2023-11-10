@@ -4,6 +4,8 @@ services:
   db:
     build:
       context: ./db
+    ports:
+      - "5432:5432"
     restart: always
 
   backend:
@@ -19,7 +21,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - "80:80"
+      - "5173:5173"
     depends_on:
       - backend
     restart: always
