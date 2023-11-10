@@ -32,3 +32,8 @@ npm install express
 npx tsc
 node dist/app.js
 ```
+
+## Create all three docker container at once.
+```
+docker compose up
+```
