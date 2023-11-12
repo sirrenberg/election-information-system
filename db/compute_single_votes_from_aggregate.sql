@@ -26,3 +26,6 @@ InsertRecursive AS (
 
 -- Select from DestinationTable to see the results
 SELECT kandidatenid, Iteration FROM InsertRecursive;
+
+INSERT INTO erststimmen (kandidatenid, stimmid)
+SELECT kandidatenid, Iteration AS stimmid FROM InsertRecursive;
