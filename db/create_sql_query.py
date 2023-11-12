@@ -1,11 +1,10 @@
-with open("data/stimmkreise.csv", "rw") as f:
-    data = f.read().split("\n")
+import pandas as pd
 
-string_builder = "INSERT INTO stimmkreise VALUES"
+# Specify the path to your CSV file
+csv_file_path = './data/ltw_2018_stimmbezirksergebnisse.csv'
 
-for line in data:
-    line = "(" + line + "),"
+# Read the CSV file into a DataFrame
+df = pd.read_csv(csv_file_path)
 
-data = data.join("")
-
-f.write(data)
+# Display the DataFrame
+print(df.columns)

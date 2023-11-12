@@ -33,9 +33,14 @@ CREATE TABLE IF NOT EXISTS hatgewaehlt(
 );
 
 CREATE TABLE IF NOT EXISTS Stimmkreise(
-    stimmkreisid INT,
-    name VARCHAR(64),
     wahlkreisid INT,
+    stimmkreisid INT,
+    name VARCHAR(64)
+);
+
+CREATE TABLE IF NOT EXISTS AnzWahlberechtigte(
+    stimmkreisid INT,
+    datum DATE,
     anzahlWahlberechtigte INT
 );
 
@@ -53,7 +58,7 @@ CREATE TABLE IF NOT EXISTS kandidaten(
 
 CREATE TABLE IF NOT EXISTS parteien(
     parteiid SERIAL PRIMARY KEY,
-    parteiname VARCHAR(64),
+    parteiname VARCHAR(128),
     kurzbezeichnung VARCHAR(64)
 );
 
