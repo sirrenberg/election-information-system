@@ -24,7 +24,6 @@ InsertRecursive AS (
         ir.Iteration + 1 <= (SELECT anzahlStimmen FROM AggregierteStimmkreisergebnisse WHERE kandidatenid = ir.kandidatenid)  -- Termination condition based on the anzahlStimmen in AggregierteStimmkreisergebnisse
 )
 
--- Select from DestinationTable to see the results
 SELECT kandidatenid, Iteration FROM InsertRecursive;
 
 INSERT INTO erststimmen (kandidatenid, stimmid)
