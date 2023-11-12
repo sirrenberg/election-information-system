@@ -20,4 +20,11 @@ INSERT INTO Parteien(parteiname, kurzbezeichnung) VALUES
     ('mut', 'mut'),
     ('Partei für Gesundheitsforschung', 'Gesundheitsforschung');
 
-INSERT INTO wahlkreise()
+INSERT INTO wahlkreise() VALUES 
+    (901,'Oberbayern'),
+    (902,'Niederbayern'), 
+    (903,'Oberpfalz'), 
+    (904,'Oberfranken'), 
+    (905,'Mittelfranken'), 
+    (906,'Unterfranken'), 
+    (907,'Schwaben');
