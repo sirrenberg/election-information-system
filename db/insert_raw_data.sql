@@ -1,3 +1,38 @@
+CREATE TABLE raw_data (
+    Schluessel INT, 
+    ErststimmenCSU INT, 
+    ErststimmenGRÜNE INT, 
+    ErststimmenFREIEWÄHLER INT, 
+    ErststimmenAfD INT, 
+    ErststimmenSPD INT, 
+    ErststimmenFDP INT, 
+    ErststimmenDIELINKE INT, 
+    ErststimmenBP INT, 
+    ErststimmenÖDP INT, 
+    ErststimmenDiePARTEI INT, 
+    ErststimmenTierschutzpartei INT, 
+    ErststimmenVPartei3 INT, 
+    ErststimmenPdH INT, 
+    ErststimmendieBasis INT, 
+    ErststimmenVolt INT, 
+    UngültigeErststimmen INT, 
+    ZweitsstimmenCSU INT, 
+    ZweitsstimmenGRÜNE INT, 
+    ZweitsstimmenFREIEWÄHLER INT, 
+    ZweitsstimmenAfD INT, 
+    ZweitsstimmenSPD INT, 
+    ZweitsstimmenFDP INT, 
+    ZweitsstimmenDIELINKE INT, 
+    ZweitsstimmenBP INT, 
+    ZweitsstimmenODP INT, 
+    ZweitsstimmenDiePARTEI INT, 
+    ZweitsstimmenTierschutzpartei INT, 
+    ZweitsstimmenVPartei3 INT, 
+    ZweitsstimmenPdH INT, 
+    ZweitsstimmendieBasis INT, 
+    ZweitsstimmenVolt INT, 
+    UngültigeZweitsstimmen INT);
+
 INSERT INTO raw_data(Schluessel, ErststimmenCSU, ErststimmenGRÜNE, ErststimmenFREIEWÄHLER, ErststimmenAfD, ErststimmenSPD, ErststimmenFDP, ErststimmenDIELINKE, ErststimmenBP, ErststimmenÖDP, ErststimmenDiePARTEI, ErststimmenTierschutzpartei, ErststimmenVPartei3, ErststimmenPdH, ErststimmendieBasis, ErststimmenVolt, UngültigeErststimmen, ZweitsstimmenCSU, ZweitsstimmenGRÜNE, ZweitsstimmenFREIEWÄHLER, ZweitsstimmenAfD, ZweitsstimmenSPD, ZweitsstimmenFDP, ZweitsstimmenDIELINKE, ZweitsstimmenBP, ZweitsstimmenODP, ZweitsstimmenDiePARTEI, ZweitsstimmenTierschutzpartei, ZweitsstimmenVPartei3, ZweitsstimmenPdH, ZweitsstimmendieBasis, ZweitsstimmenVolt, UngültigeZweitsstimmen) VALUES
 (101,139,144,25,55,63,15,11,2,11,7,6,0,5,8,5,2,118,144,37,55,59,18,12,1,11,7,8,0,6,8,5,10),
 (101,103,151,22,48,57,24,13,3,4,8,6,0,6,3,13,10,102,148,21,52,58,24,13,2,3,9,4,1,3,5,9,16),
@@ -18805,3 +18840,91 @@ INSERT INTO raw_data(Schluessel, ErststimmenCSU, ErststimmenGRÜNE, ErststimmenF
 (713,191,43,48,48,22,11,2,5,12,0,3,2,0,5,0,1,165,36,58,47,25,26,2,3,15,3,4,1,0,5,0,3),
 (713,195,49,43,46,34,7,5,0,13,0,1,1,0,2,0,1,166,51,46,51,27,24,3,0,19,3,3,0,0,1,0,3),
 (713,192,56,37,45,24,10,3,4,12,0,5,2,0,3,0,1,161,46,49,43,19,40,4,2,17,7,1,1,0,4,0,0);
+
+-- SELECT Schluessel AS stimmkreisid, sum(*) AS anzahlStimmen
+-- FROM raw_data
+-- GROUP BY Schluessel;
+
+CREATE TABLE raw_erststimmen(
+    stimmkreisid INT,
+    CSU INT,
+    GRÜNE INT,
+    FREIEWÄHLER INT,
+    AfD INT,
+    SPD INT,
+    FDP INT,
+    DIELINKE INT,
+    BP INT,
+    ODP INT,
+    DiePARTEI INT,
+    Tierschutzpartei INT,
+    VPartei3 INT,
+    PdH INT,
+    dieBasis INT,
+    Volt INT,
+    ungueltig INT
+);
+
+CREATE TABLE raw_zweitstimmen(
+        stimmkreisid INT,
+    CSU INT,
+    GRÜNE INT,
+    FREIEWÄHLER INT,
+    AfD INT,
+    SPD INT,
+    FDP INT,
+    DIELINKE INT,
+    BP INT,
+    ODP INT,
+    DiePARTEI INT,
+    Tierschutzpartei INT,
+    VPartei3 INT,
+    PdH INT,
+    dieBasis INT,
+    Volt INT,
+    ungueltig INT
+);
+
+INSERT INTO raw_erststimmen 
+SELECT Schluessel AS stimmkreisid, 
+    sum(ZweitsstimmenCSU) AS CSU,
+    sum(ZweitsstimmenGRÜNE) AS GRÜNE,
+    sum(ZweitsstimmenFREIEWÄHLER) AS FREIEWÄHLER,
+    sum(ZweitsstimmenAfD) AS AfD,
+    sum(ZweitsstimmenSPD) AS SPD,
+    sum(ZweitsstimmenFDP) AS FDP,
+    sum(ZweitsstimmenDIELINKE) AS DIELINKE,
+    sum(ZweitsstimmenBP) AS BP,
+    sum(ZweitsstimmenODP) AS ODP,
+    sum(ZweitsstimmenDiePARTEI) AS DiePARTEI,
+    sum(ZweitsstimmenTierschutzpartei) AS Tierschutzpartei,
+    sum(ZweitsstimmenVPartei3) AS VPartei3,
+    sum(ZweitsstimmenPdH) AS PdH,
+    sum(ZweitsstimmendieBasis) AS dieBasis,
+    sum(ZweitsstimmenVolt) AS Volt,
+    sum(UngültigeZweitsstimmen) AS ungueltig
+FROM raw_data
+GROUP BY Schluessel
+ORDER BY Schluessel;
+
+INSERT INTO raw_zweitstimmen
+SELECT Schluessel AS stimmkreisid, 
+    sum(ErststimmenCSU) AS CSU,
+    sum(ErststimmenGRÜNE) AS GRÜNE,
+    sum(ErststimmenFREIEWÄHLER) AS FREIEWÄHLER,
+    sum(ErststimmenAfD) AS AfD,
+    sum(ErststimmenSPD) AS SPD,
+    sum(ErststimmenFDP) AS FDP,
+    sum(ErststimmenDIELINKE) AS DIELINKE,
+    sum(ErststimmenBP) AS BP,
+    sum(ErststimmenÖDP) AS ÖDP,
+    sum(ErststimmenDiePARTEI) AS DiePARTEI,
+    sum(ErststimmenTierschutzpartei) AS Tierschutzpartei,
+    sum(ErststimmenVPartei3) AS VPartei3,
+    sum(ErststimmenPdH) AS PdH,
+    sum(ErststimmendieBasis) AS dieBasis,
+    sum(ErststimmenVolt) AS Volt,
+    sum(UngültigeErststimmen) AS ungueltig
+FROM raw_data
+GROUP BY Schluessel
+ORDER BY Schluessel;
