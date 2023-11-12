@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS raw_erststimmen;
+DROP TABLE IF EXISTS raw_zweitstimmen;
+DROP TABLE IF EXISTS raw_data;
+
+
 CREATE TABLE raw_data (
     Schluessel INT, 
     ErststimmenCSU INT, 
@@ -18885,7 +18890,7 @@ CREATE TABLE raw_zweitstimmen(
     ungueltig INT
 );
 
-INSERT INTO raw_erststimmen 
+INSERT INTO raw_zweitstimmen 
 SELECT Schluessel AS stimmkreisid, 
     sum(ZweitsstimmenCSU) AS CSU,
     sum(ZweitsstimmenGRÜNE) AS GRÜNE,
@@ -18907,7 +18912,7 @@ FROM raw_data
 GROUP BY Schluessel
 ORDER BY Schluessel;
 
-INSERT INTO raw_zweitstimmen
+INSERT INTO raw_erststimmen
 SELECT Schluessel AS stimmkreisid, 
     sum(ErststimmenCSU) AS CSU,
     sum(ErststimmenGRÜNE) AS GRÜNE,
