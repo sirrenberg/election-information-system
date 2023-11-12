@@ -82,14 +82,14 @@ CREATE TABLE IF NOT EXISTS aggregiertestimmkreisergebnisse(
     kandidatenid INT,
     stimmkreisid INT,
     anzahlStimmen INT,
-    datum INT
+    datum DATE
 );
 
 CREATE TABLE IF NOT EXISTS aggregiertewahlkreisergebnisse(
     kandidatenid INT,
     wahlkreisid INT,
     anzahlStimmen INT,
-    datum INT
+    datum DATE
 );
 
 CREATE TABLE IF NOT EXISTS erststimmen(
