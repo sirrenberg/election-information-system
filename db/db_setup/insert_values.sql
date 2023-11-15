@@ -1,4 +1,4 @@
-INSERT INTO Parteien(parteiname, kurzbezeichnung) VALUES
+INSERT INTO Parteien(parteiid,parteiname, kurzbezeichnung) VALUES
     (1, 'Christlich-Soziale Union in Bayern e.V.', 'CSU'),
     (2, 'BÜNDNIS 90/DIE GRÜNEN', 'GRÜNE'),
     (3, 'FREIE WÄHLER Bayern', 'FREIE WÄHLER'),

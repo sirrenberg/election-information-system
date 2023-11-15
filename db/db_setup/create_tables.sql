@@ -64,39 +64,48 @@ CREATE TABLE IF NOT EXISTS parteien(
 CREATE TABLE IF NOT EXISTS kanditiertstimmkreis(
     kandidatenid INT,
     stimmkreisid INT,
-    datum DATE
+    datum DATE,
+    anzahlStimmen INT
 );
 
-
--- Wahlkreisliste können wir aus allen Stimmkreislisten erstellen.
-
-CREATE TABLE IF NOT EXISTS kandidiertwahlkreisohnestimmkreis(
+CREATE TABLE IF NOT EXISTS kandidiertwahlkreis(
     kandidatenid INT,
     wahlkreisid INT,
-    datum DATE
+    datum DATE,
+    anzahlStimmen INT
 );
 
-CREATE VIEW kandidiertwahlkreis as 
-    SELECT ks.kandidatenid, s.wahlkreisid, ks.datum
-    FROM kanditiertstimmkreis ks, stimmkreise s
-    WHERE ks.stimmkreisid = s.stimmkreisid
-    UNION
-    SELECT *
-    FROM kandidiertwahlkreisohnestimmkreis;
 
-CREATE TABLE IF NOT EXISTS aggregiertestimmkreisergebnisse(
-    kandidatenid INT,
-    stimmkreisid INT,
-    anzahlStimmen INT,
-    datum DATE
-);
 
-CREATE TABLE IF NOT EXISTS aggregiertewahlkreisergebnisse(
-    kandidatenid INT,
-    wahlkreisid INT,
-    anzahlStimmen INT,
-    datum DATE
-);
+---- Wahlkreisliste können wir aus allen Stimmkreislisten erstellen.
+--
+--CREATE TABLE IF NOT EXISTS kandidiertwahlkreisohnestimmkreis(
+--    kandidatenid INT,
+--    wahlkreisid INT,
+--    datum DATE
+--);
+--
+--CREATE VIEW kandidiertwahlkreis as 
+--    SELECT ks.kandidatenid, s.wahlkreisid, ks.datum
+--    FROM kanditiertstimmkreis ks, stimmkreise s
+--    WHERE ks.stimmkreisid = s.stimmkreisid
+--    UNION
+--    SELECT *
+--    FROM kandidiertwahlkreisohnestimmkreis;
+--
+--CREATE TABLE IF NOT EXISTS aggregiertestimmkreisergebnisse(
+--    kandidatenid INT,
+--    stimmkreisid INT,
+--    anzahlStimmen INT,
+--    datum DATE
+--);
+--
+--CREATE TABLE IF NOT EXISTS aggregiertewahlkreisergebnisse(
+--    kandidatenid INT,
+--    wahlkreisid INT,
+--    anzahlStimmen INT,
+--    datum DATE
+--);
 
 CREATE TABLE IF NOT EXISTS erststimmen(
     stimmid SERIAL PRIMARY KEY,
