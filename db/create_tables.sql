@@ -50,14 +50,13 @@ CREATE TABLE IF NOT EXISTS wahlkreise(
 );
 
 CREATE TABLE IF NOT EXISTS kandidaten(
-    kandidatenid INT,
-    kandidatenvorname VARCHAR(64),
-    kandidatennachname VARCHAR(64),
+    kandidatenid INT PRIMARY KEY,
+    kandidatennamen VARCHAR(128),
     parteiid INT
 );
 
 CREATE TABLE IF NOT EXISTS parteien(
-    parteiid SERIAL PRIMARY KEY,
+    parteiid INT PRIMARY KEY,
     parteiname VARCHAR(128),
     kurzbezeichnung VARCHAR(64)
 );
