@@ -1,37 +1,33 @@
-def sainte_lague(votes, seats):
-    """
-    Calculates Parliamentary Seat Allocation using the Sainte-Laguë Method.
+import math
 
-    Args:
-    - votes (list): List of votes for each party.
-    - seats (int): Total number of seats to be allocated.
+def sainte_lague(votes, num_seats):
+    # Initialize seats for each party
+    seats = {party: 0 for party in votes}
 
-    Returns:
-    - seat_allocation (list): List of seats allocated to each party.
-    """
+    # Calculate divisor for each party
+    divisors = {party: math.sqrt(2 * i + 1) for i, party in enumerate(votes)}
 
-    num_parties = len(votes)
-    seat_allocation = [0] * num_parties
+    print(divisors)
 
-    # Create a list of tuples containing the quotient and party index
-    quotient_list = [(votes[i] / (2 * seat_allocation[i] + 1), i) for i in range(num_parties)]
-
-    # Allocate seats
-    for _ in range(seats):
+    # Seat allocation process
+    for _ in range(num_seats):
+        quotients = {party: votes[party] / divisors[party] for party in votes}
+        
         # Find the party with the highest quotient
-        max_quotient, max_index = max(quotient_list, key=lambda x: x[0])
+        winning_party = max(quotients, key=quotients.get)
+        
+        # Increment the seat for the winning party
+        seats[winning_party] += 1
+        
+        # Recalculate the divisor for the winning party
+        divisors[winning_party] = math.sqrt(2 * seats[winning_party] + 1)
 
-        # Allocate a seat to the party with the highest quotient
-        seat_allocation[max_index] += 1
-
-        # Update the quotient for the party
-        quotient_list[max_index] = (votes[max_index] / (2 * seat_allocation[max_index] + 1), max_index)
-
-    return seat_allocation
+    return seats
 
 # Example usage:
-party_votes = [50000, 30000, 20000, 10000]
-total_seats = 10
+party_votes = {'CSU': 7591332, 'FW': 3249661, 'AfD': 2992675, "Grüne": 2961819, "SPD": 1693542}
+allocated_seats = sainte_lague(party_votes, num_seats=160)
 
-result = sainte_lague(party_votes, total_seats)
-print("Seat Allocation:", result)
+print("Seat Allocation:")
+for party, seats in allocated_seats.items():
+    print(f"{party}: {seats} seats")

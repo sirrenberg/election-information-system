@@ -4,9 +4,9 @@
 
 DROP TABLE IF EXISTS zweitstimmen;
 DROP TABLE IF EXISTS erststimmen;
-DROP TABLE IF EXISTS aggregiertewahlkreisergebnisse;
-DROP TABLE IF EXISTS aggregiertestimmkreisergebnisse;
-DROP VIEW IF EXISTS kandidiertwahlkreis;
+-- DROP TABLE IF EXISTS aggregiertewahlkreisergebnisse;
+-- DROP TABLE IF EXISTS aggregiertestimmkreisergebnisse;
+-- DROP VIEW IF EXISTS kandidiertwahlkreis;
 DROP TABLE IF EXISTS kandidiertwahlkreisohnestimmkreis;
 DROP TABLE IF EXISTS kanditiertstimmkreis;
 DROP TABLE IF EXISTS parteien;
@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS AnzWahlberechtigte(
 
 CREATE TABLE IF NOT EXISTS wahlkreise(
     wahlkreisid INT,
-    wahlkreisname VARCHAR(64)
+    wahlkreisname VARCHAR(64),
+    anzahlSitze INT
 );
 
 CREATE TABLE IF NOT EXISTS kandidaten(

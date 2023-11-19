@@ -23,13 +23,13 @@ INSERT INTO Parteien(parteiid,parteiname, kurzbezeichnung) VALUES
 --    ('Partei für Gesundheitsforschung', 'Gesundheitsforschung');
 
 INSERT INTO wahlkreise VALUES 
-    (901,'Oberbayern'),
-    (902,'Niederbayern'), 
-    (903,'Oberpfalz'), 
-    (904,'Oberfranken'), 
-    (905,'Mittelfranken'), 
-    (906,'Unterfranken'), 
-    (907,'Schwaben');
+    (901,'Oberbayern', 61),
+    (902,'Niederbayern', 18), 
+    (903,'Oberpfalz', 16), 
+    (904,'Oberfranken', 16), 
+    (905,'Mittelfranken', 24), 
+    (906,'Unterfranken', 19), 
+    (907,'Schwaben', 22);
 
 INSERT INTO Stimmkreise VALUES
 (901,101,'München-Hadern'),

@@ -47,4 +47,6 @@ gesamtstimmenDerÜberFünfProzentParteien as (
 )
 
 
-SELECT * FROM gesamtstimmenDerÜberFünfProzentParteien;
+CREATE TABLE parteienÜberFünfProzent AS
+SELECT *
+FROM MyCTE FROM parteienÜberFünfProzent;
