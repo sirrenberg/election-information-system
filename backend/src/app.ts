@@ -1,11 +1,19 @@
-import express from 'express';
-const app = express();
+import express, { Express, Request, Response } from "express";
+import dotenv from "dotenv";
+
+import partyRoutes from "./routes/parties.js";
+
+dotenv.config();
+
+const app: Express = express();
 const port = 3000;
 
-app.get('/', (req, res) => {
-  res.send('Hello Nils!');
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello World from Express and TypeScript!");
 });
 
+app.use("/parties", partyRoutes);
+
 app.listen(port, () => {
-  return console.log(`Express is listening at http://localhost:${port}`);
+  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
 });
