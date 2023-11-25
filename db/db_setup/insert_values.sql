@@ -29,7 +29,7 @@ INSERT INTO wahlkreise VALUES
     (904,'Oberfranken', 16), 
     (905,'Mittelfranken', 24), 
     (906,'Unterfranken', 19), 
-    (907,'Schwaben', 22);
+    (907,'Schwaben', 26);
 
 INSERT INTO Stimmkreise VALUES
 (901,101,'München-Hadern'),

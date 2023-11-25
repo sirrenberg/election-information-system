@@ -2,11 +2,16 @@
 
 -- Create a stored procedure to perform Sainte-Laguë seat allocation in PostgreSQL
 CREATE OR REPLACE FUNCTION CalculateSeatAllocation()
-RETURNS TABLE (sa_parteiid INT, sa_wahlkreisid INT, sa_votes INT, sa_allocated_seats INT, sa_divisor FLOAT, sa_sitzeProWahlkreis INT)
+RETURNS TABLE (sa_parteiid INT, sa_wahlkreisid INT, sa_votes INT, 
+sa_allocated_seats INT, sa_divisor FLOAT, sa_sitzeProWahlkreis INT, sa_maxSitze INT)
 AS $$
 DECLARE
     iteration INT := 1;
 BEGIN
+
+DROP TABLE IF EXISTS SeatAllocation;
+DROP TABLE IF EXISTS finalSeatAllocation;
+
     -- Create a table to store seat allocation results
     CREATE TEMP TABLE SeatAllocation
     (
@@ -80,7 +85,11 @@ BEGIN
     INSERT INTO SeatAllocation (sa_parteiid, sa_wahlkreisid, sa_votes, sa_allocated_seats, sa_divisor, sa_sitzeProWahlkreis)
     SELECT parteiid, wahlkreisid, gesamtstimmen, 0, 0.5, anzahlSitze
     FROM stimmenProParteiProWahlkreisMitAnzSitze;
-RAISE NOTICE 'Iteration: %', iteration;
+
+
+--RAISE NOTICE 'Iteration: %', iteration;
+
+
 
     -- Use a loop for the iterative process
     WHILE iteration <= 200 LOOP
@@ -89,12 +98,14 @@ RAISE NOTICE 'Iteration: %', iteration;
         with winning_parties(parteiid, wahlkreisid) as (
           SELECT s2.sa_parteiid, s2.sa_wahlkreisid
           FROM SeatAllocation s2
+          -- no quotient higher exists
           WHERE NOT EXISTS (
             SELECT *
             FROM SeatAllocation s3
             WHERE s3.sa_wahlkreisid = s2.sa_wahlkreisid
             AND s3.sa_votes*1.0/s3.sa_divisor > s2.sa_votes*1.0/s2.sa_divisor
           )
+          -- check if seat limit reached
           AND (SELECT SUM(s4.sa_allocated_seats) 
               FROM SeatAllocation s4
               WHERE s4.sa_wahlkreisid = s2.sa_wahlkreisid
@@ -113,9 +124,93 @@ RAISE NOTICE 'Iteration: %', iteration;
         iteration := iteration + 1;
     END LOOP;
 
+    -- Create a table to store final seat allocation results
+    CREATE TEMP TABLE finalSeatAllocation
+    (
+        sa_parteiid INT,
+        sa_wahlkreisid INT,
+        sa_votes INT,
+        sa_allocated_seats INT,
+        sa_divisor FLOAT,
+        sa_sitzeProWahlkreis INT,
+        sa_maxSitze INT
+    );
+
+    -- gets the winning direct candidates for 2023 election
+    WITH stimmkreis_gewinner as (SELECT DISTINCT ks1.stimmkreisid, ks1.kandidatenid as gewinner
+    FROM kanditiertstimmkreis ks1
+    WHERE ks1.datum = '2023-10-08'
+    and ks1.anzahlStimmen = (SELECT MAX(ks2.anzahlStimmen) 
+                        FROM kanditiertstimmkreis ks2
+                        WHERE ks1.datum = ks2.datum and ks1.stimmkreisid = ks2.stimmkreisid)),
+
+    -- sum up the number direct candidates per party per wahlkreis
+    stimmkreis_gewinner_pro_partei as (SELECT p.parteiid, p.kurzbezeichnung, s.wahlkreisid, count(*) as num_gewinner
+      FROM parteien p, kandidaten k, stimmkreis_gewinner sg, stimmkreise s
+      WHERE p.parteiid = k.parteiid and k.kandidatenid = sg.gewinner and s.stimmkreisid = sg.stimmkreisid
+      GROUP BY p.parteiid, p.kurzbezeichnung, s.wahlkreisid),
+
+    -- calculate überhangmandate
+    numUeberhangsmandate as (SELECT sa.*, 
+      CASE 
+        WHEN COALESCE(skpp.num_gewinner, 0) - sa.sa_allocated_seats < 0 THEN 0
+        ELSE COALESCE(skpp.num_gewinner, 0) - sa.sa_allocated_seats
+      END AS numUeber
+      FROM SeatAllocation sa 
+      LEFT OUTER JOIN stimmkreis_gewinner_pro_partei skpp 
+      ON (sa.sa_parteiid = skpp.parteiid and sa.sa_wahlkreisid = skpp.wahlkreisid)),
+
+    maxSeats as (SELECT n.sa_wahlkreisid, MAX(n.sa_allocated_seats + n.numUeber) AS num 
+      FROM numUeberhangsmandate n
+      GROUP BY n.sa_wahlkreisid)
+
+    -- Insert data into the temporary table
+    INSERT INTO finalSeatAllocation (sa_parteiid, sa_wahlkreisid, sa_votes, 
+                                    sa_allocated_seats, sa_divisor, sa_sitzeProWahlkreis, sa_maxSitze)
+    SELECT sa.*, m.num 
+    FROM SeatAllocation sa, maxSeats m
+    WHERE m.sa_wahlkreisid = sa.sa_wahlkreisid;
+
+    iteration := 0;
+
+        -- Use a loop for the iterative process
+    WHILE iteration <= 200 LOOP
+
+        -- Select the party with the highest quotient
+        with winning_parties(parteiid, wahlkreisid) as (
+          SELECT f2.sa_parteiid, f2.sa_wahlkreisid
+          FROM finalSeatAllocation f2
+          -- choose the highest quotient
+          WHERE NOT EXISTS (
+            SELECT *
+            FROM finalSeatAllocation f3
+            WHERE f3.sa_wahlkreisid = f2.sa_wahlkreisid
+            AND f3.sa_votes*1.0/f3.sa_divisor > f2.sa_votes*1.0/f2.sa_divisor
+          )
+          -- check no party has reached max_seats
+          AND NOT EXISTS(SELECT *
+              FROM finalSeatAllocation f4
+              WHERE f4.sa_wahlkreisid = f2.sa_wahlkreisid
+              AND f4.sa_allocated_seats = f4.sa_maxSitze
+        ))
+
+        -- Update SeatAllocation by incrementing allocated_seats and divisor for the winning party
+        UPDATE finalSeatAllocation AS f1
+        SET sa_allocated_seats = f1.sa_allocated_seats + 1,
+            sa_divisor = f1.sa_divisor + 1
+        FROM winning_parties
+        WHERE f1.sa_parteiid = winning_parties.parteiid
+        AND f1.sa_wahlkreisid = winning_parties.wahlkreisid;
+
+        RAISE NOTICE 'Iteration: %', iteration;
+
+        -- Increment the iteration counter
+        iteration := iteration + 1;
+    END LOOP;
+
 
     -- Display the final seat allocation results
-    RETURN QUERY SELECT * FROM SeatAllocation;
+    RETURN QUERY SELECT * FROM finalSeatAllocation;
 
     -- Drop the temporary table
     DROP TABLE SeatAllocation;

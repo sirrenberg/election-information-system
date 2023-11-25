@@ -1,13 +1,10 @@
-import math
 
 def sainte_lague(votes, num_seats):
     # Initialize seats for each party
     seats = {party: 0 for party in votes}
 
     # Calculate divisor for each party
-    divisors = {party: math.sqrt(2 * i + 1) for i, party in enumerate(votes)}
-
-    print(divisors)
+    divisors = {party: 0.5 for party in votes}
 
     # Seat allocation process
     for _ in range(num_seats):
@@ -20,13 +17,16 @@ def sainte_lague(votes, num_seats):
         seats[winning_party] += 1
         
         # Recalculate the divisor for the winning party
-        divisors[winning_party] = math.sqrt(2 * seats[winning_party] + 1)
+        divisors[winning_party] += 1
 
     return seats
 
 # Example usage:
-party_votes = {'CSU': 7591332, 'FW': 3249661, 'AfD': 2992675, "Grüne": 2961819, "SPD": 1693542}
-allocated_seats = sainte_lague(party_votes, num_seats=160)
+# party_votes = {'CSU': 4829472, 'FW': 2026104, 'AfD': 1562982, "Grüne": 2682852, "SPD": 1161681}
+# party_votes = {'CSU': 1609824, 'FW': 675368, 'AfD': 520994, "Grüne": 894284	, "SPD": 387227	}
+party_votes = {'CSU': 706704, 'FW': 328583, 'AfD': 328165, "Grüne": 245253, "SPD": 134399}
+
+allocated_seats = sainte_lague(party_votes, num_seats=31)
 
 print("Seat Allocation:")
 for party, seats in allocated_seats.items():
