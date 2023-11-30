@@ -3,12 +3,12 @@ import BarChart from "../components/BarChart";
 import PieActiveArc from "../components/PieChart";
 
 function LandingPage() {
-  const data = [
-    { name: "Category A", value: 30 },
-    { name: "Category B", value: 45 },
-    { name: "Category C", value: 28 },
-    // Add more data points as needed
-  ];
+  // const data = [
+  //   { name: "Category A", value: 30 },
+  //   { name: "Category B", value: 45 },
+  //   { name: "Category C", value: 28 },
+  //   // Add more data points as needed
+  // ];
 
   return (
     <div className="lp-container ">
@@ -24,8 +24,8 @@ function LandingPage() {
 
       <div className="info-container content-page">
         <div className="charts-container">
-          <div className="chart-container">{/* <BarChart /> */}</div>
-          <div className="chart-container">{/* <PieActiveArc /> */}</div>
+          <div className="chart-container">{<BarChart />}</div>
+          <div className="chart-container">{<PieActiveArc />}</div>
         </div>
       </div>
     </div>
