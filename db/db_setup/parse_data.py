@@ -9,6 +9,7 @@ df = pd.read_excel(excel_file_path)
 # TODO:Still need to model Sonstige Parteien (For Zweitstimmen)
 # TODO: Get Zweitstimmen for parties without direct candidates
 # TODO: Get data for 2018
+# TODO: ungültige Stimmen
 def get_candidates():
     parties_shorts = ['CSU', 'GRÜNE', 'FREIE WÄHLER', 'AfD', 'SPD', 'FDP',
                       'DIE LINKE', 'BP', 'ÖDP', 'Die PARTEI', 'Tierschutzpartei', 
