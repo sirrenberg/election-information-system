@@ -37,3 +37,15 @@ node dist/app.js
 ```
 docker compose up
 ```
+
+## API
+- Aufgabenblatt 6
+  - Q1: Sitzverteilung.: (ParteiFarbe, ParteiKurzbezeichnung, AnzahlSitze), angezeigt in Sitzverteilung
+  - Q2: Mitglieder des Landtages: (Name, Partei, Wahlkreis) in Übersichten
+  - Q3: Wahlkreisübersicht: (Wahlbeteiligung, NameGewählterDirektkandidat, ParteiKurzbezeichnung, ProzentualeAnzahlStimmenJederPartei, AbsoluteAnzahlStimmenJederPartei) in Ergebnisse
+  - Q4: Stimmkreissieger: (Wahlkreisname, Siegerpartei, ErststimmenSiegerPartei, ZweitstimmenSiegerPartei) in Übersichten
+  - Q5: Überhangmandate: (Wahlkreisname, Partei, AnzahlÜberhangMandate) in Übersichten
+  - Q6: Knappste Sieger: (NameKandidat, Partei, Stimmkreis, AnzahlStimmenDifferenz (positiv wenn gewonnen, negativ wenn verloren)) in Übersichten
+  - Q7: Wahlkreisübersicht: (Wahlbeteiligung, Partei, Parteifarbe, NameGewählterDirektkandidat, ProzentualeAnzahlStimmenfürKandidat, AbsoluteAnzahlStimmenfürKandidat) in Übersichten
+  - Schuldendienste-vs-anteilStimmen (Parteiname, SchuldendienstProEinwohner, StimmenAnteil, Wahlkreisname ) (vielleicht als Punktgraph mit Namen der Wahlkreise)
+  - Anzahl an eingeschriebenen Studenten vs anteilStimmen: (Parteiname, AnzahlEingeschriebeneStudenten, StimmenAnteil, Wahlkreisname )
