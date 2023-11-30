@@ -105,7 +105,7 @@ DROP TABLE IF EXISTS finalSeatAllocation;
             WHERE s3.sa_wahlkreisid = s2.sa_wahlkreisid
             AND s3.sa_votes*1.0/s3.sa_divisor > s2.sa_votes*1.0/s2.sa_divisor
           )
-          -- check if seat limit reached
+          -- check if seat limit of wahlkreis reached
           AND (SELECT SUM(s4.sa_allocated_seats) 
               FROM SeatAllocation s4
               WHERE s4.sa_wahlkreisid = s2.sa_wahlkreisid
@@ -150,7 +150,7 @@ DROP TABLE IF EXISTS finalSeatAllocation;
       WHERE p.parteiid = k.parteiid and k.kandidatenid = sg.gewinner and s.stimmkreisid = sg.stimmkreisid
       GROUP BY p.parteiid, p.kurzbezeichnung, s.wahlkreisid),
 
-    -- calculate überhangmandate
+    -- calculate number of überhangmandate
     numUeberhangsmandate as (SELECT sa.*, 
       CASE 
         WHEN COALESCE(skpp.num_gewinner, 0) - sa.sa_allocated_seats < 0 THEN 0
