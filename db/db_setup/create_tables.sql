@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS Stimmkreise(
     name VARCHAR(64)
 );
 
-CREATE TABLE IF NOT EXISTS AnzWahlberechtigte(
+CREATE TABLE IF NOT EXISTS anzahlWahlberechtigte(
     stimmkreisid INT,
     datum DATE,
     anzahlWahlberechtigte INT
@@ -47,7 +47,9 @@ CREATE TABLE IF NOT EXISTS AnzWahlberechtigte(
 CREATE TABLE IF NOT EXISTS wahlkreise(
     wahlkreisid INT,
     wahlkreisname VARCHAR(64),
-    anzahlSitze INT
+    anzahlSitze INT,
+    anteilStudentenProEinwohner FLOAT,
+    schuldenDienstProEinwohner FLOAT,
 );
 
 CREATE TABLE IF NOT EXISTS kandidaten(
@@ -59,7 +61,8 @@ CREATE TABLE IF NOT EXISTS kandidaten(
 CREATE TABLE IF NOT EXISTS parteien(
     parteiid INT PRIMARY KEY,
     parteiname VARCHAR(128),
-    kurzbezeichnung VARCHAR(64)
+    kurzbezeichnung VARCHAR(64),
+    farbe VARCHAR(64)
 );
 
 CREATE TABLE IF NOT EXISTS kanditiertstimmkreis(
