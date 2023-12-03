@@ -1,14 +1,26 @@
 import "../styles/LandingPage.css";
 import BarChart from "../components/BarChart";
-import PieActiveArc from "../components/PieChart";
+import PieChart from "../components/PieChart";
+import { useState } from "react";
+import { data } from "../data";
+import { chartData } from "../helper/types";
 
 function LandingPage() {
-  // const data = [
-  //   { name: "Category A", value: 30 },
-  //   { name: "Category B", value: 45 },
-  //   { name: "Category C", value: 28 },
-  //   // Add more data points as needed
-  // ];
+  const [userData, setUserData] = useState({
+    labels: data.map((elem) => elem.party),
+    datasets: [
+      {
+        label: "Seats",
+        data: data.map((elem) => elem.seats),
+        backgroundColor: data.map((elem) => elem.color),
+      },
+    ],
+  } as chartData);
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+  };
 
   return (
     <div className="lp-container ">
@@ -23,9 +35,14 @@ function LandingPage() {
       </div>
 
       <div className="info-container content-page">
+        <h2 className="info-title">Wahlergebnisse</h2>
         <div className="charts-container">
-          <div className="chart-container">{<BarChart />}</div>
-          <div className="chart-container">{<PieActiveArc />}</div>
+          <div className="chart-container">
+            <BarChart chartData={userData} chartOptions={chartOptions} />
+          </div>
+          <div className="chart-container">
+            {<PieChart chartData={userData} chartOptions={chartOptions} />}
+          </div>
         </div>
       </div>
     </div>

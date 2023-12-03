@@ -1,36 +1,18 @@
-import { BarChart } from "@mui/x-charts/BarChart";
+import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS } from "chart.js/auto";
+import { BarElement } from "chart.js";
+import { chartData } from "../helper/types";
 
-export default function SimpleBarChart() {
-  function getBarHeight() {
-    // get bar height depending on screen size
-    const width = window.innerWidth;
+ChartJS.register(BarElement);
 
-    return width < 600 ? 300 : 400;
-  }
-
-  function getBarWidth() {
-    // get bar width depending on screen size
-    const width = window.innerWidth;
-
-    return width < 600 ? 400 : 400;
-  }
-
-  return (
-    <BarChart
-      xAxis={[
-        {
-          id: "barCategories",
-          data: ["bar A", "bar B", "bar C"],
-          scaleType: "band",
-        },
-      ]}
-      series={[
-        {
-          data: [2, 5, 3],
-        },
-      ]}
-      width={getBarWidth()}
-      height={getBarHeight()}
-    />
-  );
+function BarChart({
+  chartData,
+  chartOptions,
+}: {
+  chartData: chartData;
+  chartOptions: any;
+}) {
+  return <Bar data={chartData} options={chartOptions} />;
 }
+
+export default BarChart;
