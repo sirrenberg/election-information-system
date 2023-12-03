@@ -3,7 +3,7 @@ import "../styles/HamburgerMenu.css";
 import ListWithButtons from "./ListWithButtons";
 import { menuEntry } from "../helper/types";
 
-function HamburgerMenu(data: menuEntry[]) {
+function HamburgerMenu({ data }: { data: menuEntry[] }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
