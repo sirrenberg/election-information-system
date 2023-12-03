@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 
 # Provide the path to your Excel file
 excel_file_path = r'C:\election-information-system\db\data\08_10_2023_Landtagswahl_2023_Stimmkreise_Bayern.xlsx'
@@ -74,34 +75,13 @@ def zweitstimmen_pro_kandidat_per_sk():
     Create the respective sql queries
     SQL Queries in the zweitstimmen_90*.sql files
     """
-    with open("zweistimmen_wk_901.sql", "wb") as file:
-        excel_file = r'C:\election-information-system\db\data\zweitstimmen\LTW2023_BEWERBER_UND_ABGEORDNETE_WkrNr_901.xls'
-        file.write(read_sheets_and_create_query(excel_file))
+    for i in range(1, 8):
+        file_name = f"zweitstimmen_wk_90{i}.sql"
+        with open(file_name, "wb") as file:
+            file_path = construct_file_path("zweitstimmen", f"LTW2023_BEWERBER_UND_ABGEORDNETE_WkrNr_90{i}.xls")
+            sql_query = read_sheets_and_create_query(file_path)
+            file.write(sql_query.encode('utf-8', 'ignore'))
     
-    with open("zweistimmen_wk_902.sql", "wb") as file:
-        excel_file = r'C:\election-information-system\db\data\zweitstimmen\LTW2023_BEWERBER_UND_ABGEORDNETE_WkrNr_902.xls'
-        file.write(read_sheets_and_create_query(excel_file))
-    
-    with open("zweistimmen_wk_903.sql", "wb") as file:
-        excel_file = r'C:\election-information-system\db\data\zweitstimmen\LTW2023_BEWERBER_UND_ABGEORDNETE_WkrNr_903.xls'
-        file.write(read_sheets_and_create_query(excel_file))
-
-    with open("zweistimmen_wk_904.sql", "wb") as file:
-        excel_file = r'C:\election-information-system\db\data\zweitstimmen\LTW2023_BEWERBER_UND_ABGEORDNETE_WkrNr_904.xls'
-        file.write(read_sheets_and_create_query(excel_file))
-
-    with open("zweistimmen_wk_905.sql", "wb") as file:
-        excel_file = r'C:\election-information-system\db\data\zweitstimmen\LTW2023_BEWERBER_UND_ABGEORDNETE_WkrNr_905.xls'
-        file.write(read_sheets_and_create_query(excel_file))
-
-    with open("zweistimmen_wk_906.sql", "wb") as file:
-        excel_file = r'C:\election-information-system\db\data\zweitstimmen\LTW2023_BEWERBER_UND_ABGEORDNETE_WkrNr_906.xls'
-        file.write(read_sheets_and_create_query(excel_file))
-
-    with open("zweistimmen_wk_907.sql", "wb") as file:
-        excel_file = r'C:\election-information-system\db\data\zweitstimmen\LTW2023_BEWERBER_UND_ABGEORDNETE_WkrNr_907.xls'
-        file.write(read_sheets_and_create_query(excel_file))
-
 def read_sheets_and_create_query(excel_file):
     """
     Read all sheets of an excel_file
@@ -128,8 +108,7 @@ def read_sheets_and_create_query(excel_file):
     sql_query_builder += ";"
     return sql_query_builder
 
-#TODO: Didn't eliminate numbers with *, which is anzahl erstimmen
-#TODO: Should be fixed!
+#TODO: Should kandidates with 0 zweitstimmen be also included?
 def create_sql_insert_query(df_row, df_cols):
     """
     Create SQL INSERT query for one row of the dataframe
@@ -140,17 +119,37 @@ def create_sql_insert_query(df_row, df_cols):
     insert_values = []
     for i in range(2, len(df_row)):
         sk_nummer = df_cols[i]
-        anz_zweitstimmen = df_row.iloc[i]
+        zweitstimmen_str = str(df_row.iloc[i])
 
-        insert_values.append(f"({kandidat_id}, '{kandidat_name}', {sk_nummer}, {anz_zweitstimmen})")
+        #Values with * relate to einzelstimmen, should be ignored
+        if(zweitstimmen_str.find("*") == -1):
+            #Replace '-' with '0' and the '.' thousand seperator with ''
+            zweitstimmen_str = zweitstimmen_str.replace('-', '0')
+            zweitstimmen_str = zweitstimmen_str.replace('.','')
+            
+            insert_values.append(f"({kandidat_id}, '{kandidat_name}', {sk_nummer}, {int(zweitstimmen_str)})")
     
     return ',\n'.join(insert_values) + '\n'
 
+#-------------------------------------------------------------
+# Helpers
+#-------------------------------------------------------------
 def rename_id_name_cols(df):
     """
     Rename the (Unnamed: 0, Unnamed: 1) to (Id, Name)
     """
     return df.rename(columns={"Unnamed: 0": "Id", "Unnamed: 1": "Name"}, errors="raise")
 
-#TODO: Should we execute here the function?
-zweitstimmen_pro_kandidat_per_sk()
+#TODO: This method could be improved, allowing for more flexibility
+def construct_file_path(parent_dir, file_name):
+    """
+    Contstruct a file path to file_name, compatible with Windows/Ubuntu
+    Assumes data is stored under: ../data/parent_dir/file_name
+    """
+    return os.path.join("..", "data", parent_dir, file_name)
+
+#-------------------------------------------------------------
+
+#TODO: Should we execute like this the function?
+#if __name__ == '__main__':
+#    zweitstimmen_pro_kandidat_per_sk()
