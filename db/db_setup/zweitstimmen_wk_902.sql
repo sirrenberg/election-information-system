@@ -1475,5 +1475,4 @@ INSERT INTO kanditiertzweitstimmen VALUES
 (1111, 'Voth, Wolfgang', 209, 3),
 (1112, 'Wittmann, Helga', 207, 30),
 (1112, 'Wittmann, Helga', 208, 29),
-(1112, 'Wittmann, Helga', 209, 44),
-;
+(1112, 'Wittmann, Helga', 209, 44);

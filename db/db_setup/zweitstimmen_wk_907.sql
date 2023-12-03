@@ -3503,5 +3503,4 @@ INSERT INTO kanditiertzweitstimmen VALUES
 (1323, 'Schnetter, Günther', 710, 6),
 (1323, 'Schnetter, Günther', 711, 5),
 (1323, 'Schnetter, Günther', 712, 5),
-(1323, 'Schnetter, Günther', 713, 4),
-;
+(1323, 'Schnetter, Günther', 713, 4);

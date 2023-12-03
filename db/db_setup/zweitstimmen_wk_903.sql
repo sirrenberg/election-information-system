@@ -1122,5 +1122,4 @@ INSERT INTO kanditiertzweitstimmen VALUES
 (1203, 'Hoffmann, Daniel', 307, 27),
 (1203, 'Hoffmann, Daniel', 308, 28),
 (1204, 'Diepold, Maximilian', 307, 47),
-(1204, 'Diepold, Maximilian', 308, 55),
-;
+(1204, 'Diepold, Maximilian', 308, 55);

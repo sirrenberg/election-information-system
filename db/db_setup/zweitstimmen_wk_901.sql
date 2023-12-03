@@ -19876,5 +19876,4 @@ INSERT INTO kanditiertzweitstimmen VALUES
 (1519, 'Grimm, Samuel', 131, 26),
 (1520, 'Graf, Simon', 131, 40),
 (1521, 'Scharf, Peter', 131, 1),
-(1522, 'Wilfling, Damian', 131, 23),
-;
+(1522, 'Wilfling, Damian', 131, 23);

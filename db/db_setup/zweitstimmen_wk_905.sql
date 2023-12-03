@@ -2656,5 +2656,4 @@ INSERT INTO kanditiertzweitstimmen VALUES
 (1218, 'Dobrowitz, Georg', 509, 9),
 (1218, 'Dobrowitz, Georg', 510, 2),
 (1218, 'Dobrowitz, Georg', 511, 9),
-(1218, 'Dobrowitz, Georg', 512, 27),
-;
+(1218, 'Dobrowitz, Georg', 512, 27);

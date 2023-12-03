@@ -1581,5 +1581,4 @@ INSERT INTO kanditiertzweitstimmen VALUES
 (1014, 'Ziegler, Eugen', 607, 31),
 (1014, 'Ziegler, Eugen', 608, 208),
 (1014, 'Ziegler, Eugen', 609, 56),
-(1014, 'Ziegler, Eugen', 610, 20),
-;
+(1014, 'Ziegler, Eugen', 610, 20);

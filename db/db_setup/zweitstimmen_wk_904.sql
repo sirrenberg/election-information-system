@@ -1056,5 +1056,4 @@ INSERT INTO kanditiertzweitstimmen VALUES
 (1103, 'Hüttner, Markus', 407, 32),
 (1103, 'Hüttner, Markus', 408, 85),
 (1104, 'Wicklein, Marcel', 407, 223),
-(1104, 'Wicklein, Marcel', 408, 60),
-;
+(1104, 'Wicklein, Marcel', 408, 60);
