@@ -3,6 +3,9 @@ import dotenv from "dotenv";
 
 import partyRoutes from "./routes/parties.js";
 import seatRoutes from "./routes/seats.js";
+import candidateRoutes from "./routes/candidates.js";
+import wahlkreisRoutes from "./routes/Wahlkreise.js";
+import stimmkreisRoutes from "./routes/Stimmkreise.js";
 
 dotenv.config();
 
@@ -14,7 +17,10 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/parties", partyRoutes);
+app.use("/candidates", candidateRoutes);
 app.use("/seats", seatRoutes);
+app.use("/wahlkreise", wahlkreisRoutes);
+app.use("/stimmkreise", stimmkreisRoutes);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
