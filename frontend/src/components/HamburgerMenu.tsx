@@ -1,21 +1,10 @@
 import { useState } from "react";
 import "../styles/HamburgerMenu.css";
 import ListWithButtons from "./ListWithButtons";
+import { menuEntry } from "../helper/types";
 
-function HamburgerMenu() {
+function HamburgerMenu(data: menuEntry[]) {
   const [isOpen, setIsOpen] = useState(false);
-
-  const data = [
-    {
-      title: "Button 1",
-      sublist: ["Subitem 1.1", "Subitem 1.2", "Subitem 1.3"],
-    },
-    {
-      title: "Button 2",
-      sublist: ["Subitem 2.1", "Subitem 2.2", "Subitem 2.3"],
-    },
-    // Add more items as needed
-  ];
 
   return (
     <div className="hamburger-container">

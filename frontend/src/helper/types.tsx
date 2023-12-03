@@ -12,4 +12,14 @@ type chartOptions = {
   maintainAspectRatio: boolean;
 };
 
-export type { chartData, chartOptions };
+type stimmkreis = {
+  id: number;
+  name: string;
+};
+
+type menuEntry = {
+  title: string;
+  sublist: string[];
+};
+
+export type { chartData, chartOptions, menuEntry, stimmkreis };
