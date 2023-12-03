@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS wahlkreise(
     wahlkreisname VARCHAR(64),
     anzahlSitze INT,
     anteilStudentenProEinwohner FLOAT,
-    schuldenDienstProEinwohner FLOAT,
+    schuldenDienstProEinwohner FLOAT
 );
 
 CREATE TABLE IF NOT EXISTS kandidaten(
@@ -78,6 +78,18 @@ CREATE TABLE IF NOT EXISTS kandidiertwahlkreis(
     datum DATE,
     anzahlStimmen INT
 );
+
+
+--Create table for the zweistimmen pro kandidat per stimmkreis
+--TODO: The id's in kandidaten table do not match the id's of kandidaten in the excel files
+--TODO: The stimmkreis should be a foreign key, improve later
+CREATE TABLE IF NOT EXISTS kanditiertzweitstimmen(
+    id INT, 
+    kandidatennamen VARCHAR(128), 
+    stimmkreisid INT,
+    anzahlZweitstimmen INT
+); 
+
 
 
 

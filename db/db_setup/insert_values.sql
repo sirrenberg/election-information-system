@@ -1,4 +1,4 @@
-INSERT INTO Parteien(parteiid,parteiname, kurzbezeichnung) VALUES
+INSERT INTO Parteien(parteiid,parteiname, kurzbezeichnung, farbe) VALUES
     (1, 'Christlich-Soziale Union in Bayern e.V.', 'CSU', '#0884CA'),
     (2, 'BÜNDNIS 90/DIE GRÜNEN', 'GRÜNE', '#26A434'),
     (3, 'FREIE WÄHLER Bayern', 'FREIE WÄHLER', '#F7A700'),
@@ -124,7 +124,7 @@ INSERT INTO Stimmkreise VALUES
 (907,712,'Memmingen'),
 (907,713,'Neu-Ulm');
 
-INSERT INTO AnzWahlberechtigte VALUES
+INSERT INTO anzahlWahlberechtigte VALUES
     (101,'2023-10-08',98320),
     (102,'2023-10-08',86064),
     (103,'2023-10-08',123365),

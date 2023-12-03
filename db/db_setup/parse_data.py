@@ -68,9 +68,9 @@ def get_candidates():
 get_candidates()
 
 
-def zweitstimmen_pro_kandidat():
+def zweitstimmen_pro_kandidat_per_sk():
     """
-    Read data about zweitstimmen pro kandidat und stimmkreis
+    Read data about zweitstimmen pro kandidat per stimmkreis
     Create the respective sql queries
     SQL Queries in the zweitstimmen_90*.sql files
     """
@@ -110,7 +110,7 @@ def read_sheets_and_create_query(excel_file):
     """
     data = pd.ExcelFile(excel_file)
     sheet_number = len(data.sheet_names)
-    sql_query_builder = "INSERT INTO kanditiertzweitstimmen(id, name, stimmkreis, zweitstimmen) VALUES \n"
+    sql_query_builder = "INSERT INTO kanditiertzweitstimmen VALUES \n"
 
     for i in range(1, sheet_number + 1):
         #Build current sheet name
@@ -124,10 +124,12 @@ def read_sheets_and_create_query(excel_file):
         for _, row in current_sheet_data.iterrows():
             sql_query_builder += create_sql_insert_query(row, current_sheet_data.columns)
     
-    print(sql_query_builder)
+
+    sql_query_builder += ";"
     return sql_query_builder
 
 #TODO: Didn't eliminate numbers with *, which is anzahl erstimmen
+#TODO: Should be fixed!
 def create_sql_insert_query(df_row, df_cols):
     """
     Create SQL INSERT query for one row of the dataframe
@@ -151,4 +153,4 @@ def rename_id_name_cols(df):
     return df.rename(columns={"Unnamed: 0": "Id", "Unnamed: 1": "Name"}, errors="raise")
 
 #TODO: Should we execute here the function?
-zweitstimmen_pro_kandidat()
+zweitstimmen_pro_kandidat_per_sk()
