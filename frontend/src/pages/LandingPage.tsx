@@ -3,7 +3,7 @@ import BarChart from "../components/BarChart";
 import PieChart from "../components/PieChart";
 import { useState } from "react";
 import { data } from "../data";
-import { chartData } from "../helper/types";
+import { chartData, chartOptions } from "../helper/types";
 
 function LandingPage() {
   const [userData, setUserData] = useState({
@@ -17,14 +17,9 @@ function LandingPage() {
     ],
   } as chartData);
 
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-  };
-
   return (
     <div className="lp-container ">
-      <div className="title-container content-page">
+      <div className="title-container">
         <h1 className="main-title">
           Das Bayerische Landtagswahl Informationssystem
         </h1>
@@ -34,14 +29,14 @@ function LandingPage() {
         </div>
       </div>
 
-      <div className="info-container content-page">
+      <div className="info-container">
         <h2 className="info-title">Wahlergebnisse</h2>
         <div className="charts-container">
           <div className="chart-container">
-            <BarChart chartData={userData} chartOptions={chartOptions} />
+            <BarChart chartData={userData} />
           </div>
           <div className="chart-container">
-            {<PieChart chartData={userData} chartOptions={chartOptions} />}
+            {<PieChart chartData={userData} />}
           </div>
         </div>
       </div>

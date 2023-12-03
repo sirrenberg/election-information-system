@@ -1,0 +1,49 @@
+.seat-dist-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10rem;
+
+  height: 100vh;
+}
+
+.seat-dist-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.seat-dist-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 80%;
+  width: 100%;
+}
+
+.seat-dist-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 50%;
+  height: 100%;
+
+  margin: 0 2rem;
+}
+
+.seat-dist-subtitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  height: 80%;
+}

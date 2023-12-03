@@ -1,6 +1,6 @@
 :root {
   --bayern-blue: #0098d4;
-  --dark-blue: #0050c8;
+  --dark-blue: #122566;
   --white: #fff;
   --black: #000;
 }
@@ -42,6 +42,10 @@ a {
 
 @media screen and (min-width: 992px) {
   .content-page {
-    min-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding-top: 10rem;
   }
 }
