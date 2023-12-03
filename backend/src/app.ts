@@ -6,6 +6,8 @@ import seatRoutes from "./routes/seats.js";
 import candidateRoutes from "./routes/candidates.js";
 import wahlkreisRoutes from "./routes/Wahlkreise.js";
 import stimmkreisRoutes from "./routes/Stimmkreise.js";
+import bewerberMitErststimmenMehrheitRoutes from "./routes/BewerberMitErststimmenmehrheit.js";
+import absoluteStimmenverteilungParteienBayernRoutes from "./routes/absoluteStimmverteilungParteienBayern.js";
 
 dotenv.config();
 
@@ -21,6 +23,8 @@ app.use("/candidates", candidateRoutes);
 app.use("/seats", seatRoutes);
 app.use("/wahlkreise", wahlkreisRoutes);
 app.use("/stimmkreise", stimmkreisRoutes);
+app.use("/bewerberMitErststimmenMehrheit", bewerberMitErststimmenMehrheitRoutes);
+app.use("/absoluteStimmenverteilungParteienBayern", absoluteStimmenverteilungParteienBayernRoutes);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
