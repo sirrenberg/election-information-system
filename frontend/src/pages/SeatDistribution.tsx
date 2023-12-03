@@ -1,12 +1,12 @@
 import BarChart from "../components/BarChart";
 import PieChart from "../components/PieChart";
 import { data } from "../data";
-import { chartData, chartOptions } from "../helper/types";
+import { chartData } from "../helper/types";
 import { useState } from "react";
 import "../styles/SeatDistribution.css";
 
 function SeatDistribution() {
-  const [userData, setUserData] = useState({
+  const [userData, _] = useState({
     labels: data.map((elem) => elem.party),
     datasets: [
       {
@@ -16,11 +16,6 @@ function SeatDistribution() {
       },
     ],
   } as chartData);
-
-  const chartOptions: chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-  };
 
   return (
     <div className="seat-dist-container">

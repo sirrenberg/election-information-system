@@ -17,22 +17,18 @@ function ListItem({ item }: { item: any }) {
         >
           {item.title}
         </p>
-        <div className="arrow-container">
-          <i
-            onClick={toggleSublist}
-            className={`arrow ${isSublistOpen ? "up" : "down"}`}
-          ></i>
+        <div className="arrow-container" onClick={toggleSublist}>
+          <i className={`arrow ${isSublistOpen ? "up" : "down"}`}></i>
         </div>
       </div>
-      {isSublistOpen && (
-        <ul>
-          {item.sublist.map((subitem, index) => (
-            <li className="hm-list-subitem" key={index}>
-              {subitem}
-            </li>
-          ))}
-        </ul>
-      )}
+
+      <ul style={{ display: isSublistOpen ? "block" : "none" }}>
+        {item.sublist.map((subitem, index) => (
+          <li className="hm-list-subitem" key={index}>
+            {subitem}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

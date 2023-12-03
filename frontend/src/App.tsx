@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import LandingPage from "./pages/LandingPage";
 import SeatDistribution from "./pages/SeatDistribution";
 import Results from "./pages/Results";
+import Overview from "./pages/Overview";
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/results" element={<Results />} />
         <Route path="/seats" element={<SeatDistribution />} />
-        <Route path="/overview" element={<LandingPage />} />
+        <Route path="/overview" element={<Overview />} />
       </Routes>
     </div>
   );

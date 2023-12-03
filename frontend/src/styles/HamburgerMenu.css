@@ -8,7 +8,7 @@
   position: fixed;
   top: 0;
   left: -400px;
-  transition: left 0.3s ease-out;
+  transition: all 0.3s ease-out;
   padding-top: 200px;
 }
 
@@ -31,17 +31,19 @@
 
 .hm-list-item-content {
   background-color: var(--bayern-blue);
-
+  font-weight: bold;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  border-bottom: 1px solid var(--white);
+  border-bottom: 1px solid var(--dark-blue);
   padding: 20px;
 }
 
-.hm-list-item:hover {
-  background-color: "#ff0";
+.hm-list-item-content:hover,
+.hm-list-subitem:hover {
+  background-color: var(--white);
+  color: var(--bayern-blue);
 }
 
 .hm-list-subitem {
@@ -49,14 +51,17 @@
   background-color: var(--bayern-blue);
   border: none;
   width: 100%;
+
   padding: 20px;
   color: var(--white);
-  border-bottom: 1px solid var(--white);
+  border-bottom: 1px solid var(--dark-blue);
 }
 
 .arrow-container {
   align-self: flex-end;
   justify-self: flex-end;
+  padding: 5px;
+  cursor: pointer;
 }
 
 .arrow {
@@ -64,7 +69,7 @@
   border-width: 0 3px 3px 0;
   display: inline-block;
   padding: 3px;
-  transition: left 0.3s ease-out;
+  transition: all 0.3s ease-out;
 }
 
 .right {

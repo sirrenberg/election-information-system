@@ -1,11 +1,12 @@
 import "../styles/Results.css";
 import HamburgerMenu from "../components/HamburgerMenu";
+import RegionResult from "../components/RegionResult";
 
 function Results() {
   return (
     <div className="results-container ">
-      <h1>Results</h1>
       <HamburgerMenu />
+      <RegionResult />
     </div>
   );
 }
