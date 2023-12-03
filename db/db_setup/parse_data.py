@@ -102,8 +102,9 @@ def read_sheets_and_create_query(excel_file):
 
         #Create sql insert query for each row in the current sheet
         for _, row in current_sheet_data.iterrows():
-            sql_query_builder += create_sql_insert_query(row, current_sheet_data.columns)
-    
+            query_to_append = create_sql_insert_query(row, current_sheet_data.columns)
+            if len(query_to_append) != 0:
+                sql_query_builder += query_to_append
 
     sql_query_builder += ";"
     return sql_query_builder
@@ -129,7 +130,10 @@ def create_sql_insert_query(df_row, df_cols):
             
             insert_values.append(f"({kandidat_id}, '{kandidat_name}', {sk_nummer}, {int(zweitstimmen_str)})")
     
-    return ',\n'.join(insert_values) + '\n'
+    if len(insert_values) > 0:
+        return ',\n'.join(insert_values) + ',\n'
+    else:
+        return '\n'
 
 #-------------------------------------------------------------
 # Helpers
