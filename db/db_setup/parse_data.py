@@ -127,6 +127,7 @@ def read_sheets_and_create_query(excel_file):
     print(sql_query_builder)
     return sql_query_builder
 
+#TODO: Didn't eliminate numbers with *, which is anzahl erstimmen
 def create_sql_insert_query(df_row, df_cols):
     """
     Create SQL INSERT query for one row of the dataframe
