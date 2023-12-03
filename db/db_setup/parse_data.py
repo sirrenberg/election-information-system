@@ -65,7 +65,89 @@ def get_candidates():
     with open("kandidiertwahlkreis.sql", "wb") as file:
         file.write(kandidiert_wk_builder)
 
-
-            
-
 get_candidates()
+
+
+def zweitstimmen_pro_kandidat():
+    """
+    Read data about zweitstimmen pro kandidat und stimmkreis
+    Create the respective sql queries
+    SQL Queries in the zweitstimmen_90*.sql files
+    """
+    with open("zweistimmen_wk_901.sql", "wb") as file:
+        excel_file = r'C:\election-information-system\db\data\zweitstimmen\LTW2023_BEWERBER_UND_ABGEORDNETE_WkrNr_901.xls'
+        file.write(read_sheets_and_create_query(excel_file))
+    
+    with open("zweistimmen_wk_902.sql", "wb") as file:
+        excel_file = r'C:\election-information-system\db\data\zweitstimmen\LTW2023_BEWERBER_UND_ABGEORDNETE_WkrNr_902.xls'
+        file.write(read_sheets_and_create_query(excel_file))
+    
+    with open("zweistimmen_wk_903.sql", "wb") as file:
+        excel_file = r'C:\election-information-system\db\data\zweitstimmen\LTW2023_BEWERBER_UND_ABGEORDNETE_WkrNr_903.xls'
+        file.write(read_sheets_and_create_query(excel_file))
+
+    with open("zweistimmen_wk_904.sql", "wb") as file:
+        excel_file = r'C:\election-information-system\db\data\zweitstimmen\LTW2023_BEWERBER_UND_ABGEORDNETE_WkrNr_904.xls'
+        file.write(read_sheets_and_create_query(excel_file))
+
+    with open("zweistimmen_wk_905.sql", "wb") as file:
+        excel_file = r'C:\election-information-system\db\data\zweitstimmen\LTW2023_BEWERBER_UND_ABGEORDNETE_WkrNr_905.xls'
+        file.write(read_sheets_and_create_query(excel_file))
+
+    with open("zweistimmen_wk_906.sql", "wb") as file:
+        excel_file = r'C:\election-information-system\db\data\zweitstimmen\LTW2023_BEWERBER_UND_ABGEORDNETE_WkrNr_906.xls'
+        file.write(read_sheets_and_create_query(excel_file))
+
+    with open("zweistimmen_wk_907.sql", "wb") as file:
+        excel_file = r'C:\election-information-system\db\data\zweitstimmen\LTW2023_BEWERBER_UND_ABGEORDNETE_WkrNr_907.xls'
+        file.write(read_sheets_and_create_query(excel_file))
+
+def read_sheets_and_create_query(excel_file):
+    """
+    Read all sheets of an excel_file
+    Always rename first two columns to (Id, Name)
+    Create SQL Insert query
+    """
+    data = pd.ExcelFile(excel_file)
+    sheet_number = len(data.sheet_names)
+    sql_query_builder = "INSERT INTO kanditiertzweitstimmen(id, name, stimmkreis, zweitstimmen) VALUES \n"
+
+    for i in range(1, sheet_number + 1):
+        #Build current sheet name
+        sheet = "Page " + str(i)
+
+        #Read the current sheet and rename first two columns
+        current_sheet_data = pd.read_excel(excel_file, sheet_name=sheet)
+        current_sheet_data = rename_id_name_cols(current_sheet_data)
+
+        #Create sql insert query for each row in the current sheet
+        for _, row in current_sheet_data.iterrows():
+            sql_query_builder += create_sql_insert_query(row, current_sheet_data.columns)
+    
+    print(sql_query_builder)
+    return sql_query_builder
+
+def create_sql_insert_query(df_row, df_cols):
+    """
+    Create SQL INSERT query for one row of the dataframe
+    """
+    kandidat_id = df_row.iloc[0]
+    kandidat_name = df_row.iloc[1]
+
+    insert_values = []
+    for i in range(2, len(df_row)):
+        sk_nummer = df_cols[i]
+        anz_zweitstimmen = df_row.iloc[i]
+
+        insert_values.append(f"({kandidat_id}, '{kandidat_name}', {sk_nummer}, {anz_zweitstimmen})")
+    
+    return ',\n'.join(insert_values) + '\n'
+
+def rename_id_name_cols(df):
+    """
+    Rename the (Unnamed: 0, Unnamed: 1) to (Id, Name)
+    """
+    return df.rename(columns={"Unnamed: 0": "Id", "Unnamed: 1": "Name"}, errors="raise")
+
+#TODO: Should we execute here the function?
+zweitstimmen_pro_kandidat()
