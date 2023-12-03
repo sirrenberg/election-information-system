@@ -3,9 +3,13 @@
 
 ## Create a Docker image with build
 ```
-docker build -t <my-docker-container-name> .
-docker run -d --name my-postgres-container -p 5432:5432 my-postgres-image
+docker build -t <my-docker-image-name> .
+docker run -d --name <my-postgres-container> -p 5432:5432 <my-docker-image-name>
 ```
+
+## Run only the backend docker container
+```
+
 
 ## Connect VSCode with postgres database
 ```
@@ -39,6 +43,7 @@ docker compose up
 ```
 
 ## API
+- Express
 - Aufgabenblatt 6
   - Q1: Sitzverteilung.: (ParteiFarbe, ParteiKurzbezeichnung, AnzahlSitze), angezeigt in Sitzverteilung
   - Q2: Mitglieder des Landtages: (Name, Partei, Wahlkreis) in Übersichten
