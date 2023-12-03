@@ -6,7 +6,16 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const { rows } = await pool.query("SELECT * FROM stimmkreise");
+    const { rows } = await pool.query(
+    `
+    SELECT *
+    FROM
+      stimmkreise s
+      INNER JOIN
+      wahlkreise w
+      ON
+      s.wahlkreisid = w.wahlkreisid;`
+  );
     res.json(rows);
   } catch (error) {
     console.error(error);
