@@ -53,6 +53,32 @@
       SELECT g.parteiid, g.kurzbezeichnung, g.wahlkreisid, g.gesamtstimmen, w.anzahlSitze
       FROM gesamtstimmenDerÜberFünfProzentParteienProWahlkreis g, wahlkreise w
       WHERE g.wahlkreisid = w.wahlkreisid
-    )
+    ),
+
+    --------Q3--------------------
+    -- 3.1 Wahlbeteiligung
+    gesamtStimmenProWahlkreis as (
+        SELECT g.wahlkreisid, SUM(g.gesamtstimmen) as gesamtstimmen
+        FROM gesamtStimmenProParteiProWahlkreis g
+        GROUP BY g.wahlkreisid
+    ),
+
+    anzWahlberechtigteProWahlkreis as (
+      SELECT w.wahlkreisid, SUM(a.anzahlWahlberechtigte) as anzWahlberechtigte
+      FROM wahlkreise w, Stimmkreise s, anzahlWahlberechtigte a, 
+      WHERE w.wahlkreisid = s.wahlkreisid AND s.stimmkreisid =  a.stimmkreisid
+      GROUP BY w.wahlkreisid
+    ),
+
+    wahlbeteiligungProWahlkreis as (
+      SELECT g.wahlkreisid, (g.gesamtstimmen * 1.0) / a.anzWahlberechtigte as wahlbeteiligung
+      FROM gesamtStimmenProWahlkreis g, anzWahlberechtigteProWahlkreis a
+      WHERE g.wahlkreisid = a.wahlkreisid
+    ),
+
+    --3.3 die prozentuale und absolute Anzahl(schon gemacht oben) an Stimmen für jede Partei
+    --
+    --3.4 die Entwicklung der Stimmen im Vergleich zur Vorwahl (soweit möglich)
+
 
 select * from stimmenProParteiProWahlkreisMitAnzSitze;

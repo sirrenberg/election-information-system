@@ -68,12 +68,14 @@ def get_candidates():
 
 get_candidates()
 
+def determine_candidates():
+    
 
 def zweitstimmen_pro_kandidat_per_sk():
     """
-    Read data about zweitstimmen pro kandidat per stimmkreis
-    Create the respective sql queries
-    SQL Queries in the zweitstimmen_90*.sql files
+    Read data about zweitstimmen pro kandidat per stimmkreis \n
+    Create the respective sql queries \n
+    SQL Queries in the ..\data\zweitstimmen_90*.sql files
     """
     for i in range(1, 8):
         file_name = f"zweitstimmen_wk_90{i}.sql"
@@ -151,7 +153,6 @@ def construct_file_path(parent_dir, file_name):
     Assumes data is stored under: ../data/parent_dir/file_name
     """
     return os.path.join("..", "data", parent_dir, file_name)
-
 #-------------------------------------------------------------
 
 #TODO: Should we execute like this the function?
