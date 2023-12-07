@@ -2,19 +2,17 @@
 --TODO: Create matelialized views for the results of the election
 --TODO: PRIMARY KEY? FOREIGN KEY? HINZUFÜGEN ODER NICHT?
 
-DROP TABLE IF EXISTS zweitstimmen;
-DROP TABLE IF EXISTS erststimmen;
--- DROP TABLE IF EXISTS aggregiertewahlkreisergebnisse;
--- DROP TABLE IF EXISTS aggregiertestimmkreisergebnisse;
--- DROP VIEW IF EXISTS kandidiertwahlkreis;
-DROP TABLE IF EXISTS kandidiertwahlkreisohnestimmkreis;
-DROP TABLE IF EXISTS kanditiertstimmkreis;
+DROP TABLE IF EXISTS wahlberechtigte;
+DROP TABLE IF EXISTS hatgewaehlt;
+DROP TABLE IF EXISTS stimmkreise;
+DROP TABLE IF EXISTS wahlkreise;
+DROP TABLE IF EXISTS anzahlWahlberechtigte;
 DROP TABLE IF EXISTS parteien;
 DROP TABLE IF EXISTS kandidaten;
-DROP TABLE IF EXISTS wahlkreise;
-DROP TABLE IF EXISTS Stimmkreise;
-DROP TABLE IF EXISTS hatgewaehlt;
-DROP TABLE IF EXISTS wahlberechtigte;
+DROP TABLE IF EXISTS kandidiert_erststimmen;
+DROP TABLE IF EXISTS kandidiert_zweitstimmen;
+DROP TABLE IF EXISTS erststimmen;
+DROP TABLE IF EXISTS zweitstimmen;
 
 
 CREATE TABLE IF NOT EXISTS wahlberechtigte(
@@ -32,31 +30,27 @@ CREATE TABLE IF NOT EXISTS hatgewaehlt(
     hatgewaehlt BOOLEAN
 );
 
-CREATE TABLE IF NOT EXISTS Stimmkreise(
-    wahlkreisid INT,
+CREATE TABLE IF NOT EXISTS stimmkreise(
+    wahlkreisid INT PRIMARY KEY,
     stimmkreisid INT,
     name VARCHAR(64)
 );
 
-CREATE TABLE IF NOT EXISTS anzahlWahlberechtigte(
-    stimmkreisid INT,
-    datum DATE,
-    anzahlWahlberechtigte INT
-);
-
 CREATE TABLE IF NOT EXISTS wahlkreise(
-    wahlkreisid INT,
+    wahlkreisid INT PRIMARY KEY,
     wahlkreisname VARCHAR(64),
     anzahlSitze INT,
     anteilStudentenProEinwohner FLOAT,
     schuldenDienstProEinwohner FLOAT
 );
 
-CREATE TABLE IF NOT EXISTS kandidaten(
-    kandidatenid INT PRIMARY KEY,
-    kandidatennamen VARCHAR(128),
-    parteiid INT
+CREATE TABLE IF NOT EXISTS anzahlWahlberechtigte(
+    stimmkreisid INT,
+    datum DATE,
+    anzahlWahlberechtigte INT,
+    PRIMARY KEY (stimmkreisid, datum)
 );
+
 
 CREATE TABLE IF NOT EXISTS parteien(
     parteiid INT PRIMARY KEY,
@@ -65,63 +59,27 @@ CREATE TABLE IF NOT EXISTS parteien(
     farbe VARCHAR(64)
 );
 
-CREATE TABLE IF NOT EXISTS kanditiertstimmkreis(
+CREATE TABLE IF NOT EXISTS kandidaten(
+    kandidatenid INT PRIMARY KEY,
+    kandidatennamen VARCHAR(128),
+    parteiid INT
+);
+
+CREATE TABLE IF NOT EXISTS kandidiert_erststimmen(
+    kandidatenid INT,
+    stimmkreisid INT,
+    datum DATE,
+    anzahlStimmen INT,
+    PRIMARY KEY (kandidatenid, stimmkreisid, datum)
+);
+
+CREATE TABLE IF NOT EXISTS kandidiert_zweitstimmen(
     kandidatenid INT,
     stimmkreisid INT,
     datum DATE,
     anzahlStimmen INT
+    PRIMARY KEY (kandidatenid, stimmkreisid, datum)
 );
-
-CREATE TABLE IF NOT EXISTS kandidiertwahlkreis(
-    kandidatenid INT,
-    wahlkreisid INT,
-    datum DATE,
-    anzahlStimmen INT
-);
-
-
---Create table for the zweistimmen pro kandidat per stimmkreis
---TODO: The id's in kandidaten table do not match the id's of kandidaten in the excel files
---TODO: The stimmkreis should be a foreign key, improve later
-CREATE TABLE IF NOT EXISTS kanditiertzweitstimmen(
-    id INT, 
-    kandidatennamen VARCHAR(128), 
-    stimmkreisid INT,
-    anzahlZweitstimmen INT
-); 
-
-
-
-
----- Wahlkreisliste können wir aus allen Stimmkreislisten erstellen.
---
---CREATE TABLE IF NOT EXISTS kandidiertwahlkreisohnestimmkreis(
---    kandidatenid INT,
---    wahlkreisid INT,
---    datum DATE
---);
---
---CREATE VIEW kandidiertwahlkreis as 
---    SELECT ks.kandidatenid, s.wahlkreisid, ks.datum
---    FROM kanditiertstimmkreis ks, stimmkreise s
---    WHERE ks.stimmkreisid = s.stimmkreisid
---    UNION
---    SELECT *
---    FROM kandidiertwahlkreisohnestimmkreis;
---
---CREATE TABLE IF NOT EXISTS aggregiertestimmkreisergebnisse(
---    kandidatenid INT,
---    stimmkreisid INT,
---    anzahlStimmen INT,
---    datum DATE
---);
---
---CREATE TABLE IF NOT EXISTS aggregiertewahlkreisergebnisse(
---    kandidatenid INT,
---    wahlkreisid INT,
---    anzahlStimmen INT,
---    datum DATE
---);
 
 CREATE TABLE IF NOT EXISTS erststimmen(
     stimmid SERIAL PRIMARY KEY,
