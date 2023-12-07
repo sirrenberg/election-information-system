@@ -1,5 +1,5 @@
 --TODO: USE DB NORMALIZER TO NORMALIZE THIS DB!!!!
-
+--TODO: Create matelialized views for the results of the election
 --TODO: PRIMARY KEY? FOREIGN KEY? HINZUFÜGEN ODER NICHT?
 
 DROP TABLE IF EXISTS zweitstimmen;
