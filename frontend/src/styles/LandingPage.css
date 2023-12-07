@@ -1,9 +1,3 @@
-.lp-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .title-container {
   display: flex;
   flex-direction: column;

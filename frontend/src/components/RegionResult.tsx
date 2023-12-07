@@ -46,17 +46,17 @@ function RegionResult() {
           </div>
         </div>
         <div className="region-res-section">
-          <h2 className="region-res-subtitle">Anteil</h2>
+          <h2 className="region-res-subtitle">Vergleich zu letzer Wahl</h2>
           <div className="chart-container">
-            <PieChart chartData={userData} />
+            <BarChart chartData={userData} />
           </div>
         </div>
       </div>
 
       <div className="region-res-comparison region-res-section">
-        <h2 className="region-res-subtitle">Vergleich zu letzter Wahl</h2>
+        <h2 className="region-res-subtitle">Anteil</h2>
         <div className="chart-container">
-          <BarChart chartData={userData} />
+          <PieChart chartData={userData} />
         </div>
       </div>
     </div>

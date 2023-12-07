@@ -26,7 +26,7 @@ function Results() {
     });
 
   return (
-    <div className="results-container ">
+    <div className="results-container content-page">
       <HamburgerMenu data={menuData} />
       <RegionResult />
     </div>

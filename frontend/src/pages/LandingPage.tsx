@@ -18,7 +18,7 @@ function LandingPage() {
   } as chartData);
 
   return (
-    <div className="lp-container ">
+    <div className="lp-container content-page">
       <div className="title-container">
         <h1 className="main-title">
           Das Bayerische Landtagswahl Informationssystem

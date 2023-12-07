@@ -1,16 +1,5 @@
 .seat-dist-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 10rem;
-
   height: 100vh;
-}
-
-.seat-dist-title {
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
 }
 
 .seat-dist-content {
