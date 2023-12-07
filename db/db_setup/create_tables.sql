@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS hatgewaehlt(
 );
 
 CREATE TABLE IF NOT EXISTS stimmkreise(
-    wahlkreisid INT PRIMARY KEY,
-    stimmkreisid INT,
+    wahlkreisid INT,
+    stimmkreisid INT PRIMARY KEY,
     name VARCHAR(64)
 );
 
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS kandidiert_zweitstimmen(
     kandidatenid INT,
     stimmkreisid INT,
     datum DATE,
-    anzahlStimmen INT
+    anzahlStimmen INT,
     PRIMARY KEY (kandidatenid, stimmkreisid, datum)
 );
 
