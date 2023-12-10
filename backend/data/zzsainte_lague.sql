@@ -8,12 +8,12 @@ AS $$
 DECLARE
     iteration INT := 0;
 BEGIN
+    DROP TABLE IF EXISTS SeatAllocation CASCADE;
+    DROP TABLE IF EXISTS finalSeatAllocation CASCADE;
 
-DROP TABLE IF EXISTS SeatAllocation;
-DROP TABLE IF EXISTS finalSeatAllocation;
 
     -- Create a table to store seat allocation results
-    CREATE TEMP TABLE SeatAllocation
+    CREATE TABLE SeatAllocation
     (
         sa_parteiid INT,
         sa_wahlkreisid INT,
@@ -136,7 +136,7 @@ DROP TABLE IF EXISTS finalSeatAllocation;
     END LOOP;
 
     -- Create a table to store final seat allocation results
-    CREATE TEMP TABLE finalSeatAllocation
+    CREATE TABLE finalSeatAllocation
     (
         sa_parteiid INT,
         sa_wahlkreisid INT,
@@ -182,11 +182,6 @@ DROP TABLE IF EXISTS finalSeatAllocation;
     FROM SeatAllocation sa, maxSeats m
     WHERE m.sa_wahlkreisid = sa.sa_wahlkreisid;
 
-    -- Create a table to store raw seat allocation results
-    CREATE MATERIALIZED VIEW raw_seat_allocation AS
-    SELECT sa_parteiid, sa_wahlkreisid, sa_allocated_seats, sa_votes
-    FROM SeatAllocation;
-
     iteration := 0;
 
     -- Use a loop for the iterative process
@@ -228,13 +223,6 @@ DROP TABLE IF EXISTS finalSeatAllocation;
     -- Display the final seat allocation results
     RETURN QUERY SELECT * FROM finalSeatAllocation;
 
-    -- Create a table to store raw seat allocation results
-    CREATE MATERIALIZED VIEW refined_seat_allocation AS
-    SELECT sa_parteiid, sa_wahlkreisid, sa_allocated_seats, sa_votes
-    FROM SeatAllocation;
-
-    -- Drop the temporary table
-    DROP TABLE SeatAllocation;
 END;
 $$ LANGUAGE plpgsql;
 
