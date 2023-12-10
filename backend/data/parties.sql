@@ -3,7 +3,7 @@ INSERT INTO Parteien(parteiid,parteiname, kurzbezeichnung, farbe) VALUES
     (2, 'BÜNDNIS 90/DIE GRÜNEN', 'GRÜNE', '#26A434'),
     (3, 'FREIE WÄHLER Bayern', 'FREIE WÄHLER', '#F7A700'),
     (4, 'Alternative für Deutschland', 'AfD', '#2694C7'),
-    (5, 'Sozialdemokratische Partei Deutschlands', 'SPD', 'E2001A'),
+    (5, 'Sozialdemokratische Partei Deutschlands', 'SPD', '#E2001A'),
     (6, 'Freie Demokratische Partei', 'FDP', '#FEED00'),
     (7, 'DIE LINKE', 'DIE LINKE', '#E40613'),
     (8, 'Bayernpartei', 'BP', '#146A8F'),
