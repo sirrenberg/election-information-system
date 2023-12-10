@@ -44,8 +44,8 @@ CREATE MATERIALIZED VIEW zweitstimmenProParteiProWahlkreis as (
 CREATE MATERIALIZED VIEW gesamtStimmenProParteiProWahlkreis as (
     SELECT COALESCE(ks.parteiid, zs.parteiid) as parteiid,
             COALESCE(ks.parteiname, zs.parteiname) as parteiname,
-            COALESCE(ks.parteikurzbezeichnung, zs.parteikurzbezeichnung),
-            COALESCE(ks.parteifarbe, zs.parteifarbe),
+            COALESCE(ks.kurzbezeichnung, zs.kurzbezeichnung) as kurzbezeichnung,
+            COALESCE(ks.farbe, zs.farbe) as farbe,
             COALESCE(ks.datum, zs.datum) as datum,
                 COALESCE(ks.wahlkreisid, zs.wahlkreisid) as wahlkreisid,
                  (COALESCE(ks.anzahlStimmen, 0) + COALESCE(zs.anzahlStimmen, 0)) as anzahlStimmen
