@@ -10,6 +10,8 @@ import stimmkreisRoutes from "./routes/Stimmkreise.js";
 import bewerberMitErststimmenMehrheitRoutes from "./routes/BewerberMitErststimmenmehrheit.js";
 import absoluteStimmenverteilungParteienBayernRoutes from "./routes/absoluteStimmverteilungParteienBayern.js";
 
+import loadData from './routes/loadData.js';
+
 dotenv.config();
 
 const app: Express = express();
@@ -34,6 +36,8 @@ app.use(
   "/absoluteStimmenverteilungParteienBayern",
   absoluteStimmenverteilungParteienBayernRoutes
 );
+
+app.use("/init", loadData);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
