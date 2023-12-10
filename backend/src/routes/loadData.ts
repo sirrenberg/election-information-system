@@ -16,10 +16,8 @@ router.get("/", async (req, res) => {
 
     for (const file of files) {
       const filePath = path.join(__dirname, "../../data", file);
-      console.log(filePath);
 
       const data = await fs.promises.readFile(filePath, 'utf-8');
-      console.log(data);
       await pool.query(data);
     }
 
