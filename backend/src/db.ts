@@ -4,6 +4,7 @@ const { Pool } = pg;
 
 const pool = new Pool({
   user: "myuser",
+  // host: "db",
   host: "localhost",
   database: "electiondb",
   password: "mypassword",

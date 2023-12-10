@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   db:
@@ -7,6 +7,8 @@ services:
     ports:
       - "5432:5432"
     restart: always
+    networks:
+      - election-network
 
   backend:
     build:
@@ -16,6 +18,8 @@ services:
     depends_on:
       - db
     restart: always
+    networks:
+      - election-network
 
   frontend:
     build:
@@ -25,3 +29,10 @@ services:
     depends_on:
       - backend
     restart: always
+    networks:
+      - election-network
+
+networks:
+  election-network:
+    name: election-network
+    driver: bridge
