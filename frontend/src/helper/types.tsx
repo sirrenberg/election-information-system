@@ -26,4 +26,25 @@ type menuEntry = {
   }[];
 };
 
-export type { chartData, chartOptions, menuEntry, stimmkreis };
+type seatData = {
+  party: string;
+  seats: number;
+  color: string;
+  votes: number;
+};
+
+type candidateData = {
+  party: string;
+  wahlkreis: string;
+  name: string;
+  stimmkreis: string;
+};
+
+export type {
+  chartData,
+  chartOptions,
+  menuEntry,
+  stimmkreis,
+  seatData,
+  candidateData,
+};

@@ -6,14 +6,14 @@ RETURNS TABLE (sa_parteiid INT, sa_wahlkreisid INT, sa_votes INT,
 sa_allocated_seats INT, sa_divisor FLOAT, sa_sitzeProWahlkreis INT, sa_maxSitze INT)
 AS $$
 DECLARE
-    iteration INT := 1;
+    iteration INT := 0;
 BEGIN
+    DROP TABLE IF EXISTS SeatAllocation CASCADE;
+    DROP TABLE IF EXISTS finalSeatAllocation CASCADE;
 
-DROP TABLE IF EXISTS SeatAllocation;
-DROP TABLE IF EXISTS finalSeatAllocation;
 
     -- Create a table to store seat allocation results
-    CREATE TEMP TABLE SeatAllocation
+    CREATE TABLE SeatAllocation
     (
         sa_parteiid INT,
         sa_wahlkreisid INT,
@@ -136,7 +136,7 @@ DROP TABLE IF EXISTS finalSeatAllocation;
     END LOOP;
 
     -- Create a table to store final seat allocation results
-    CREATE TEMP TABLE finalSeatAllocation
+    CREATE TABLE finalSeatAllocation
     (
         sa_parteiid INT,
         sa_wahlkreisid INT,
@@ -184,7 +184,7 @@ DROP TABLE IF EXISTS finalSeatAllocation;
 
     iteration := 0;
 
-        -- Use a loop for the iterative process
+    -- Use a loop for the iterative process
     WHILE iteration <= 200 LOOP
 
         -- Select the party with the highest quotient
@@ -223,7 +223,8 @@ DROP TABLE IF EXISTS finalSeatAllocation;
     -- Display the final seat allocation results
     RETURN QUERY SELECT * FROM finalSeatAllocation;
 
-    -- Drop the temporary table
-    DROP TABLE SeatAllocation;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Call the stored procedure
+SELECT * FROM CalculateSeatAllocation();

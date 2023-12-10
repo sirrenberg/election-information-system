@@ -10,8 +10,9 @@ import stimmkreisRoutes from "./routes/Stimmkreise.js";
 import bewerberMitErststimmenMehrheitRoutes from "./routes/BewerberMitErststimmenmehrheit.js";
 import absoluteStimmenverteilungParteienBayernRoutes from "./routes/absoluteStimmverteilungParteienBayern.js";
 import MitgliederDesLandtagesRoutes from "./routes/MitgliederDesLandtages.js";
+import ueberhangsMandateRoutes from "./routes/ueberhangsMandate.js";
 
-import loadData from './routes/loadData.js';
+import loadData from "./routes/loadData.js";
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.use(
   absoluteStimmenverteilungParteienBayernRoutes
 );
 app.use("/MitgliederDesLandtages", MitgliederDesLandtagesRoutes);
+app.use("/ueberhangs_mandate", ueberhangsMandateRoutes);
 
 app.use("/init", loadData);
 
