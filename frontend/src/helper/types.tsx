@@ -40,6 +40,14 @@ type candidateData = {
   stimmkreis: string;
 };
 
+type ueberhangData = {
+  wahlkreis: string;
+  partei: string;
+  direktmandate: number;
+  ueberhangmandate: number;
+  totalmandate: number;
+};
+
 export type {
   chartData,
   chartOptions,
@@ -47,4 +55,5 @@ export type {
   stimmkreis,
   seatData,
   candidateData,
+  ueberhangData,
 };

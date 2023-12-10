@@ -40,58 +40,6 @@ function RegionResult({ id }: { id: string }) {
           </div>
         </div>
       </div>
-
-      <div className="extra-candidates-table-container">
-        <h2 className="extra-candidates-title">Überhangmandate</h2>
-        <table className="info-table">
-          <thead>
-            <tr>
-              <th>Partei</th>
-              <th>Anzahl Direktsitze</th>
-              <th>Anzahl Überhang-/Ausgleichsmandate</th>
-              <th>Insgesamt</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>CSU</td>
-              <td>3</td>
-              <td>2</td>
-              <td>5</td>
-            </tr>
-            <tr>
-              <td>CSU</td>
-              <td>3</td>
-              <td>2</td>
-              <td>5</td>
-            </tr>
-            <tr>
-              <td>CSU</td>
-              <td>3</td>
-              <td>2</td>
-              <td>5</td>
-            </tr>
-            <tr>
-              <td>CSU</td>
-              <td>3</td>
-              <td>2</td>
-              <td>5</td>
-            </tr>
-            <tr>
-              <td>CSU</td>
-              <td>3</td>
-              <td>2</td>
-              <td>5</td>
-            </tr>
-            <tr>
-              <td>CSU</td>
-              <td>3</td>
-              <td>2</td>
-              <td>5</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
   );
 }

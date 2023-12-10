@@ -39,7 +39,7 @@ app.use(
   absoluteStimmenverteilungParteienBayernRoutes
 );
 app.use("/MitgliederDesLandtages", MitgliederDesLandtagesRoutes);
-app.use("/ueberhangs_mandate", ueberhangsMandateRoutes);
+app.use("/ueberhang_mandate", ueberhangsMandateRoutes);
 
 app.use("/init", loadData);
 

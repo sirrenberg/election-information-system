@@ -17,9 +17,11 @@ router.get("/", async (req, res) => {
       JOIN finalseatallocation fsa ON sa.sa_parteiid = fsa.sa_parteiid AND sa.sa_wahlkreisid = fsa.sa_wahlkreisid
     )
     
-    select p.kurzbezeichnung as partei, w.wahlkreisname as wahlkreis, nem.difference
+    select p.kurzbezeichnung as partei, w.wahlkreisname as wahlkreis, 
+    nem.allocated_seats as raw_seats, nem.final_allocated_seats as final_seats, nem.difference
     from numExtraMandate nem, parteien p, wahlkreise w
-    where nem.sa_parteiid = p.parteiid and nem.sa_wahlkreisid = w.wahlkreisid`);
+    where nem.sa_parteiid = p.parteiid and nem.sa_wahlkreisid = w.wahlkreisid
+    order by w.wahlkreisname, partei`);
 
     res.json(rows);
   } catch (error) {
