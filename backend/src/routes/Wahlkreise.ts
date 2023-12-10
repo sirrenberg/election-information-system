@@ -23,9 +23,11 @@ router.get("/:wahlkreisid", async (req, res) => {
     }
 
     const { rows } = await pool.query(
-      `SELECT w.wahlkreisid, w.wahlkreisname, e.anzahlstimmen AS erststimmen, z.anzahlstimmen AS zweitstimmen, g.anzahlstimmen AS gesamtstimmen
+      `SELECT w.wahlkreisid, w.wahlkreisname, e.kurzbezeichnung, e.farbe, e.anzahlstimmen AS erststimmen, z.anzahlstimmen AS zweitstimmen, g.anzahlstimmen AS gesamtstimmen
       FROM wahlkreise w, erststimmenProParteiProWahlkreis e, zweitstimmenProParteiProWahlkreis z, gesamtStimmenProParteiProWahlkreis g
-      WHERE w.wahlkreisid = $1`,
+      WHERE w.wahlkreisid = e.wahlkreisid AND w.wahlkreisid = z.wahlkreisid AND w.wahlkreisid = g.wahlkreisid 
+      AND e.parteiid = z.parteiid AND e.parteiid = g.parteiid
+      AND w.wahlkreisid = $1`,
       [req.params.wahlkreisid]
     );
     res.json(rows[0]);
