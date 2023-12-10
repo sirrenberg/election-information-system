@@ -9,6 +9,7 @@ import wahlkreisRoutes from "./routes/Wahlkreise.js";
 import stimmkreisRoutes from "./routes/Stimmkreise.js";
 import bewerberMitErststimmenMehrheitRoutes from "./routes/BewerberMitErststimmenmehrheit.js";
 import absoluteStimmenverteilungParteienBayernRoutes from "./routes/absoluteStimmverteilungParteienBayern.js";
+import MitgliederDesLandtagesRoutes from "./routes/MitgliederDesLandtages.js";
 
 import loadData from './routes/loadData.js';
 
@@ -36,6 +37,7 @@ app.use(
   "/absoluteStimmenverteilungParteienBayern",
   absoluteStimmenverteilungParteienBayernRoutes
 );
+app.use("/MitgliederDesLandtages", MitgliederDesLandtagesRoutes);
 
 app.use("/init", loadData);
 
