@@ -19,7 +19,7 @@ function SeatDistribution() {
 
   return (
     <div className="seat-dist-container content-page">
-      <h1 className="seat-dist-title page-title">Sitzverteilung</h1>
+      <h1>Sitzverteilung</h1>
       <div className="seat-dist-content">
         <div className="seat-dist-section">
           <h2 className="seat-dist-subtitle">Gesamtstimmen</h2>

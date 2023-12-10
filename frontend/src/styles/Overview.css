@@ -1,0 +1,34 @@
+.overview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.overview-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 30px 20px;
+  width: 100%;
+  height: 100%;
+}
+
+.overview-section-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.overview-table {
+  width: 80%;
+}
+
+.student-stats-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  height: 40vh;
+}

@@ -19,7 +19,11 @@ type stimmkreis = {
 
 type menuEntry = {
   title: string;
-  sublist: string[];
+  main_link: string;
+  sublist: {
+    name: string;
+    link: string;
+  }[];
 };
 
 export type { chartData, chartOptions, menuEntry, stimmkreis };

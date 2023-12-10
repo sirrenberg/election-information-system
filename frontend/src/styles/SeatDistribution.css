@@ -2,12 +2,17 @@
   height: 100vh;
 }
 
+.seat-dist-title {
+  font-weight: bold;
+  margin-bottom: 100px;
+}
+
 .seat-dist-content {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  height: 80%;
+  height: 60%;
   width: 100%;
 }
 

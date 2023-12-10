@@ -8,16 +8,14 @@ function HamburgerMenu({ data }: { data: menuEntry[] }) {
 
   return (
     <div className="hamburger-container">
-      <div className="hamburger-btn">
-        <button
-          id="toggle-button"
-          onClick={() => {
-            setIsOpen(!isOpen);
-          }}
-        >
-          HM
-        </button>
-      </div>
+      <label className="hamburger-menu">
+        <input
+          type="checkbox"
+          checked={isOpen}
+          onChange={() => setIsOpen(!isOpen)}
+        />
+      </label>
+
       <div className={`sidebar ${isOpen ? "open" : ""}`}>
         <ListWithButtons data={data} />
       </div>

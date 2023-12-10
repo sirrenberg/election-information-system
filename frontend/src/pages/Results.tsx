@@ -1,15 +1,30 @@
 import "../styles/Results.css";
 import HamburgerMenu from "../components/HamburgerMenu";
+import DistrictResult from "../components/DistrictResult";
 import RegionResult from "../components/RegionResult";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { menuEntry } from "../helper/types";
 import { groupBy } from "../helper/misc";
+import { useAPI } from "../hooks/useAPI";
+import { useParams } from "react-router-dom";
 
 function Results() {
+  const { sendRequest } = useAPI();
+  const { id } = useParams<{ id: string }>();
+
+  function isStimmkreis(id: string) {
+    // Wahlkreisid starts with 9
+    if (id.startsWith("9")) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   const [menuData, setMenuData] = useState<menuEntry[]>([]);
-  fetch("http://localhost:3000/stimmkreise")
-    .then((response) => response.json())
-    .then((data) => {
+
+  useEffect(() => {
+    sendRequest("/stimmkreise", "GET").then((data) => {
       const groupedData = groupBy(data, "wahlkreisname");
 
       // convert into menuEntry
@@ -17,18 +32,25 @@ function Results() {
       for (const [key, value] of Object.entries(groupedData)) {
         const entry: menuEntry = {
           title: key,
-          sublist: value.map((item) => item.name),
+          main_link: value[0].wahlkreisid,
+          sublist: value.map((item: any) => ({
+            name: item.name,
+            link: item.stimmkreisid,
+          })),
         };
         menuData.push(entry);
       }
 
       setMenuData(menuData);
     });
+  }, []);
 
   return (
     <div className="results-container content-page">
       <HamburgerMenu data={menuData} />
-      <RegionResult />
+      {!id && <h1>Bitte Wahl-/Stimmkreis auswählen</h1>}
+      {id && isStimmkreis(id) && <DistrictResult id={id} />}
+      {id && !isStimmkreis(id) && <RegionResult id={id} />}
     </div>
   );
 }
