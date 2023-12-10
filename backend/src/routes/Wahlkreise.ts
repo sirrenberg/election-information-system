@@ -30,7 +30,7 @@ router.get("/:wahlkreisid", async (req, res) => {
       AND w.wahlkreisid = $1`,
       [req.params.wahlkreisid]
     );
-    res.json(rows[0]);
+    res.json(rows);
   } catch (error) {
     console.error(error);
     res.status(500).send("Server Error");
