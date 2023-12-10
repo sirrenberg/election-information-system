@@ -26,24 +26,26 @@ CREATE MATERIALIZED VIEW gesamtStimmenProKandidatProWahlkreis as (
 -------------------------------------------------------------------------
 --Works
 CREATE MATERIALIZED VIEW erststimmenProParteiProWahlkreis as (
-    SELECT p.parteiid, p.parteiname, ks.datum, ks.wahlkreisid, sum(ks.anzahlStimmen) as anzahlStimmen
+    SELECT p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, ks.datum, ks.wahlkreisid, sum(ks.anzahlStimmen) as anzahlStimmen
     FROM erststimmenProKandidatProWahlkreis ks, kandidaten k, parteien p
     WHERE ks.kandidatenid = k.kandidatenid AND k.parteiid = p.parteiid
-    GROUP BY p.parteiid, p.parteiname, ks.datum, ks.wahlkreisid
+    GROUP BY p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, ks.datum, ks.wahlkreisid
 );
 
 --Works
 CREATE MATERIALIZED VIEW zweitstimmenProParteiProWahlkreis as (
-    SELECT p.parteiid, p.parteiname, zs.datum, zs.wahlkreisid, sum(zs.anzahlStimmen) as anzahlStimmen
+    SELECT p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, zs.datum, zs.wahlkreisid, sum(zs.anzahlStimmen) as anzahlStimmen
     FROM zweitstimmenProKandidatProWahlkreis zs, kandidaten k, parteien p
     WHERE zs.kandidatenid = k.kandidatenid AND k.parteiid = p.parteiid
-    GROUP BY p.parteiid, p.parteiname, zs.datum, zs.wahlkreisid
+    GROUP BY p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, zs.datum, zs.wahlkreisid
 );
 
 --Works
 CREATE MATERIALIZED VIEW gesamtStimmenProParteiProWahlkreis as (
     SELECT COALESCE(ks.parteiid, zs.parteiid) as parteiid,
             COALESCE(ks.parteiname, zs.parteiname) as parteiname,
+            COALESCE(ks.parteikurzbezeichnung, zs.parteikurzbezeichnung),
+            COALESCE(ks.parteifarbe, zs.parteifarbe),
             COALESCE(ks.datum, zs.datum) as datum,
                 COALESCE(ks.wahlkreisid, zs.wahlkreisid) as wahlkreisid,
                  (COALESCE(ks.anzahlStimmen, 0) + COALESCE(zs.anzahlStimmen, 0)) as anzahlStimmen
