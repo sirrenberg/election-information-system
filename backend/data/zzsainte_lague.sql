@@ -240,4 +240,3 @@ $$ LANGUAGE plpgsql;
 
 -- Call the stored procedure
 SELECT * FROM CalculateSeatAllocation();
-```
