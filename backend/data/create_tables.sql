@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS hatgewaehlt;
 DROP TABLE IF EXISTS stimmkreise;
 DROP TABLE IF EXISTS wahlkreise;
 DROP TABLE IF EXISTS anzahlWahlberechtigte;
+DROP TABLE IF EXISTS anzahlWaehler;
 DROP TABLE IF EXISTS parteien;
 DROP TABLE IF EXISTS kandidaten;
 DROP TABLE IF EXISTS kandidiert_erststimmen;
@@ -50,6 +51,14 @@ CREATE TABLE IF NOT EXISTS anzahlWahlberechtigte(
     anzahlWahlberechtigte INT,
     PRIMARY KEY (stimmkreisid, datum)
 );
+
+CREATE TABLE IF NOT EXISTS anzahlWaehler(
+    stimmkreisid INT,
+    datum DATE,
+    anzahlWaehler INT,
+    PRIMARY KEY (stimmkreisid, datum)
+);
+
 
 
 CREATE TABLE IF NOT EXISTS parteien(

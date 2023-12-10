@@ -4,6 +4,8 @@ from DataParser.DataParser import DataParser
 import os
 import shutil
 
+import pandas as pd
+
 #The script should
 #Clean data
 #Parse data (create SQL insert statements)
@@ -15,12 +17,14 @@ def main():
     #DataCleaner.clean_data_2018()
 
     #Create SQL insert queries for 2018 and 2023
-    DataParser.create_insert_queries(2023)
-    DataParser.create_insert_queries(2018)
-    DataParser.close_candidate_query()
+    #DataParser.create_insert_queries(2023)
+    #DataParser.create_insert_queries(2018)
+    #DataParser.close_candidate_query()
+
+    get_waehler_2023()
 
     #Merge SQL insert queries for easier manual execution
-    merge_queries()
+    #merge_queries()
 
 #TODO: This should be improved
 #TODO: Directory iteration should be done in another function
@@ -101,6 +105,30 @@ def merge_queries():
     
     shutil.rmtree(zweitstimmen_2018)
     shutil.rmtree(zweitstimmen_2023)
+
+def get_waehler_2023():
+    file_2023 = pd.read_excel(os.path.join("..", "data", "08_10_2023_Landtagswahl_2023_Stimmkreise_Bayern.xlsx"))
+    #print(file_2023['Schlüssel- nummer'])
+    #print(file_2023['Wähler'])
+
+    df = pd.DataFrame({
+    'stimmkreisid': file_2023['Schlüssel- nummer'],
+    'datum': '2023-10-08',
+    'anzahlWaehler': file_2023['Wähler']
+    })
+
+    waehler = "INSERT INTO anzahlWaehler VALUES \n"
+    for index, row in df.iterrows():
+        waehler += f"({row['stimmkreisid']}, '{row['datum']}', {row['anzahlWaehler']}),\n"
+
+    waehler = waehler[:-2] + ";\n"
+
+    file_path = os.path.join(".", "insert_queries", "waehler.sql")
+
+    with open(file_path, mode='wb') as file:
+        file.write(waehler.encode('utf-8', 'ignore'))
+
+    print(waehler)
 
 if __name__ == "__main__":
     main()
