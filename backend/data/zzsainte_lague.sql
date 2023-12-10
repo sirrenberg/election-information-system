@@ -6,7 +6,7 @@ RETURNS TABLE (sa_parteiid INT, sa_wahlkreisid INT, sa_votes INT,
 sa_allocated_seats INT, sa_divisor FLOAT, sa_sitzeProWahlkreis INT, sa_maxSitze INT)
 AS $$
 DECLARE
-    iteration INT := 1;
+    iteration INT := 0;
 BEGIN
 
 DROP TABLE IF EXISTS SeatAllocation;
@@ -182,9 +182,14 @@ DROP TABLE IF EXISTS finalSeatAllocation;
     FROM SeatAllocation sa, maxSeats m
     WHERE m.sa_wahlkreisid = sa.sa_wahlkreisid;
 
+    -- Create a table to store raw seat allocation results
+    CREATE MATERIALIZED VIEW raw_seat_allocation AS
+    SELECT sa_parteiid, sa_wahlkreisid, sa_allocated_seats, sa_votes
+    FROM SeatAllocation;
+
     iteration := 0;
 
-        -- Use a loop for the iterative process
+    -- Use a loop for the iterative process
     WHILE iteration <= 200 LOOP
 
         -- Select the party with the highest quotient
@@ -222,6 +227,11 @@ DROP TABLE IF EXISTS finalSeatAllocation;
 
     -- Display the final seat allocation results
     RETURN QUERY SELECT * FROM finalSeatAllocation;
+
+    -- Create a table to store raw seat allocation results
+    CREATE MATERIALIZED VIEW refined_seat_allocation AS
+    SELECT sa_parteiid, sa_wahlkreisid, sa_allocated_seats, sa_votes
+    FROM SeatAllocation;
 
     -- Drop the temporary table
     DROP TABLE SeatAllocation;
