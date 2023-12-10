@@ -11,6 +11,8 @@ import bewerberMitErststimmenMehrheitRoutes from "./routes/BewerberMitErststimme
 import absoluteStimmenverteilungParteienBayernRoutes from "./routes/absoluteStimmverteilungParteienBayern.js";
 import MitgliederDesLandtagesRoutes from "./routes/MitgliederDesLandtages.js";
 import ueberhangsMandateRoutes from "./routes/ueberhangsMandate.js";
+import KnappsteSiegerRoutes from "./routes/knappsteSieger.js";
+
 
 import loadData from "./routes/loadData.js";
 
@@ -40,6 +42,7 @@ app.use(
 );
 app.use("/MitgliederDesLandtages", MitgliederDesLandtagesRoutes);
 app.use("/ueberhang_mandate", ueberhangsMandateRoutes);
+app.use("/knappste-sieger-und-zweite", KnappsteSiegerRoutes);
 
 app.use("/init", loadData);
 
