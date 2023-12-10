@@ -15,9 +15,9 @@ INSERT INTO Parteien(parteiid,parteiname, kurzbezeichnung, farbe) VALUES
     (14, 'Basisdemokratische Partei Deutschland', 'dieBasis', '#4C4D4F'),
     (15, 'Volt Deutschland', 'Volt', '#502379'),
     -- After Volt, no data on candidates - (Sonstige)
-    (16, 'Sonstige', 'Sonstige', '#000000');
---    ('Piratenpartei Deutschland', 'PIRATEN'),
---    ('Partei für Franken', 'DIE FRANKEN'),
---    ('Liberal-Konservative Reformer - Die EURO-Kritiker', 'LKR'),
---    ('mut', 'mut'),
---    ('Partei für Gesundheitsforschung', 'Gesundheitsforschung');
+    (16, 'Sonstige', 'Sonstige', '#000000'),
+    (17, 'Piratenpartei Deutschland', 'PIRATEN', '#000000'),
+    (18, 'Partei für Franken', 'DIE FRANKEN', '#000000'),
+    (19, 'Liberal-Konservative Reformer - Die EURO-Kritiker', 'LKR', '#000000'),
+    (20, 'mut', 'mut', '#000000'),
+    (21, 'Partei für Gesundheitsforschung', 'Gesundheitsforschung', '#000000');

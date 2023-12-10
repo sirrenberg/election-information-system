@@ -1,7 +1,6 @@
 from DataCleaner.DataCleaner import DataCleaner
 from DataParser.DataParser import DataParser
 
-
 import os
 import shutil
 
@@ -23,6 +22,8 @@ def main():
     #Merge SQL insert queries for easier manual execution
     merge_queries()
 
+#TODO: This should be improved
+#TODO: Directory iteration should be done in another function
 def merge_queries():
     erststimmen_2018 = os.path.join(".", "insert_queries", "erststimmen_2018") 
     erststimmen_2023 = os.path.join(".", "insert_queries", "erststimmen_2023")
