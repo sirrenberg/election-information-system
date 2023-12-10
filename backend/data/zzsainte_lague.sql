@@ -237,3 +237,7 @@ DROP TABLE IF EXISTS finalSeatAllocation;
     DROP TABLE SeatAllocation;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Call the stored procedure
+SELECT * FROM CalculateSeatAllocation();
+```
