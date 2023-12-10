@@ -14,11 +14,11 @@ router.get("/", async (req, res) => {
             k1.stimmkreisid,
             k1.anzahlstimmen
           FROM
-            kanditiertstimmkreis k1
+            kandidiert_erststimmen k1
           WHERE
             NOT EXISTS (
               SELECT 1
-              FROM kanditiertstimmkreis k2
+              FROM kandidiert_erststimmen k2
               WHERE k2.anzahlstimmen > k1.anzahlstimmen AND k2.stimmkreisid = k1.stimmkreisid
             )
         )
@@ -63,12 +63,12 @@ router.get("/:stimmkreisid", async (req, res) => {
             k1.stimmkreisid,
             k1.anzahlstimmen
           FROM
-            kanditiertstimmkreis k1
+            kandidiert_erststimmen k1
           WHERE
             k1.stimmkreisid = ${req.params.stimmkreisid} AND
             NOT EXISTS (
               SELECT 1
-              FROM kanditiertstimmkreis k2
+              FROM kandidiert_erststimmen k2
               WHERE k2.anzahlstimmen > k1.anzahlstimmen AND k2.stimmkreisid = k1.stimmkreisid
             )
         )

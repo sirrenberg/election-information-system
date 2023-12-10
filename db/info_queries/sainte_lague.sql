@@ -27,12 +27,23 @@ DROP TABLE IF EXISTS finalSeatAllocation;
       SELECT p.parteiid, p.kurzbezeichnung, w.wahlkreisid, COALESCE(SUM(ks.anzahlstimmen), 0) as erststimmen
       FROM parteien p
       LEFT OUTER JOIN kandidaten k ON p.parteiid = k.parteiid
-      LEFT OUTER JOIN kanditiertstimmkreis ks ON k.kandidatenid = ks.kandidatenid
+      LEFT OUTER JOIN kandidiert_erststimmen ks ON k.kandidatenid = ks.kandidatenid
       JOIN stimmkreise s ON ks.stimmkreisid = s.stimmkreisid
       JOIN wahlkreise w ON s.wahlkreisid = w.wahlkreisid
-    --  WHERE datum = '2023-10-08'
+      WHERE datum = '2023-10-08'
       GROUP BY p.parteiid, p.kurzbezeichnung, w.wahlkreisid
 
+    ),
+
+    kandidiertwahlkreis as (
+      SELECT 
+          *
+      FROM 
+          kandidiert_zweitstimmen kz
+      INNER JOIN
+          stimmkreise s
+          ON
+          s.stimmkreisid = kz.stimmkreisid
     ),
 
     zweitStimmenProParteiProWahlkreis as (
@@ -40,7 +51,7 @@ DROP TABLE IF EXISTS finalSeatAllocation;
       FROM parteien p
       LEFT OUTER JOIN kandidaten k ON p.parteiid = k.parteiid
       LEFT OUTER JOIN kandidiertwahlkreis kw ON k.kandidatenid = kw.kandidatenid
-    --  WHERE kw.datum = '2023-10-08'
+      WHERE kw.datum = '2023-10-08'
       GROUP BY p.parteiid, p.kurzbezeichnung, kw.wahlkreisid
     ),
 
@@ -138,10 +149,10 @@ DROP TABLE IF EXISTS finalSeatAllocation;
 
     -- gets the winning direct candidates for 2023 election
     WITH stimmkreis_gewinner as (SELECT DISTINCT ks1.stimmkreisid, ks1.kandidatenid as gewinner
-    FROM kanditiertstimmkreis ks1
+    FROM kandidiert_erststimmen ks1
     WHERE ks1.datum = '2023-10-08'
     and ks1.anzahlStimmen = (SELECT MAX(ks2.anzahlStimmen) 
-                        FROM kanditiertstimmkreis ks2
+                        FROM kandidiert_erststimmen ks2
                         WHERE ks1.datum = ks2.datum and ks1.stimmkreisid = ks2.stimmkreisid)),
 
     -- sum up the number direct candidates per party per wahlkreis
