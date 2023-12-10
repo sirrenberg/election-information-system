@@ -213,8 +213,10 @@ router.get("/", async (req, res) => {
         ksuz.differenz,
         ksuz.siegerkandidatenid,
         ksuz.siegername,
+        ksuz.siegerparteiid,
         ksuz.zweiterkandidatenid,
-        ksuz.zweitername
+        ksuz.zweitername,
+        ksuz.zweiterparteiid
     FROM 
         knappsteSiegerUndZweite ksuz
     ORDER BY
