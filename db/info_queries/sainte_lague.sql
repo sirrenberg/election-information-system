@@ -227,14 +227,3 @@ DROP TABLE IF EXISTS finalSeatAllocation;
     DROP TABLE SeatAllocation;
 END;
 $$ LANGUAGE plpgsql;
-
--- Execute the stored procedure with the desired number of seats
-SELECT * FROM CalculateSeatAllocation() c, parteien p
-where c.sa_parteiid = p.parteiid
-ORDER BY c.sa_wahlkreisid, p.parteiid;
-
--- SELECT p.parteiid, sum(sa_allocated_seats)
--- FROM CalculateSeatAllocation() c, parteien p
--- where c.sa_parteiid = p.parteiid
--- GROUP BY  p.parteiid;
-
