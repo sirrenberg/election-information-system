@@ -54,7 +54,7 @@ CREATE MATERIALIZED VIEW gesamtStimmenProParteiProWahlkreis as (
 );
 
 ---------------------------------------------------------
-
+--This all pro Wahlkreis
 CREATE MATERIALIZED VIEW erststimmenProPartei as (
     SELECT ks.parteiid, ks.parteiname, ks.datum, sum(ks.anzahlStimmen) as anzahlStimmen
     FROM erststimmenProParteiProWahlkreis ks
@@ -94,17 +94,67 @@ CREATE MATERIALIZED VIEW gesamtstimmenProStimmkreis as (
             COALESCE(ks.datum, zs.datum) as datum,
                 COALESCE(ks.anzahlStimmen, 0) + COALESCE(zs.anzahlStimmen, 0) as anzahlStimmen
     FROM erststimmenProStimmkreis ks
-    FULL OUTER JOIN zweitstimmenProStimmkreis zs ON ks.stimmkreisid = zs.stimmkreisid
+    FULL OUTER JOIN zweitstimmenProStimmkreis zs ON ks.stimmkreisid = zs.stimmkreisid AND ks.datum = zs.datum
 );
 
--------Q3-------------------
+-------Q3.1-------------------
 CREATE MATERIALIZED VIEW wahlbeteiligungProStimmkreis as (
-    SELECT (wh.anzahlWaehler * 1.00)/wb.anzahlWahlberechtigte as beteiligung, wb.datum, wb.stimmkreisid
+    SELECT ((wh.anzahlWaehler * 1.00)/wb.anzahlWahlberechtigte) as beteiligung, wb.datum, wb.stimmkreisid
     FROM anzahlWahlberechtigte wb, anzahlWaehler wh
-        WHERE wb.stimmkreisid =  wh.stimmkreisid
+        WHERE wb.stimmkreisid =  wh.stimmkreisid AND wb.datum=wh.datum
 );
 
+-----------------------------
 
+-------- Q3.2/3/4 ---------------
+CREATE MATERIALIZED VIEW erststimmenProParteiProStimmkreis as (
+    SELECT p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, ks.datum, ks.stimmkreisid, sum(ks.anzahlStimmen) as anzahlstimmen
+    FROM kandidiert_erststimmen ks, kandidaten k, parteien p 
+        WHERE ks.kandidatenid = k.kandidatenid and k.parteiid = p.parteiid
+    GROUP BY p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, ks.datum, ks.stimmkreisid
+);
+
+CREATE MATERIALIZED VIEW zweitstimmenProParteiProStimmkreis as (
+    SELECT p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, zs.datum, zs.stimmkreisid, sum(zs.anzahlStimmen) as anzahlstimmen
+    FROM kandidiert_zweitstimmen zs, kandidaten k, parteien p
+        WHERE zs.kandidatenid = k.kandidatenid and k.parteiid = p.parteiid
+    GROUP BY p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, zs.datum, zs.stimmkreisid
+);
+
+---------Absoluter Anzahl von Gesamtstimmen---------------
+CREATE MATERIALIZED VIEW gesamtStimmenProParteiProStimmkreis as (
+    SELECT COALESCE(ks.parteiid, zs.parteiid) as parteiid, 
+            COALESCE(ks.parteiname, zs.parteiname) as parteiname,
+             COALESCE(ks.kurzbezeichnung, zs.kurzbezeichnung) as kurzbezeichnung,
+              COALESCE(ks.farbe, zs.farbe) as farbe,
+              COALESCE(ks.datum, zs.datum) as datum,
+              COALESCE(ks.stimmkreisid, zs.stimmkreisid) as stimmkreisid,
+               COALESCE(ks.anzahlStimmen, 0) + COALESCE(zs.anzahlStimmen, 0) as anzahlStimmen
+    FROM erststimmenProParteiProStimmkreis ks 
+    FULL OUTER JOIN zweitstimmenProParteiProStimmkreis zs 
+                        ON ks.parteiid = zs.parteiid AND ks.stimmkreisid=zs.stimmkreisid AND ks.datum=zs.datum  
+);
+
+---------Prozentualer Anzahl von Gesamtstimmen-------------
+CREATE MATERIALIZED VIEW pgesamtStimmenProParteiProStimmkreis as (
+    SELECT gsp.parteiid, gsp.parteiname,
+             gsp.kurzbezeichnung, gsp.farbe, 
+                gsp.datum, gsp.stimmkreisid,
+                    (gsp.anzahlStimmen * 1.00) / gs.anzahlStimmen  as prozentualStimmen
+    FROM gesamtstimmenProStimmkreis gs, gesamtStimmenProParteiProStimmkreis gsp 
+    WHERE gs.stimmkreisid = gsp.stimmkreisid AND gs.datum = gsp.datum 
+);
+
+-------- (2023-2018) Unterschied in Gesamtstimmen----------
+CREATE MATERIALIZED VIEW stimmenUnterschiedProParteiProStimmkreis as (
+    SELECT gsp1.parteiid, gsp1.parteiname,
+            gsp1.kurzbezeichnung, gsp1.farbe, gsp1.stimmkreisid,
+                (gsp1.anzahlStimmen - gsp2.anzahlStimmen) as stimmenUnterschied, 
+                ((gsp1.anzahlStimmen - gsp2.anzahlStimmen) * 1.00) / gsp2.anzahlStimmen as relativUnterschied
+    FROM gesamtStimmenProParteiProStimmkreis gsp1, gesamtStimmenProParteiProStimmkreis gsp2
+        WHERE gsp1.parteiid = gsp2.parteiid AND gsp1.stimmkreisid=gsp2.stimmkreisid 
+                                                AND gsp1.datum = '2023-10-08' AND gsp2.datum = '2018-10-14'
+);
 
 
 ----------------------------

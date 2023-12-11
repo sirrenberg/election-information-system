@@ -55,6 +55,8 @@ CREATE MATERIALIZED VIEW gesamtStimmenProParteiProWahlkreis as (
 
 ---------------------------------------------------------
 
+
+--This all pro Wahlkreis
 CREATE MATERIALIZED VIEW erststimmenProPartei as (
     SELECT ks.parteiid, ks.parteiname, ks.datum, sum(ks.anzahlStimmen) as anzahlStimmen
     FROM erststimmenProParteiProWahlkreis ks
@@ -97,13 +99,41 @@ CREATE MATERIALIZED VIEW gesamtstimmenProStimmkreis as (
     FULL OUTER JOIN zweitstimmenProStimmkreis zs ON ks.stimmkreisid = zs.stimmkreisid
 );
 
--------Q3-------------------
+-------Q3.1-------------------
 CREATE MATERIALIZED VIEW wahlbeteiligungProStimmkreis as (
     SELECT (wh.anzahlWaehler * 1.00)/wb.anzahlWahlberechtigte as beteiligung, wb.datum, wb.stimmkreisid
     FROM anzahlWahlberechtigte wb, anzahlWaehler wh
         WHERE wb.stimmkreisid =  wh.stimmkreisid
 );
 
+-----------------------------
+
+-------- Q3.2 ---------------
+CREATE MATERIALIZED VIEW erststimmenProParteiProStimmkreis as (
+    SELECT p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, ks.datum, ks.stimmkreisid, sum(ks.anzahlStimmen)  
+    FROM kandidiert_erststimmen ks, kandidaten k, partei p 
+        WHERE ks.kandidatenid = k.kandidatenid and k.parteiid = partei.parteiid
+    GROUP BY p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, ks.datum, ks.stimmkreisid
+);
+
+CREATE MATERIALIZED VIEW zweitstimmenProParteiProStimmkreis as (
+    SELECT p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, zs.datum, zs.stimmkreisid, sum(zs.anzahlStimmen)
+    FROM kandidiert_zweitstimmen zs, kandidaten k, partei p
+        WHERE zs.kandidatenid = k.kandidatenid and k.parteiid = p.parteiid
+    GROUP BY p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, zs.datum, zs.stimmkreisid
+);
+
+CREATE MATERIALIZED VIEW gesamtStimmenProParteiProStimmkreis as (
+    SELECT COALESCE(ks.parteiid, zs.parteiid) as parteiid, 
+            COALESCE(ks.parteiname, zs.parteiname) as parteiname,
+             COALESCE(ks.kurzbezeichnung, ps.kurzbezeichnung) as kurzbezeichnung,
+              COALESCE(ks.farbe, zs.farbe) as farbe,
+              COALESCE(ks.datum, zs.datum) as datum,
+              COALESCE(ks.stimmkreisid, zs.stimmkreisid) as stimmkreisid,
+               COALESCE(ks.anzahlStimmen, 0) + COALESCE(zs.anzahlStimmen, 0) as anzahlStimmen
+    FROM erststimmenProParteiProStimmkreis ks 
+    FULL OUTER JOIN zweitstimmenProParteiProStimmkreis zs ON ks.parteiid = zs.parteiid AND ks.stimmkreisid=zs.stimmkreisid  
+);
 
 
 
