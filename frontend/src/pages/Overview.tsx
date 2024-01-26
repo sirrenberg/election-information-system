@@ -60,7 +60,7 @@ function Overview() {
       </div>
 
       <div className="close-winners-container overview-section">
-        <h2 className="overview-section-title">Überhang-/Ausgleichmandate</h2>
+        <h2 className="overview-section-title">Überhang-/Ausgleichmandate*</h2>
         <table className="info-table overview-table">
           <thead>
             <tr>
@@ -83,6 +83,7 @@ function Overview() {
             ))}
           </tbody>
         </table>
+        <p className="overview-section-subtitle">*es werden nur Parteien angezeigt, die im neu gewählten Landtag vertreten sind. Alle anderen Parteien haben weder Direkt- noch Überhang-oder Ausgleichmandate erzielt.</p>
       </div>
 
       {/* <div className="student-stats-container overview-section">
