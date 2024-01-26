@@ -181,7 +181,7 @@ router.get("/", async (req, res) => {
     -- die knappsten Sieger und Zweite für jede Partei
     knappsteSiegerUndZweite AS (
         SELECT
-            p.parteiid AS betrachtePartei,
+            p.kurzbezeichnung AS betrachtePartei,
             r.*,
             aks.anzahlKnappsteSieger,
             akz.anzahlKnappsteZweite
@@ -210,18 +210,29 @@ router.get("/", async (req, res) => {
     SELECT 
         ksuz.betrachtepartei,
         ksuz.stimmkreisid,
+		stim.name AS stimmkreisname,
         ksuz.differenz,
-        ksuz.siegerkandidatenid,
         ksuz.siegername,
-        ksuz.siegerparteiid,
-        ksuz.zweiterkandidatenid,
+		psieg.kurzbezeichnung AS siegerparteikurz,
         ksuz.zweitername,
-        ksuz.zweiterparteiid
+		pzweit.kurzbezeichnung AS zweiterparteikurz
     FROM 
         knappsteSiegerUndZweite ksuz
+		JOIN
+			parteien psieg
+			ON
+			psieg.parteiid = ksuz.siegerparteiid
+		JOIN
+			parteien pzweit
+			ON
+			pzweit.parteiid = ksuz.zweiterparteiid
+		JOIN
+			stimmkreise stim
+			ON
+			stim.stimmkreisid = ksuz.stimmkreisid
+		
     ORDER BY
         ksuz.betrachtepartei, ksuz.differenz
-    
     `
   );
     res.json(rows);

@@ -48,6 +48,14 @@ type ueberhangData = {
   totalmandate: number;
 };
 
+type knappsteSiegerData = {
+  partei: string;
+  stimmkreis: string;
+  differenz: number;
+  sieger: string;
+  zweiter: string;
+};
+
 export type {
   chartData,
   chartOptions,
@@ -56,4 +64,5 @@ export type {
   seatData,
   candidateData,
   ueberhangData,
+  knappsteSiegerData,
 };

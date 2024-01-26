@@ -15,6 +15,14 @@
   height: 100%;
 }
 
+
+.table-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 .overview-section-title {
   font-weight: bold;
   font-size: 1.5rem;
