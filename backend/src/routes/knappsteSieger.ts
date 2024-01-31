@@ -33,15 +33,21 @@ router.get("/", async (req, res) => {
             AND
                 k1.datum = '2023-10-08'
     ),
-    -- die Kandidaten, die ihren Stimmkreis nicht gewonnen haben
+	-- die Kandidaten, die ihren Stimmkreis nicht gewonnen haben
     loserStimmkreis AS (
         SELECT
-            k.kandidatenid,
+		    k.kandidatenid,
+            kand.parteiid,
+            kand.kandidatennamen,
             k.stimmkreisid,
             k.anzahlstimmen,
             k.datum
         FROM
             kandidiert_erststimmen k
+			INNER JOIN
+			kandidaten kand
+			ON
+			kand.kandidatenid= k.kandidatenid
         WHERE
             NOT EXISTS (
                 SELECT 1
@@ -95,8 +101,28 @@ router.get("/", async (req, res) => {
         ORDER BY
             w.stimmkreisid
     ),
+	-- ranking Sieger und alle anderen
+	diffLoserAndWinner AS(
+		SELECT
+			w.stimmkreisid,
+			w.anzahlstimmen - l.anzahlStimmen AS differenz,
+			w.kandidatenid AS siegerKandidatenID,
+			w.parteiid AS siegerParteiID,
+			w.kandidatennamen AS siegerName,
+			l.kandidatenID AS loserKandidatenID,
+			l.parteiid AS loserParteiID,
+			l.kandidatennamen AS loserName
+		FROM
+			winnerStimmkreis w
+			INNER JOIN
+			loserStimmkreis l
+			ON
+			w.stimmkreisid = l.stimmkreisid
+		ORDER BY
+			l.parteiid, differenz
+	),
     -- ranking der Differenzen für jede Partei für die Sieger
-    rankingSiegerUndZweite AS (
+    rankingSieger AS (
         SELECT
             d1.*,
             (SELECT
@@ -131,16 +157,6 @@ router.get("/", async (req, res) => {
         GROUP BY
             w.parteiid
     ),
-    -- Anzahl der Zweiten für jede Partei
-    anzahlZweiterProPartei AS (
-        SELECT
-            COUNT(*) AS anzahlZweiter,
-            s.parteiid
-        FROM
-            secondStimmkreis s
-        GROUP BY
-            s.parteiid
-    ),
     -- Gibt an, wie viele knappste Sieger pro Partei angezeigt werden sollen. Wenn die Partei 10 oder mehr Stimmkreise
     -- gewonnen hat, sollen 10 knappste Sieger angezeigt werden. Sonst halt n, mit n = Anzahl der gewonnenen Stimmkreise.
     anzahlKnappsteSiegerProPartei AS (
@@ -161,78 +177,137 @@ router.get("/", async (req, res) => {
             p.parteiid
         
     ),
-    -- Gibt an, wie viele knappste Zweite z pro Partei angezeigt werden sollen, mit z = 10 - n. Falls die Partei nicht 
-    -- genug Stimmkreise gewonnen hat, um das zu liefern, 
-    anzahlKnappsteZweiteProPartei AS (
-        SELECT
-            az.parteiid,
-            CASE
-                WHEN aks.anzahlKnappsteSieger + az.anzahlZweiter > 10
-                THEN 10 - aks.anzahlKnappsteSieger
-                ELSE az.anzahlZweiter
-            END AS anzahlKnappsteZweite
-        FROM 
-            anzahlZweiterProPartei az
-            INNER JOIN
-            anzahlKnappsteSiegerProPartei aks
-            ON
-            az.parteiid = aks.parteiid
-    ),
     -- die knappsten Sieger und Zweite für jede Partei
-    knappsteSiegerUndZweite AS (
+    knappsteSieger AS (
         SELECT
-            p.kurzbezeichnung AS betrachtePartei,
+            p.kurzbezeichnung AS betrachtetePartei,
             r.*,
-            aks.anzahlKnappsteSieger,
-            akz.anzahlKnappsteZweite
+			'knappsteSiegerVsZweiter' AS tag
         FROM
-            rankingSiegerUndZweite r
+            rankingSieger r
             INNER JOIN
             anzahlKnappsteSiegerProPartei aks
             ON 
             r.siegerparteiid = aks.parteiid
             INNER JOIN
-            anzahlKnappsteZweiteProPartei akz
-            ON
-            r.zweiterparteiid = akz.parteiid
-            CROSS JOIN
             parteien p
+			ON
+		    p.parteiid = r.siegerParteiID
         WHERE
-            p.parteiid = r.siegerParteiID
-            AND
             r.siegerranking <= aks.anzahlKnappsteSieger 
-            OR
-            p.parteiid = r.zweiterParteiID
-            AND
-            r.zweiterranking <= akz.anzahlKnappsteZweite
-    )
-    
-    SELECT 
-        ksuz.betrachtepartei,
-        ksuz.stimmkreisid,
-		stim.name AS stimmkreisname,
-        ksuz.differenz,
-        ksuz.siegername,
-		psieg.kurzbezeichnung AS siegerparteikurz,
-        ksuz.zweitername,
-		pzweit.kurzbezeichnung AS zweiterparteikurz
-    FROM 
-        knappsteSiegerUndZweite ksuz
-		JOIN
-			parteien psieg
+    ),
+	-- Anzahl der Politiker, die ihren Stimmkreis nicht gewonnen haben, für jede Partei
+	-- Nötig, weil vielleicht manche Parteien nicht in jedem Stimmkreis einen Kandidaten haben. 
+    anzahlLoserProPartei AS (
+        SELECT
+            COUNT(*) AS anzahlLoser,
+            l.parteiid
+        FROM
+            loserStimmkreis l
+        GROUP BY
+            l.parteiid
+    ),
+	-- Gibt an, wie viele Politiker pro Partei "aufgefüllt" werden müssen. Wenn eine Partei keine 10 Wahlkreise 
+	-- gewonnen hat, wird mit mit z = 10 - n aufgefüllt.
+	-- Diese Politiker, mit denen aufgefüllt wird, haben den niedrigsten Abstand dieser Partei zum Sieger des Wahlkreises.
+    anzahlKnappsteLoserProPartei AS (
+        SELECT
+            al.parteiid,
+            CASE
+                WHEN aks.anzahlKnappsteSieger + al.anzahlLoser > 10
+                THEN 10 - aks.anzahlKnappsteSieger
+                ELSE al.anzahlLoser
+            END AS anzahlKnappsteLoser
+        FROM 
+            anzahlLoserProPartei al
+            INNER JOIN
+            anzahlKnappsteSiegerProPartei aks
+            ON
+            al.parteiid = aks.parteiid
+    ),
+	-- ranking of knappste Loser
+	rankingLoser AS (
+		SELECT
+			l.*,
+			RANK() OVER (PARTITION BY l.loserParteiID ORDER BY differenz) AS loserRanking
+		FROM
+			diffLoserAndWinner l
+	),
+	
+    -- die knappsten Loser für jede Partei
+	knappsteLoser AS (
+        SELECT
+            p.kurzbezeichnung AS betrachtetePartei,
+            r.*,
+			'knappsterVerliererVsSieger' AS tag
+        FROM
+            rankingLoser r
+            INNER JOIN
+            anzahlKnappsteLoserProPartei akl
+            ON 
+            r.loserparteiid = akl.parteiid
+            INNER JOIN
+            parteien p
 			ON
-			psieg.parteiid = ksuz.siegerparteiid
-		JOIN
-			parteien pzweit
-			ON
-			pzweit.parteiid = ksuz.zweiterparteiid
-		JOIN
-			stimmkreise stim
-			ON
-			stim.stimmkreisid = ksuz.stimmkreisid
+		    p.parteiid = r.loserParteiID
+        WHERE
+            r.loserRanking <= akl.anzahlKnappsteLoser 
+    ),
+
+	ausgabe AS (
+		SELECT 
+			ks.betrachtetePartei,
+			ks.stimmkreisid,
+			stim.name AS stimmkreisname,
+			ks.differenz,
+			ks.siegername,
+			psieg.kurzbezeichnung AS siegerparteikurz,
+			ks.zweitername AS verlierername,
+			pzweit.kurzbezeichnung AS verliererparteikurz,
+			ks.tag
+		FROM 
+			knappsteSieger ks
+				JOIN
+					parteien psieg
+					ON
+					psieg.parteiid = ks.siegerparteiid
+				JOIN
+					parteien pzweit
+					ON
+					pzweit.parteiid = ks.zweiterparteiid
+				JOIN
+					stimmkreise stim
+					ON
+					stim.stimmkreisid = ks.stimmkreisid
+		UNION
+			(SELECT 
+				kl.betrachtetePartei,
+				kl.stimmkreisid,
+				stim.name AS stimmkreisname,
+				kl.differenz,
+				kl.siegername,
+				psieg.kurzbezeichnung AS siegerparteikurz,
+				kl.losername AS verlierername,
+				ploser.kurzbezeichnung AS verliererparteikurz,
+			 	kl.tag
+			FROM 
+				knappsteLoser kl
+					JOIN
+						parteien psieg
+						ON
+						psieg.parteiid = kl.siegerparteiid
+					JOIN
+						parteien ploser
+						ON
+						ploser.parteiid = kl.loserparteiid
+					JOIN
+						stimmkreise stim
+						ON
+						stim.stimmkreisid = kl.stimmkreisid))
 		
-    ORDER BY
-        ksuz.betrachtepartei, ksuz.differenz
+    SELECT a.*
+    FROM ausgabe a
+    ORDER BY a.betrachtetepartei, a.tag DESC, a.differenz
     `
   );
     res.json(rows);
