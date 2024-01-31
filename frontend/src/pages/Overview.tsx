@@ -12,6 +12,7 @@ function Overview() {
   const [ueberhangData, setUeberhangData] = useState<ueberhangData[]>([]);
   const [knappsteSiegerData, setKnappsteSiegerData] = useState<knappsteSiegerData[]>([]);
   const [groupedData, setGroupedData] = useState<any[]>([]);
+  const [openTables, setOpenTables] = useState<string[]>([]);
 
   useEffect(() => {
     sendRequest("/ueberhang_mandate", "GET").then((data) => {
@@ -50,33 +51,36 @@ function Overview() {
 
       <div className="close-winners-container overview-section">
         <h2 className="overview-section-title">Knappste Sieger</h2>
-        {Object.entries(groupedData).map(([partei, data]) => (
-          <div key={partei} className="table-container">
-          <h2>{partei}</h2>
-          <table className="info-table overview-table">
-            <thead>
-              <tr>
-                <th>Partei</th>
-                <th>Stimmkreis</th>
-                <th>Differenz</th>
-                <th>Sieger</th>
-                <th>Zweiter</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((elem) => (
-                <tr key={elem.partei + elem.stimmkreis}>
-                  <td>{elem.partei}</td>
-                  <td>{elem.stimmkreis}</td>
-                  <td>{elem.differenz}</td>
-                  <td>{elem.sieger}</td>
-                  <td>{elem.zweiter}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-          ))}
+        {Object.entries(groupedData).map(([partei, data]) => {
+          return(
+            <div key={partei} className="table-container">
+              <h2 onClick={() => openTables.includes(partei) ? setOpenTables(openTables.filter((elem) => elem !== partei)): setOpenTables([...openTables, partei])}>{partei}</h2>
+                {openTables.includes(partei) && (<table className="info-table overview-table">
+                  <thead>
+                    <tr>
+                      <th>Partei</th>
+                      <th>Stimmkreis</th>
+                      <th>Differenz</th>
+                      <th>Sieger</th>
+                      <th>Zweiter</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.map((elem) => (
+                      <tr key={elem.partei + elem.stimmkreis}>
+                        <td>{elem.partei}</td>
+                        <td>{elem.stimmkreis}</td>
+                        <td>{elem.differenz}</td>
+                        <td>{elem.sieger}</td>
+                        <td>{elem.zweiter}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>)}
+            </div>
+          )
+        })
+      }
         <table className="info-table overview-table">
           <thead>
             <tr>
