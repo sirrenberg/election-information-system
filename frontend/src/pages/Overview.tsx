@@ -5,6 +5,7 @@ import { chartData, ueberhangData, knappsteSiegerData } from "../helper/types";
 import { useAPI } from "../hooks/useAPI";
 import { useEffect } from "react";
 import { groupBy } from 'lodash';
+import ClosestWinners from "./ClosestWinners";
 
 function Overview() {
   const { sendRequest } = useAPI();
@@ -12,7 +13,6 @@ function Overview() {
   const [ueberhangData, setUeberhangData] = useState<ueberhangData[]>([]);
   const [knappsteSiegerData, setKnappsteSiegerData] = useState<knappsteSiegerData[]>([]);
   const [groupedData, setGroupedData] = useState<any[]>([]);
-  const [openTables, setOpenTables] = useState<string[]>([]);
 
   useEffect(() => {
     sendRequest("/ueberhang_mandate", "GET").then((data) => {
@@ -29,82 +29,10 @@ function Overview() {
     });
   }, []);
 
-  useEffect(() => {
-    sendRequest("/knappste-sieger-und-zweite", "GET").then((data) => {
-      console.log(data);
-      const knappsteSiegerData: knappsteSiegerData[] = data.map((elem: any) => ({
-        partei: elem.betrachtepartei,
-        stimmkreis: `${elem.stimmkreisname} (${elem.stimmkreisid})`,
-        differenz: Number(elem.differenz),
-        sieger: `${elem.siegername} (${elem.siegerparteikurz})`,
-        zweiter: `${elem.zweitername} (${elem.zweiterparteikurz})`,
-      }));
-
-      setKnappsteSiegerData(knappsteSiegerData);
-      setGroupedData(groupBy(knappsteSiegerData, 'partei'));
-    });
-  }, []);
-
   return (
     <div className="overview-container content-page">
       <h1 className="page-title">Overview</h1>
-
-      <div className="close-winners-container overview-section">
-        <h2 className="overview-section-title">Knappste Sieger</h2>
-        {Object.entries(groupedData).map(([partei, data]) => {
-          return(
-            <div key={partei} className="table-container">
-              <h2 onClick={() => openTables.includes(partei) ? setOpenTables(openTables.filter((elem) => elem !== partei)): setOpenTables([...openTables, partei])}>{partei}</h2>
-                {openTables.includes(partei) && (<table className="info-table overview-table">
-                  <thead>
-                    <tr>
-                      <th>Partei</th>
-                      <th>Stimmkreis</th>
-                      <th>Differenz</th>
-                      <th>Sieger</th>
-                      <th>Zweiter</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.map((elem) => (
-                      <tr key={elem.partei + elem.stimmkreis}>
-                        <td>{elem.partei}</td>
-                        <td>{elem.stimmkreis}</td>
-                        <td>{elem.differenz}</td>
-                        <td>{elem.sieger}</td>
-                        <td>{elem.zweiter}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>)}
-            </div>
-          )
-        })
-      }
-        <table className="info-table overview-table">
-          <thead>
-            <tr>
-              <th>Partei</th>
-              <th>Stimmkreis</th>
-              <th>Differenz</th>
-              <th>Sieger</th>
-              <th>Zweiter</th>
-            </tr>
-          </thead>
-          <tbody>
-            {knappsteSiegerData.map((elem) => (
-              <tr key={elem.partei + elem.stimmkreis}>
-                <td>{elem.partei}</td>
-                <td>{elem.stimmkreis}</td>
-                <td>{elem.differenz}</td>
-                <td>{elem.sieger}</td>
-                <td>{elem.zweiter}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
+      <ClosestWinners />
       <div className="close-winners-container overview-section">
         <h2 className="overview-section-title">Überhang-/Ausgleichmandate*</h2>
         <table className="info-table overview-table">
