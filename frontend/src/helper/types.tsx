@@ -50,10 +50,12 @@ type ueberhangData = {
 
 type knappsteSiegerData = {
   partei: string;
+  parteiLong: string;
   stimmkreis: string;
   differenz: number;
   sieger: string;
-  zweiter: string;
+  verlierer: string;
+  tag: string;
 };
 
 export type {

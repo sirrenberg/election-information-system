@@ -8,7 +8,7 @@ function ClosestWinners() {
     const { sendRequest } = useAPI();
     const [selectedParty, setSelectedParty] = useState('');
     const [knappsteSiegerData, setKnappsteSiegerData] = useState<knappsteSiegerData[]>([]);
-    const [groupedData, setGroupedData] = useState<any[]>([]);
+    const [groupedData, setGroupedData] = useState<{ [key: string] : knappsteSiegerData[] }>({});
 
     const handleChange = (event) => {
         setSelectedParty(event.target.value);
@@ -18,7 +18,8 @@ function ClosestWinners() {
         sendRequest("/knappste-sieger-und-zweite", "GET").then((data) => {
         console.log(data);
         const knappsteSiegerData: knappsteSiegerData[] = data.map((elem: any) => ({
-            partei: elem.betrachtetepartei,
+            partei: elem.betrachteteparteikurz,
+            parteiLong: elem.betrachteteparteiname,
             stimmkreis: `${elem.stimmkreisname} (${elem.stimmkreisid})`,
             differenz: Number(elem.differenz),
             sieger: `${elem.siegername} (${elem.siegerparteikurz})`,
@@ -50,8 +51,7 @@ function ClosestWinners() {
                         }
                         return(
                             <div key={partei} className="table-container">
-                                <h2>{partei}</h2>
-
+                                <h2>{data[0].parteiLong}</h2>
                                 {
                                     data.filter(elem => elem.tag === 'knappsteSiegerVsZweiter').length > 0 && (
                                             <div key={partei} className="table-container">
@@ -60,7 +60,6 @@ function ClosestWinners() {
             
                                                     <thead>
                                                     <tr>
-                                                        <th>Partei</th>
                                                         <th>Stimmkreis</th>
                                                         <th>Differenz</th>
                                                         <th>Knappste Sieger</th>
@@ -71,7 +70,6 @@ function ClosestWinners() {
                                                     <tbody>
                                                         {data.filter(elem => elem.tag === 'knappsteSiegerVsZweiter').map((elem) => (
                                                             <tr key={elem.partei + elem.stimmkreis}>
-                                                            <td>{elem.partei}</td>
                                                             <td>{elem.stimmkreis}</td>
                                                             <td>{elem.differenz}</td>
                                                             <td>{elem.sieger}</td>
@@ -92,7 +90,6 @@ function ClosestWinners() {
 
                                                 <thead>
                                                 <tr>
-                                                    <th>Partei</th>
                                                     <th>Stimmkreis</th>
                                                     <th>Differenz</th>
                                                     <th>Knappste Verlierer</th>
@@ -103,7 +100,6 @@ function ClosestWinners() {
                                                 <tbody>
                                                     {data.filter(elem => elem.tag === 'knappsterVerliererVsSieger').map((elem) => (
                                                         <tr key={elem.partei + elem.stimmkreis}>
-                                                        <td>{elem.partei}</td>
                                                         <td>{elem.stimmkreis}</td>
                                                         <td>{elem.differenz * -1}</td>
                                                         <td>{elem.verlierer}</td>
@@ -125,42 +121,5 @@ function ClosestWinners() {
         </div>
     );
 }
-
-// function closestWinnerTable(data) {
-//     const filteredData = data.filter(elem => elem.tag === 'knappsteSiegerVsZweiter');
-//     if (filteredData.length === 0) {
-//         return null;
-//     }
-    
-//     return (
-//         <div>
-//             <h3>Knappste Sieger</h3>
-//             <table className="info-table overview-table">
-
-//                 <thead>
-//                 <tr>
-//                     <th>Partei</th>
-//                     <th>Stimmkreis</th>
-//                     <th>Differenz</th>
-//                     <th>Sieger</th>
-//                     <th>Zweite</th>
-//                 </tr>
-//                 </thead>
-
-//                 <tbody>
-//                     {data.filter(elem => elem.tag === 'knappsteSiegerVsZweiter').map((elem) => (
-//                         <tr key={elem.partei + elem.stimmkreis}>
-//                         <td>{elem.partei}</td>
-//                         <td>{elem.stimmkreis}</td>
-//                         <td>{elem.differenz}</td>
-//                         <td>{elem.sieger}</td>
-//                         <td>{elem.verlierer}</td>
-//                         </tr>
-//                     ))}
-//                 </tbody>
-//             </table>
-//         </div>
-//     )   
-// }
 
 export default ClosestWinners;

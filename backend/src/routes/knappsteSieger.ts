@@ -180,7 +180,8 @@ router.get("/", async (req, res) => {
     -- die knappsten Sieger und Zweite für jede Partei
     knappsteSieger AS (
         SELECT
-            p.kurzbezeichnung AS betrachtetePartei,
+		    p.kurzbezeichnung AS betrachteteParteiKurz,
+			p.parteiname AS betrachteteParteiName,
             r.*,
 			'knappsteSiegerVsZweiter' AS tag
         FROM
@@ -237,7 +238,8 @@ router.get("/", async (req, res) => {
     -- die knappsten Loser für jede Partei
 	knappsteLoser AS (
         SELECT
-            p.kurzbezeichnung AS betrachtetePartei,
+            p.kurzbezeichnung AS betrachteteParteiKurz,
+			p.parteiname AS betrachteteParteiName,
             r.*,
 			'knappsterVerliererVsSieger' AS tag
         FROM
@@ -256,7 +258,8 @@ router.get("/", async (req, res) => {
 
 	ausgabe AS (
 		SELECT 
-			ks.betrachtetePartei,
+			ks.betrachteteParteiKurz,
+			ks.betrachteteParteiName,
 			ks.stimmkreisid,
 			stim.name AS stimmkreisname,
 			ks.differenz,
@@ -281,7 +284,8 @@ router.get("/", async (req, res) => {
 					stim.stimmkreisid = ks.stimmkreisid
 		UNION
 			(SELECT 
-				kl.betrachtetePartei,
+				kl.betrachteteParteiKurz,
+				kl.betrachteteParteiName,
 				kl.stimmkreisid,
 				stim.name AS stimmkreisname,
 				kl.differenz,
@@ -307,7 +311,7 @@ router.get("/", async (req, res) => {
 		
     SELECT a.*
     FROM ausgabe a
-    ORDER BY a.betrachtetepartei, a.tag DESC, a.differenz
+    ORDER BY a.betrachteteParteiKurz, a.tag, a.differenz
     `
   );
     res.json(rows);
