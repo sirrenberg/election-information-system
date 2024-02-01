@@ -16,13 +16,15 @@ router.get("/", async (req, res) => {
       p.kurzbezeichnung,
       k1.anzahlstimmen,
       wps.anzahlWaehler, 
-      wps.anzahlStimmberechtigte
+      wps.anzahlStimmberechtigte,
+	    s.name AS stimmkreisname
     
     FROM
       kandidiert_erststimmen k1
       JOIN kandidaten kand ON kand.kandidatenid = k1.kandidatenid
       JOIN wahlbeteiligungProStimmkreis wps ON wps.datum = k1.datum AND wps.stimmkreisid = k1.stimmkreisid
       JOIN parteien p ON p.parteiid = kand.parteiid
+	  JOIN stimmkreise s ON s.stimmkreisid = k1.stimmkreisid
     WHERE
       k1.stimmkreisid = 402
       AND

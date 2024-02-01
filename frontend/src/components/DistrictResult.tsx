@@ -3,9 +3,14 @@ import { data } from "../data";
 import BarChart from "./BarChart";
 import PieChart from "./PieChart";
 import { chartData } from "../helper/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAPI } from "../hooks/useAPI";
+import { stimmkreisuebersicht, stimmkreisParteiErgebnis } from "../helper/types";
 
 function DistrictResult({ id }: { id: string }) {
+  const {sendRequest} = useAPI();
+  const [stimmkreisuebersicht, setStimmkreisuebersicht] = useState<stimmkreisuebersicht>();
+  const [stimmkreisParteiErgebnisse, setStimmkreisParteiErgebnisse] = useState<stimmkreisParteiErgebnis[]>();
   const [userData, _] = useState({
     labels: data.map((elem) => elem.party),
     datasets: [
@@ -16,6 +21,33 @@ function DistrictResult({ id }: { id: string }) {
       },
     ],
   } as chartData);
+
+  useEffect(() => {
+    sendRequest("/stimmkreisuebersicht", "GET").then((data) => {
+      console.log(data);
+
+      const elem = data.direktkandidat[0];
+      const stimmkreisuebersicht: stimmkreisuebersicht = {
+        beteiligung: Number(elem.beteiligung),
+        kandidatenname: elem.kandidatennamen,
+        kurzbezeichnung: elem.kurzbezeichnung,
+        anzahlStimmenFürKandidat: Number(elem.anzahlstimmen),
+        anzahlWaehlerStimmkreis: Number(elem.anzahlwaehler),
+        anzahlStimmberechtigteStimmkreis: Number(elem.anzahlstimmberechtigte),
+      };
+      setStimmkreisuebersicht(stimmkreisuebersicht);
+      console.log(stimmkreisuebersicht.kurzbezeichnung);
+
+      const stimmkreisParteiErgebnisse: stimmkreisParteiErgebnis[] = data.stimmen.map((elem: any) => ({
+        parteiname: elem.parteiname,
+        kurzbezeichnung: elem.kurzbezeichnung,
+        anzahlStimmen: Number(elem.anzahlstimmen),
+        anzahlStimmenRelativ: Number(elem.prozentualstimmen),
+        parteiFarbe: elem.farbe,
+      }));
+      setStimmkreisParteiErgebnisse(stimmkreisParteiErgebnisse);
+    });
+  }, []);
 
   return (
     <div className="district-res-container">
@@ -28,12 +60,14 @@ function DistrictResult({ id }: { id: string }) {
               <tr>
                 <th>Partei</th>
                 <th>Name</th>
+                <th>Anzahl Stimmen</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>CSU</td>
-                <td>Max Mustermann</td>
+                <td>{stimmkreisuebersicht?.kurzbezeichnung}</td>
+                <td>{stimmkreisuebersicht?.kandidatenname}</td>
+                <td>{stimmkreisuebersicht?.anzahlStimmenFürKandidat}</td>
               </tr>
             </tbody>
           </table>
@@ -43,16 +77,16 @@ function DistrictResult({ id }: { id: string }) {
           <table className="district-table info-table">
             <thead>
               <tr>
-                <th>Wahlberechtigte</th>
+                <th>Anzahl Stimmberechtigte</th>
                 <th>Wähler</th>
                 <th>Wahlbeteiligung</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>1000</td>
-                <td>800</td>
-                <td>80%</td>
+                <td>{stimmkreisuebersicht?.anzahlStimmberechtigteStimmkreis}</td>
+                <td>{stimmkreisuebersicht?.anzahlWaehlerStimmkreis}</td>
+                <td>{(stimmkreisuebersicht?.beteiligung*100).toFixed(3)}%</td>
               </tr>
             </tbody>
           </table>

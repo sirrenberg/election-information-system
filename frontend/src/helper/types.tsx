@@ -58,6 +58,23 @@ type knappsteSiegerData = {
   tag: string;
 };
 
+type stimmkreisuebersicht ={
+  beteiligung: number,
+  kandidatenname: string,
+  kurzbezeichnung: string,
+  anzahlStimmenFürKandidat: number,
+  anzahlWaehlerStimmkreis: number,
+  anzahlStimmberechtigteStimmkreis: number,
+};
+
+type stimmkreisParteiErgebnis = {
+  parteiname: string,
+  kurzbezeichnung: string,
+  anzahlStimmen: number,
+  anzahlStimmenRelativ: number,
+  parteiFarbe: string,
+};
+
 export type {
   chartData,
   chartOptions,
@@ -67,4 +84,6 @@ export type {
   candidateData,
   ueberhangData,
   knappsteSiegerData,
+  stimmkreisuebersicht,
+  stimmkreisParteiErgebnis,
 };
