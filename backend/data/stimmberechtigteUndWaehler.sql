@@ -1,4 +1,4 @@
-INSERT INTO anzahlStimmberechtigteUndWaeler VALUES
+INSERT INTO anzahlStimmberechtigteUndWaehler VALUES
 	(101, '2023-10-08', 98320, 67564),
 	(102, '2023-10-08', 86064, 60169),
 	(103, '2023-10-08', 123365, 87696),

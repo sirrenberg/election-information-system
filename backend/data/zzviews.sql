@@ -98,10 +98,9 @@ CREATE MATERIALIZED VIEW gesamtstimmenProStimmkreis as (
 );
 
 -------Q3.1-------------------
-CREATE MATERIALIZED VIEW wahlbeteiligungProStimmkreis as (
-    SELECT ((wh.anzahlWaehler * 1.00)/wb.anzahlWahlberechtigte) as beteiligung, wb.datum, wb.stimmkreisid
-    FROM anzahlWahlberechtigte wb, anzahlWaehler wh
-        WHERE wb.stimmkreisid =  wh.stimmkreisid AND wb.datum=wh.datum
+CREATE MATERIALIZED VIEW wahlbeteiligungProStimmkreis AS (
+    SELECT ((sub.anzahlWaehler * 1.00)/sub.anzahlStimmberechtigte) AS beteiligung, sub.datum, sub.stimmkreisid, sub.anzahlWaehler, sub.anzahlStimmberechtigte
+    FROM anzahlStimmberechtigteUndWaehler sub
 );
 
 -----------------------------
