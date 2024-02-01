@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS wahlberechtigte;
 DROP TABLE IF EXISTS hatgewaehlt;
 DROP TABLE IF EXISTS stimmkreise;
 DROP TABLE IF EXISTS wahlkreise;
-DROP TABLE IF EXISTS anzahlWahlberechtigte;
+DROP TABLE IF EXISTS anzahlStimmberechtigteUndWaeler;
 DROP TABLE IF EXISTS anzahlWaehler;
 DROP TABLE IF EXISTS parteien;
 DROP TABLE IF EXISTS kandidaten;
@@ -45,10 +45,11 @@ CREATE TABLE IF NOT EXISTS wahlkreise(
     schuldenDienstProEinwohner FLOAT
 );
 
-CREATE TABLE IF NOT EXISTS anzahlWahlberechtigte(
+CREATE TABLE IF NOT EXISTS anzahlStimmberechtigteUndWaeler(
     stimmkreisid INT,
     datum DATE,
-    anzahlWahlberechtigte INT,
+    anzahlStimmberechtigte INT,
+    anzahlWaehler INT,
     PRIMARY KEY (stimmkreisid, datum)
 );
 
