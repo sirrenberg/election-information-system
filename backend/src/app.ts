@@ -9,9 +9,10 @@ import wahlkreisRoutes from "./routes/Wahlkreise.js";
 import stimmkreisRoutes from "./routes/Stimmkreise.js";
 import bewerberMitErststimmenMehrheitRoutes from "./routes/BewerberMitErststimmenmehrheit.js";
 import absoluteStimmenverteilungParteienBayernRoutes from "./routes/absoluteStimmverteilungParteienBayern.js";
-import MitgliederDesLandtagesRoutes from "./routes/MitgliederDesLandtages.js";
+import mitgliederDesLandtagesRoutes from "./routes/MitgliederDesLandtages.js";
 import ueberhangsMandateRoutes from "./routes/ueberhangsMandate.js";
-import KnappsteSiegerRoutes from "./routes/knappsteSieger.js";
+import knappsteSiegerRoutes from "./routes/knappsteSieger.js";
+import stimmkreisUebersichtRoutes from "./routes/stimmkreisuebersicht.js";
 
 
 import loadData from "./routes/loadData.js";
@@ -40,9 +41,10 @@ app.use(
   "/absoluteStimmenverteilungParteienBayern",
   absoluteStimmenverteilungParteienBayernRoutes
 );
-app.use("/MitgliederDesLandtages", MitgliederDesLandtagesRoutes);
+app.use("/MitgliederDesLandtages", mitgliederDesLandtagesRoutes);
 app.use("/ueberhang_mandate", ueberhangsMandateRoutes);
-app.use("/knappste-sieger-und-zweite", KnappsteSiegerRoutes);
+app.use("/knappste-sieger-und-zweite", knappsteSiegerRoutes);
+app.use("/stimmkreisuebersicht", stimmkreisUebersichtRoutes);
 
 app.use("/init", loadData);
 
