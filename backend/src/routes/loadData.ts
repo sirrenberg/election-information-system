@@ -21,8 +21,6 @@ router.get("/", async (req, res) => {
       await pool.query(data);
     }
 
-    generateVoters();
-
     res.status(200).send("Queries Executed Successfully");
   } catch (error) {
     console.error(error);
@@ -47,8 +45,8 @@ async function generateVoters() {
     })
     .catch((err) => console.error(err));
 
-  const { rows } = await pool.query(`SELECT * 
-                  FROM anzahlStimmberechtigteUndWaehler 
+  const { rows } = await pool.query(`SELECT *
+                  FROM anzahlStimmberechtigteUndWaehler
                   WHERE datum = '2023-10-08'`);
 
   for (const row of rows) {
@@ -73,50 +71,6 @@ async function generateVoters() {
       .then(() => console.log("Voters Generated Successfully"))
       .catch((err) => console.error(err));
   }
-}
-
-// returns a promise that resolves to an array of first names
-function getFirstNames() {
-  return new Promise((resolve, reject) => {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-
-    fs.readFile(
-      path.join(__dirname, "../../misc/nachnamen.txt"),
-      "latin1",
-      (err, data) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        const firstNames = data.split("\n");
-        resolve(firstNames);
-      }
-    );
-  });
-}
-
-function getLastNames() {
-  return new Promise((resolve, reject) => {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-
-    fs.readFile(
-      path.join(__dirname, "../../misc/vornamen.csv"),
-      "utf-8",
-      (err, data) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        const rows = data.split("\n");
-        const lastNames = rows.map((row) => row.split(",")[0]);
-        resolve(lastNames);
-      }
-    );
-  });
 }
 
 export default router;

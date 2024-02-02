@@ -21,7 +21,7 @@ DROP TABLE IF EXISTS last_names CASCADE;
 
 
 CREATE TABLE IF NOT EXISTS wahlberechtigte(
-    waehlerid SERIAL PRIMARY KEY,
+    waehlerid VARCHAR(128) PRIMARY KEY,
     vorname VARCHAR(64),
     nachname VARCHAR(64),
     passwort_hash TEXT NOT NULL,

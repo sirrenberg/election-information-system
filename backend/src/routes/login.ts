@@ -5,24 +5,17 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-// router.post("/", async (req, res) => {
-//   try {
-//     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
-//     const user = { id: req.body.id, password: hashedPassword };
-
-//     res.status(200).send();
-//   } catch (err) {
-//     res.status(500).send();
-//   }
-// });
-
 router.post("/", async (req, res) => {
-  // get user with id
+  if (![req.body.id]) {
+    res.status(400).send();
+    return;
+  }
+
+  // get user with first
   const { rows, rowCount } = await pool.query(
     `SELECT *
-      FROM waehler
-      WHERE id = $1`,
+      FROM wahlberechtigte
+      WHERE waehlerid = $1`,
     [req.body.id]
   );
 
@@ -32,15 +25,23 @@ router.post("/", async (req, res) => {
     return;
   }
 
+  console.log(rows);
+
   try {
     // compare password with hashed password
-    if (await bcrypt.compare(req.body.password, rows[0].password)) {
+    if (await bcrypt.compare(req.body.password, rows[0].passwort_hash)) {
       // create token
       const user = { id: req.body.id };
 
-      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "10m",
-      });
+      console.log(process.env);
+
+      const accessToken = jwt.sign(
+        user,
+        process.env.ACCESS_TOKEN_SECRET as string,
+        {
+          expiresIn: "10m",
+        }
+      );
 
       res.json({ accessToken: accessToken });
 
@@ -50,6 +51,7 @@ router.post("/", async (req, res) => {
       res.status(401).send();
     }
   } catch (err) {
+    console.error(err);
     res.status(500).send();
   }
 });
