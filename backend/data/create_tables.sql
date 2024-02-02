@@ -14,6 +14,8 @@ DROP TABLE IF EXISTS kandidiert_erststimmen CASCADE;
 DROP TABLE IF EXISTS kandidiert_zweitstimmen CASCADE;
 DROP TABLE IF EXISTS erststimmen CASCADE;
 DROP TABLE IF EXISTS zweitstimmen CASCADE;
+DROP TABLE IF EXISTS first_names CASCADE;
+DROP TABLE IF EXISTS last_names CASCADE;
 
 
 CREATE TABLE IF NOT EXISTS wahlberechtigte(
@@ -100,5 +102,14 @@ CREATE TABLE IF NOT EXISTS zweitstimmen(
     stimmid SERIAL PRIMARY KEY,
     datum DATE, --datum der wahl, nicht der stimmabgabe.
     kandidatenid INT
+);
+
+CREATE TABLE first_names(
+    name VARCHAR(64) PRIMARY KEY
+);
+
+CREATE TABLE last_names(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(64) PRIMARY KEY
 );
 
