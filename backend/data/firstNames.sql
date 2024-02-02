@@ -539,7 +539,6 @@ INSERT INTO first_names (name) VALUES
 ('Annabelle'),
 ('Zunayrah'),
 ('Rebecca'),
-('Janne'),
 ('Nika'),
 ('Mine'),
 ('Gabi'),

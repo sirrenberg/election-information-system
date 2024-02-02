@@ -2,6 +2,8 @@
 --TODO: Create matelialized views for the results of the election
 --TODO: PRIMARY KEY? FOREIGN KEY? HINZUFÜGEN ODER NICHT?
 
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
 DROP TABLE IF EXISTS wahlberechtigte CASCADE;
 DROP TABLE IF EXISTS hatgewaehlt CASCADE;
 DROP TABLE IF EXISTS stimmkreise CASCADE;
@@ -19,9 +21,10 @@ DROP TABLE IF EXISTS last_names CASCADE;
 
 
 CREATE TABLE IF NOT EXISTS wahlberechtigte(
-    waehlerid VARCHAR(128) PRIMARY KEY,
+    waehlerid SERIAL PRIMARY KEY,
     vorname VARCHAR(64),
     nachname VARCHAR(64),
+    passwort_hash TEXT NOT NULL,
     stimmkreisid INT
 );
 
@@ -109,7 +112,6 @@ CREATE TABLE first_names(
 );
 
 CREATE TABLE last_names(
-    id SERIAL PRIMARY KEY,
     name VARCHAR(64) PRIMARY KEY
 );
 
