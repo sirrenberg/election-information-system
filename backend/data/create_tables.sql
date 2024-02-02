@@ -2,25 +2,24 @@
 --TODO: Create matelialized views for the results of the election
 --TODO: PRIMARY KEY? FOREIGN KEY? HINZUFÜGEN ODER NICHT?
 
-DROP TABLE IF EXISTS wahlberechtigte;
-DROP TABLE IF EXISTS hatgewaehlt;
-DROP TABLE IF EXISTS stimmkreise;
-DROP TABLE IF EXISTS wahlkreise;
-DROP TABLE IF EXISTS anzahlStimmberechtigteUndWaehler;
-DROP TABLE IF EXISTS anzahlWaehler;
-DROP TABLE IF EXISTS parteien;
-DROP TABLE IF EXISTS kandidaten;
-DROP TABLE IF EXISTS kandidiert_erststimmen;
-DROP TABLE IF EXISTS kandidiert_zweitstimmen;
-DROP TABLE IF EXISTS erststimmen;
-DROP TABLE IF EXISTS zweitstimmen;
+DROP TABLE IF EXISTS wahlberechtigte CASCADE;
+DROP TABLE IF EXISTS hatgewaehlt CASCADE;
+DROP TABLE IF EXISTS stimmkreise CASCADE;
+DROP TABLE IF EXISTS wahlkreise CASCADE;
+DROP TABLE IF EXISTS anzahlStimmberechtigteUndWaehler CASCADE;
+DROP TABLE IF EXISTS anzahlWaehler CASCADE;
+DROP TABLE IF EXISTS parteien CASCADE;
+DROP TABLE IF EXISTS kandidaten CASCADE;
+DROP TABLE IF EXISTS kandidiert_erststimmen CASCADE;
+DROP TABLE IF EXISTS kandidiert_zweitstimmen CASCADE;
+DROP TABLE IF EXISTS erststimmen CASCADE;
+DROP TABLE IF EXISTS zweitstimmen CASCADE;
 
 
 CREATE TABLE IF NOT EXISTS wahlberechtigte(
-    waehlerid VARCHAR(64) PRIMARY KEY,
+    waehlerid VARCHAR(128) PRIMARY KEY,
     vorname VARCHAR(64),
     nachname VARCHAR(64),
-    wohnort VARCHAR(64), --keine Funktionale Abhängigkeit zu Stimmkreis, weil aus München nicht ersichtlich, welcher Stimmkreis
     stimmkreisid INT
 );
 

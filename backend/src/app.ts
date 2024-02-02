@@ -13,8 +13,7 @@ import mitgliederDesLandtagesRoutes from "./routes/MitgliederDesLandtages.js";
 import ueberhangsMandateRoutes from "./routes/ueberhangsMandate.js";
 import knappsteSiegerRoutes from "./routes/knappsteSieger.js";
 import stimmkreisUebersichtRoutes from "./routes/stimmkreisuebersicht.js";
-
-
+import loginRoutes from "./routes/login.js";
 import loadData from "./routes/loadData.js";
 
 dotenv.config();
@@ -27,6 +26,8 @@ app.use(cors());
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World from Express and TypeScript!");
 });
+
+app.get("/login", loginRoutes);
 
 app.use("/parties", partyRoutes);
 app.use("/candidates", candidateRoutes);
