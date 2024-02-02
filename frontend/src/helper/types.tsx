@@ -65,6 +65,7 @@ type stimmkreisuebersicht ={
   anzahlStimmenFürKandidat: number,
   anzahlWaehlerStimmkreis: number,
   anzahlStimmberechtigteStimmkreis: number,
+  stimmkreisname: string,
 };
 
 type stimmkreisParteiErgebnis = {
