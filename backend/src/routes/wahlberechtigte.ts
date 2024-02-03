@@ -1,14 +1,15 @@
 import express from "express";
 import pool from "../db.js";
 import bcrypt from "bcrypt";
-import { v4 } from "uuid";
+import crypto from "crypto";
+
 const router = express.Router();
 
 router.post("/", async (req, res) => {
   // get data from request
   const { first_name, last_name, password, stimmkreis_id } = req.body;
 
-  const id = v4();
+  const id = generateRandomString(20);
 
   // hash password
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -28,5 +29,21 @@ router.post("/", async (req, res) => {
     res.status(500).send();
   }
 });
+
+function generateRandomString(length: number) {
+  let result = "";
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  const charactersLength = characters.length;
+
+  while (result.length < length) {
+    const buffer = crypto.randomBytes(length);
+    for (let i = 0; i < buffer.length && result.length < length; ++i) {
+      const randomCharIndex = buffer[i] % charactersLength;
+      result += characters[randomCharIndex];
+    }
+  }
+
+  return result;
+}
 
 export default router;
