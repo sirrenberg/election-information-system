@@ -1,0 +1,64 @@
+.votes-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+  width: 100%;
+}
+
+.first-vote-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 10px 0;
+  width: 50%;
+}
+
+.radio-buttons-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 10px;
+}
+
+.radio-button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+  width: 100%;
+}
+
+.party-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+  margin: 10px 0;
+  width: 60%;
+  cursor: pointer;
+}
+
+.input-container input {
+  cursor: pointer;
+}
+
+.input-container label {
+  cursor: pointer;
+}
+
+.input-container:hover {
+  background-color: #f2f2f2;
+}
+
+.buttons-container {
+  padding: 50px;
+}

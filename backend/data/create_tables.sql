@@ -18,6 +18,7 @@ DROP TABLE IF EXISTS erststimmen CASCADE;
 DROP TABLE IF EXISTS zweitstimmen CASCADE;
 DROP TABLE IF EXISTS first_names CASCADE;
 DROP TABLE IF EXISTS last_names CASCADE;
+DROP TABLE IF EXISTS voter_hashes CASCADE;
 
 
 CREATE TABLE IF NOT EXISTS wahlberechtigte(
@@ -81,7 +82,7 @@ CREATE TABLE IF NOT EXISTS kandidaten(
 
 CREATE TABLE IF NOT EXISTS kandidiert_erststimmen(
     kandidatenid INT,
-    stimmkreisid INT,
+    stimmkreisid INT, 
     datum DATE,
     anzahlStimmen INT,
     PRIMARY KEY (kandidatenid, stimmkreisid, datum)
@@ -89,29 +90,35 @@ CREATE TABLE IF NOT EXISTS kandidiert_erststimmen(
 
 CREATE TABLE IF NOT EXISTS kandidiert_zweitstimmen(
     kandidatenid INT,
-    stimmkreisid INT,
+    stimmkreisid INT, -- we collect the votes for the stimmkreis
     datum DATE,
     anzahlStimmen INT,
     PRIMARY KEY (kandidatenid, stimmkreisid, datum)
 );
 
 CREATE TABLE IF NOT EXISTS erststimmen(
-    stimmid SERIAL PRIMARY KEY,
+    kandidatenid INT,
+    stimmkreisid INT,
     datum DATE, --datum der wahl, nicht der stimmabgabe.
-    kandidatenid INT
+    PRIMARY KEY (datum, kandidatenid, stimmkreisid)
 );
 
 CREATE TABLE IF NOT EXISTS zweitstimmen(
-    stimmid SERIAL PRIMARY KEY,
+    kandidatenid INT,
+    stimmkreisid INT,
     datum DATE, --datum der wahl, nicht der stimmabgabe.
-    kandidatenid INT
+    PRIMARY KEY (datum, kandidatenid, stimmkreisid)
 );
 
-CREATE TABLE first_names(
+CREATE TABLE IF NOT EXISTS first_names(
     name VARCHAR(64) PRIMARY KEY
 );
 
-CREATE TABLE last_names(
+CREATE TABLE IF NOT EXISTS last_names(
     name VARCHAR(64) PRIMARY KEY
+);
+
+CREATE TABLE IF NOT EXISTS voter_hashes(
+    hashvalue TEXT PRIMARY KEY
 );
 

@@ -9,12 +9,16 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   if (![req.body.id]) {
-    res.status(400).send();
+    res.status(400).send({
+      error: "Invalid input",
+    });
     return;
   }
 
   if (!containsOnlyWhitelistChars(req.body.id)) {
-    res.status(400).send("Bad Request");
+    res.status(400).send({
+      error: "Invalid input",
+    });
     return;
   }
 
@@ -31,7 +35,9 @@ router.post("/", async (req, res) => {
 
   // check if user exists
   if (rowCount === 0) {
-    res.status(404).send();
+    res.status(404).send({
+      error: "User not found",
+    });
     return;
   }
 
@@ -63,16 +69,21 @@ router.post("/", async (req, res) => {
         },
       };
 
-      res.json({ accessToken, voter });
-
-      res.status(200).send();
+      res.status(200).send({
+        accessToken,
+        voter,
+      });
     } else {
       // wrong password
-      res.status(401).send();
+      res.status(401).send({
+        error: "Wrong password",
+      });
     }
   } catch (err) {
     console.error(err);
-    res.status(500).send();
+    res.status(500).send({
+      error: "Internal Server Error",
+    });
   }
 });
 

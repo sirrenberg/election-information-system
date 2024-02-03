@@ -2,6 +2,9 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 
+// import middleware
+import { authenticateToken } from "./middleware/authentication.js";
+
 import partyRoutes from "./routes/parties.js";
 import seatRoutes from "./routes/seats.js";
 import candidateRoutes from "./routes/candidates.js";
@@ -16,6 +19,7 @@ import stimmkreisUebersichtRoutes from "./routes/stimmkreisuebersicht.js";
 import loginRoutes from "./routes/login.js";
 import loadData from "./routes/loadData.js";
 import wahlberechtigeRoutes from "./routes/wahlberechtigte.js";
+import voteRoutes from "./routes/vote.js";
 
 dotenv.config();
 
@@ -50,6 +54,8 @@ app.use("/stimmkreisuebersicht", stimmkreisUebersichtRoutes);
 app.use("/wahlberechtigte", wahlberechtigeRoutes);
 
 app.use("/init", loadData);
+
+app.use("/vote", authenticateToken, voteRoutes);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);

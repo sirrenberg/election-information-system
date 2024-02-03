@@ -91,10 +91,26 @@ type Credentials = {
 
 type Voter = {
   id: string;
-  name: string;
-  stimmkreis: string;
-  wahlkreis: string;
+  first_name: string;
+  last_name: string;
+  stimmkreis: {
+    id: string;
+    name: string;
+  };
+  wahlkreis: {
+    id: string;
+    name: string;
+  };
   token: string;
+};
+
+type Candidate = {
+  kandidatenid: string;
+  kandidatennamen: string;
+  parteiid: string;
+  parteiname: string;
+  kurzbezeichnung: string;
+  farbe: string;
 };
 
 export type {
@@ -110,4 +126,5 @@ export type {
   stimmkreisParteiErgebnis,
   Credentials,
   Voter,
+  Candidate,
 };

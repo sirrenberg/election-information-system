@@ -12,11 +12,12 @@ async function authenticateToken(
   const token = authHeader && authHeader.split(" ")[1];
 
   // check if token exists
-  if (token == null) return res.status(401).send("No token provided");
+  if (token == null)
+    return res.status(401).send({ error: "No token provided" });
 
   // verify token
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string, (err, user) => {
-    if (err) return res.sendStatus(403);
+    if (err) return res.status(403).send({ error: "Invalid token" });
 
     req.user = user;
 
@@ -24,4 +25,4 @@ async function authenticateToken(
   });
 }
 
-module.exports = authenticateToken;
+export { authenticateToken };
