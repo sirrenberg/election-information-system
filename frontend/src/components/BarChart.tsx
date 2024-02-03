@@ -9,6 +9,11 @@ function BarChart({ chartData }: { chartData: chartData }) {
   const chartOptions: chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
   };
 
   return <Bar data={chartData} options={chartOptions} />;
