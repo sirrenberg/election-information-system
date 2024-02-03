@@ -15,6 +15,7 @@ function DistrictResult({ id }: { id: string }) {
   const {sendRequest} = useAPI();
   const [stimmkreisuebersicht, setStimmkreisuebersicht] = useState<stimmkreisuebersicht>();
   const [stimmkreisParteiErgebnisse, setStimmkreisParteiErgebnisse] = useState<stimmkreisParteiErgebnis[]>();
+
   const [userData, _] = useState({
     labels: data.map((elem) => elem.party),
     datasets: [
@@ -49,7 +50,7 @@ function DistrictResult({ id }: { id: string }) {
       };
       setStimmkreisuebersicht(stimmkreisuebersicht);
 
-      const stimmkreisParteiErgebnisse: stimmkreisParteiErgebnis[] = data.stimmen.map((elem: any) => ({
+      const spe: stimmkreisParteiErgebnis[] = data.stimmen.map((elem: any) => ({
         parteiname: elem.parteiname,
         kurzbezeichnung: elem.kurzbezeichnung,
         anzahlStimmen: Number(elem.anzahlstimmen),
@@ -58,8 +59,8 @@ function DistrictResult({ id }: { id: string }) {
         diffstimmenabsolut: Number(elem.diffstimmenabsolut),
         diffstimmenrel: Number(elem.diffstimmenrel),
       }));
-      console.log("Parteiergebnisse: " + stimmkreisParteiErgebnisse[0].parteiname + " " + stimmkreisParteiErgebnisse[0].anzahlStimmen + " " + stimmkreisParteiErgebnisse[0].parteiFarbe);
-      setStimmkreisParteiErgebnisse(stimmkreisParteiErgebnisse);
+      console.log("Parteiergebnisse: " + spe[0].parteiname + " " + spe[0].anzahlStimmen + " " + spe[0].parteiFarbe);
+      setStimmkreisParteiErgebnisse(spe);
     });
   },[id]);
 
@@ -119,7 +120,7 @@ function DistrictResult({ id }: { id: string }) {
     return chartData;
   }
 
-  if(!stimmkreisuebersicht || !stimmkreisParteiErgebnisse) return (<div>Loading... xD</div>);
+  if(!stimmkreisuebersicht || !stimmkreisParteiErgebnisse) return (<div>Loading...</div>);
   return (
     <div className="district-res-container">
       <h1 className="district-title">{id} - {stimmkreisuebersicht?.stimmkreisname}</h1>
@@ -130,7 +131,7 @@ function DistrictResult({ id }: { id: string }) {
               <tr>
                 <th>gewählter Direktkandidat</th>
                 <th>Anzahl Stimmen*</th>
-                <th>Vorjahressieger</th>
+                <th>Sieger vorherige Wahl</th>
                 <th>Anzahl Stimmberechtigte*</th>
                 <th>Abgegebene Stimmen*</th>
                 <th>Wahlbeteiligung*</th>
@@ -160,11 +161,11 @@ function DistrictResult({ id }: { id: string }) {
         <div className="district-res-section">
           <h2 className="district-res-subtitle">Anzahl der Stimmen (absolut)</h2>
           <div className="chart-container">
-            <BarChart chartData={stimmkreisParteiErgebnisse &&getTotalVotesChartData()} />
+            <BarChart chartData={getTotalVotesChartData()} />
           </div>
         </div>
         <div className="district-res-section">
-          <h2 className="district-res-subtitle">Stimmendifferenz zum Vorjahr (absolut)</h2>
+          <h2 className="district-res-subtitle">Stimmendifferenz zur vorherigen Wahl (absolut)</h2>
           <div className="chart-container">
             <BarChart chartData={stimmkreisParteiErgebnisse &&getTotalVotesDiffChartData()} />
           </div>
@@ -179,7 +180,7 @@ function DistrictResult({ id }: { id: string }) {
           </div>
         </div>
         <div className="district-res-section">
-          <h2 className="district-res-subtitle">Stimmendifferenz zum Vorjahr (relativ)</h2>
+          <h2 className="district-res-subtitle">Stimmendifferenz zur vorherigen Wahl (relativ)</h2>
           <div className="chart-container">
             <BarChart chartData={getRelativeVotesDiffChartData()} />
           </div>

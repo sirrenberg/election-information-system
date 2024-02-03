@@ -76,7 +76,7 @@ router.get("/", async (req, res) => {
           gesamtStimmenProParteiProStimmkreis g
           JOIN pgesamtStimmenProParteiProStimmkreis p 
           ON g.parteiid = p.parteiid AND p.datum = g.datum AND p.stimmkreisid = g.stimmkreisid
-        WHERE g.stimmkreisid = 402 AND (g.datum = '2023-10-08' OR g.datum = '2018-10-14')
+        WHERE g.stimmkreisid = ${stimmkreisid} AND (g.datum = '${dateCurrentElection}' OR g.datum = '${datePrevElection}')
     )
     
     SELECT 
@@ -88,9 +88,9 @@ router.get("/", async (req, res) => {
       coalesce(s1.anzahlstimmen,0) - coalesce(s2.anzahlstimmen,0) AS diffStimmenAbsolut,
       coalesce(s1.prozentualstimmen,0) - coalesce(s2.prozentualstimmen,0) AS diffStimmenRel
     FROM 
-      (SELECT * FROM stimmenFürParteien WHERE datum = '2023-10-08') s1
+      (SELECT * FROM stimmenFürParteien WHERE datum = '${dateCurrentElection}') s1
       FULL OUTER JOIN
-      (SELECT * FROM stimmenFürParteien WHERE datum = '2018-10-14') s2
+      (SELECT * FROM stimmenFürParteien WHERE datum = '${datePrevElection}') s2
       ON s1.kurzbezeichnung = s2.kurzbezeichnung
     ORDER BY anzahlstimmen DESC
     `
