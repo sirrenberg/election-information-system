@@ -58,22 +58,30 @@ type knappsteSiegerData = {
   tag: string;
 };
 
-type stimmkreisuebersicht = {
-  beteiligung: number;
-  kandidatenname: string;
-  kurzbezeichnung: string;
-  anzahlStimmenFürKandidat: number;
-  anzahlWaehlerStimmkreis: number;
-  anzahlStimmberechtigteStimmkreis: number;
-  stimmkreisname: string;
+type stimmkreisuebersicht ={
+  beteiligung: number,
+  kandidatenname: string,
+  kurzbezeichnung: string,
+  anzahlStimmenFürKandidat: number,
+  anzahlWaehlerStimmkreis: number,
+  anzahlStimmberechtigteStimmkreis: number,
+  stimmkreisname: string,
+  diffBeteiligung: number,
+  letzterDirektkandidat: string,
+  parteiLetzterDirektkandidat: string,
+  diffStimmen: number,
+  diffWaehler: number,
+  diffStimmberechtigte: number,
 };
 
 type stimmkreisParteiErgebnis = {
-  parteiname: string;
-  kurzbezeichnung: string;
-  anzahlStimmen: number;
-  anzahlStimmenRelativ: number;
-  parteiFarbe: string;
+  parteiname: string,
+  kurzbezeichnung: string,
+  anzahlStimmen: number,
+  anzahlStimmenRelativ: number,
+  parteiFarbe: string,
+  diffstimmenabsolut: string,
+  diffstimmenrel: string,
 };
 
 type Credentials = {
@@ -87,7 +95,6 @@ type Voter = {
   stimmkreis: string;
   wahlkreis: string;
   token: string;
-};
 
 export type {
   chartData,

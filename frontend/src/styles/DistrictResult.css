@@ -27,6 +27,7 @@
   margin: 10px 20px;
   width: 40%;
   height: 100%;
+  margin-top: 100px;
 }
 
 .district-info-tables {
@@ -41,8 +42,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 50%;
-  margin-bottom: 50px;
+  width: 80%;
+  margin-bottom: 0;
 }
 
 .table-title {
@@ -51,5 +52,5 @@
 }
 
 .district-table {
-  width: 60%;
+  width: 100%;
 }
