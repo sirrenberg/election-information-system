@@ -95,6 +95,7 @@ type Voter = {
   stimmkreis: string;
   wahlkreis: string;
   token: string;
+};
 
 export type {
   chartData,
