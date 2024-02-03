@@ -58,22 +58,35 @@ type knappsteSiegerData = {
   tag: string;
 };
 
-type stimmkreisuebersicht ={
-  beteiligung: number,
-  kandidatenname: string,
-  kurzbezeichnung: string,
-  anzahlStimmenFürKandidat: number,
-  anzahlWaehlerStimmkreis: number,
-  anzahlStimmberechtigteStimmkreis: number,
-  stimmkreisname: string,
+type stimmkreisuebersicht = {
+  beteiligung: number;
+  kandidatenname: string;
+  kurzbezeichnung: string;
+  anzahlStimmenFürKandidat: number;
+  anzahlWaehlerStimmkreis: number;
+  anzahlStimmberechtigteStimmkreis: number;
+  stimmkreisname: string;
 };
 
 type stimmkreisParteiErgebnis = {
-  parteiname: string,
-  kurzbezeichnung: string,
-  anzahlStimmen: number,
-  anzahlStimmenRelativ: number,
-  parteiFarbe: string,
+  parteiname: string;
+  kurzbezeichnung: string;
+  anzahlStimmen: number;
+  anzahlStimmenRelativ: number;
+  parteiFarbe: string;
+};
+
+type Credentials = {
+  id: string;
+  password: string;
+};
+
+type Voter = {
+  id: string;
+  name: string;
+  stimmkreis: string;
+  wahlkreis: string;
+  token: string;
 };
 
 export type {
@@ -87,4 +100,6 @@ export type {
   knappsteSiegerData,
   stimmkreisuebersicht,
   stimmkreisParteiErgebnis,
+  Credentials,
+  Voter,
 };

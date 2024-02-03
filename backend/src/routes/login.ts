@@ -3,11 +3,18 @@ import pool from "../db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+import containsOnlyWhitelistChars from "../whitelisting.js";
+
 const router = express.Router();
 
 router.post("/", async (req, res) => {
   if (![req.body.id]) {
     res.status(400).send();
+    return;
+  }
+
+  if (!containsOnlyWhitelistChars(req.body.id)) {
+    res.status(400).send("Bad Request");
     return;
   }
 
@@ -24,8 +31,6 @@ router.post("/", async (req, res) => {
     res.status(404).send();
     return;
   }
-
-  console.log(rows);
 
   try {
     // compare password with hashed password
