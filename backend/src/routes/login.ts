@@ -33,8 +33,6 @@ router.post("/", async (req, res) => {
       // create token
       const user = { id: req.body.id };
 
-      console.log(process.env);
-
       const accessToken = jwt.sign(
         user,
         process.env.ACCESS_TOKEN_SECRET as string,

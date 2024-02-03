@@ -28,49 +28,49 @@ router.get("/", async (req, res) => {
   }
 });
 
-async function generateVoters() {
-  let randomFirstNames: string[] = [];
-  getFirstNames()
-    .then((data) => {
-      randomFirstNames = data as string[];
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+// async function generateVoters() {
+//   let randomFirstNames: string[] = [];
+//   getFirstNames()
+//     .then((data) => {
+//       randomFirstNames = data as string[];
+//     })
+//     .catch((err) => {
+//       console.error(err);
+//     });
 
-  let randomLastNames: string[] = [];
-  getLastNames()
-    .then((data) => {
-      randomLastNames = data as string[];
-    })
-    .catch((err) => console.error(err));
+//   let randomLastNames: string[] = [];
+//   getLastNames()
+//     .then((data) => {
+//       randomLastNames = data as string[];
+//     })
+//     .catch((err) => console.error(err));
 
-  const { rows } = await pool.query(`SELECT *
-                  FROM anzahlStimmberechtigteUndWaehler
-                  WHERE datum = '2023-10-08'`);
+//   const { rows } = await pool.query(`SELECT *
+//                   FROM anzahlStimmberechtigteUndWaehler
+//                   WHERE datum = '2023-10-08'`);
 
-  for (const row of rows) {
-    let queryBuilder = `INSERT INTO waehler (waehlerid, vorname, nachname, stimmkreisid) VALUES `;
-    const { stimmkreisid, anzahlstimmberechtigte } = row;
+//   for (const row of rows) {
+//     let queryBuilder = `INSERT INTO waehler (waehlerid, vorname, nachname, stimmkreisid) VALUES `;
+//     const { stimmkreisid, anzahlstimmberechtigte } = row;
 
-    for (let i = 0; i < anzahlstimmberechtigte; i++) {
-      const waehlerId = v4();
-      const randomFirstName =
-        randomFirstNames[Math.floor(Math.random() * randomFirstNames.length)];
-      const randomLastName =
-        randomLastNames[Math.floor(Math.random() * randomLastNames.length)];
+//     for (let i = 0; i < anzahlstimmberechtigte; i++) {
+//       const waehlerId = v4();
+//       const randomFirstName =
+//         randomFirstNames[Math.floor(Math.random() * randomFirstNames.length)];
+//       const randomLastName =
+//         randomLastNames[Math.floor(Math.random() * randomLastNames.length)];
 
-      queryBuilder += `('${waehlerId}', '${randomFirstName}', '${randomLastName}', ${stimmkreisid}),`;
-    }
+//       queryBuilder += `('${waehlerId}', '${randomFirstName}', '${randomLastName}', ${stimmkreisid}),`;
+//     }
 
-    queryBuilder = queryBuilder.slice(0, -1) + ";";
-    console.log(queryBuilder);
+//     queryBuilder = queryBuilder.slice(0, -1) + ";";
+//     console.log(queryBuilder);
 
-    pool
-      .query(queryBuilder)
-      .then(() => console.log("Voters Generated Successfully"))
-      .catch((err) => console.error(err));
-  }
-}
+//     pool
+//       .query(queryBuilder)
+//       .then(() => console.log("Voters Generated Successfully"))
+//       .catch((err) => console.error(err));
+//   }
+// }
 
 export default router;
