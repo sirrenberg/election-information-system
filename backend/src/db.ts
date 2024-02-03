@@ -4,8 +4,8 @@ const { Pool } = pg;
 
 const pool = new Pool({
   user: "myuser",
-  // host: "db",
-  host: "localhost",
+  // host: "db", // use this if you are using docker
+  host: "localhost", // use this in npm run dev
   database: "electiondb",
   password: "mypassword",
   port: 5432,
