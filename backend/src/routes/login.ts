@@ -20,9 +20,12 @@ router.post("/", async (req, res) => {
 
   // get user with first
   const { rows, rowCount } = await pool.query(
-    `SELECT *
-      FROM wahlberechtigte
-      WHERE waehlerid = $1`,
+    `SELECT w.*, s.name as stimmkreisname, k.wahlkreisid, k.wahlkreisname
+      FROM wahlberechtigte w, stimmkreise s, wahlkreise k
+      WHERE w.waehlerid = $1
+      AND w.stimmkreisid = s.stimmkreisid
+      AND s.wahlkreisid = k.wahlkreisid
+      ;`,
     [req.body.id]
   );
 
@@ -46,7 +49,21 @@ router.post("/", async (req, res) => {
         }
       );
 
-      res.json({ accessToken: accessToken });
+      const voter = {
+        id: rows[0].waehlerid,
+        first_name: rows[0].vorname,
+        last_name: rows[0].nachname,
+        stimmkreis: {
+          id: rows[0].stimmkreisid,
+          name: rows[0].stimmkreisname,
+        },
+        wahlkreis: {
+          id: rows[0].wahlkreisid,
+          name: rows[0].wahlkreisname,
+        },
+      };
+
+      res.json({ accessToken, voter });
 
       res.status(200).send();
     } else {
