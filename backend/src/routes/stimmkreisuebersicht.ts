@@ -11,24 +11,25 @@ router.get("/", async (req, res) => {
     WITH 
     winnerErststimmen AS (
     SELECT
+      k1.datum,
       wps.beteiligung AS beteiligung,
       kand.kandidatennamen,
       p.kurzbezeichnung,
       k1.anzahlstimmen,
       wps.anzahlWaehler, 
       wps.anzahlStimmberechtigte,
-	    s.name AS stimmkreisname
+      s.name AS stimmkreisname
     
     FROM
       kandidiert_erststimmen k1
       JOIN kandidaten kand ON kand.kandidatenid = k1.kandidatenid
       JOIN wahlbeteiligungProStimmkreis wps ON wps.datum = k1.datum AND wps.stimmkreisid = k1.stimmkreisid
       JOIN parteien p ON p.parteiid = kand.parteiid
-	  JOIN stimmkreise s ON s.stimmkreisid = k1.stimmkreisid
+      JOIN stimmkreise s ON s.stimmkreisid = k1.stimmkreisid
     WHERE
       k1.stimmkreisid = 402
       AND
-      k1.datum = '2023-10-08'
+      (k1.datum = '2023-10-08' OR k1.datum = '2018-10-14')
       AND
       NOT EXISTS (
       SELECT 1
@@ -39,18 +40,19 @@ router.get("/", async (req, res) => {
     
     SELECT *
     FROM winnerErststimmen
-    
     `
   );
 
   const { rows: anzStimmen } = await pool.query(
     `
-      SELECT g.parteiname, g.kurzbezeichnung, g.farbe, g.anzahlstimmen, p.prozentualstimmen
-      FROM 
-          gesamtStimmenProParteiProStimmkreis g
-          JOIN pgesamtStimmenProParteiProStimmkreis p 
-          ON g.parteiid = p.parteiid AND p.datum = g.datum AND p.stimmkreisid = g.stimmkreisid
-      WHERE g.stimmkreisid = 402 AND g.datum = '2023-10-08'`
+    SELECT g.parteiname, g.kurzbezeichnung, g.farbe, g.anzahlstimmen, p.prozentualstimmen, g.datum
+    FROM 
+      gesamtStimmenProParteiProStimmkreis g
+      JOIN pgesamtStimmenProParteiProStimmkreis p 
+      ON g.parteiid = p.parteiid AND p.datum = g.datum AND p.stimmkreisid = g.stimmkreisid
+    WHERE g.stimmkreisid = 402 AND (g.datum = '2023-10-08' OR g.datum = '2018-10-14')
+    ORDER BY g.datum, g.anzahlstimmen DESC
+    `
     );
     res.json({"direktkandidat": direktkandidat, "stimmen" : anzStimmen});
   } catch (error) {
