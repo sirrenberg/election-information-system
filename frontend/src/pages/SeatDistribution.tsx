@@ -47,7 +47,7 @@ function SeatDistribution() {
       labels: seatData.map((elem) => elem.party),
       datasets: [
         {
-          label: "Sitze",
+          label: "Stimmen",
           data: seatData.map((elem) => elem.votes),
           backgroundColor: seatData.map((elem) => elem.color),
         },
