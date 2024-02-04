@@ -26,8 +26,6 @@ function DistrictResult({ id }: { id: string }) {
       `/stimmkreisuebersicht?date_current_election=${date_current_election}&date_prev_election=${date_prev_election}&id=${id}`,
       "GET"
     ).then((data) => {
-      console.log(data);
-
       const elem = data.direktkandidat[0];
       const stimmkreisuebersicht: stimmkreisuebersicht = {
         beteiligung: Number(elem.beteiligung),
@@ -55,14 +53,6 @@ function DistrictResult({ id }: { id: string }) {
         diffstimmenabsolut: Number(elem.diffstimmenabsolut),
         diffstimmenrel: Number(elem.diffstimmenrel),
       }));
-      console.log(
-        "Parteiergebnisse: " +
-          spe[0].parteiname +
-          " " +
-          spe[0].anzahlStimmen +
-          " " +
-          spe[0].parteiFarbe
-      );
       setStimmkreisParteiErgebnisse(spe);
 
       const sieger = data.stimmkreissieger[0];
