@@ -1,3 +1,23 @@
+DROP MATERIALIZED VIEW IF EXISTS erststimmenProKandidatProWahlkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS zweitstimmenProKandidatProWahlkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS gesamtStimmenProKandidatProWahlkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS erststimmenProParteiProWahlkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS zweitstimmenProParteiProWahlkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS gesamtStimmenProParteiProWahlkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS erststimmenProPartei CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS zweitstimmenProPartei CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS gesamtstimmenProPartei CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS erststimmenProStimmkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS zweitstimmenProStimmkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS gesamtstimmenProStimmkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS wahlbeteiligungProStimmkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS erststimmenProParteiProStimmkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS zweitstimmenProParteiProStimmkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS gesamtStimmenProParteiProStimmkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS pgesamtStimmenProParteiProStimmkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS stimmenUnterschiedProParteiProStimmkreis CASCADE;
+
+
 CREATE MATERIALIZED VIEW erststimmenProKandidatProWahlkreis as (
     SELECT ks.kandidatenid, ks.datum, s.wahlkreisid, sum(ks.anzahlStimmen) as anzahlStimmen
     FROM kandidiert_erststimmen ks, stimmkreise s
