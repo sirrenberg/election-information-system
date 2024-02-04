@@ -23,6 +23,7 @@ import wahlberechtigeRoutes from "./routes/wahlberechtigte.js";
 import voteRoutes from "./routes/vote.js";
 import generateVoteRoutes from "./routes/generate_votes.js";
 import updateAggregatedDataRoutes from "./routes/updateAggregatedData.js";
+import additionalQueriesRoutes from "./routes/additionalQueries.js";
 
 dotenv.config();
 
@@ -58,6 +59,7 @@ app.use("/wahlkreisuebersicht", wahlkreisUebersichtRoutes);
 app.use("/wahlberechtigte", wahlberechtigeRoutes);
 app.use("/generate_votes", generateVoteRoutes);
 app.use("/update_aggregated_data", updateAggregatedDataRoutes);
+app.use("/additional_queries", additionalQueriesRoutes);
 
 app.use("/init", loadData);
 
