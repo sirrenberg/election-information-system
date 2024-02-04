@@ -5,7 +5,7 @@ import { chartData, ueberhangData, knappsteSiegerData } from "../helper/types";
 import { useAPI } from "../hooks/useAPI";
 import { useEffect } from "react";
 import { groupBy } from "lodash";
-import ClosestWinners from "./ClosestWinners";
+import ClosestWinners from "../components/ClosestWinners";
 
 function Overview() {
   const { sendRequest } = useAPI();
