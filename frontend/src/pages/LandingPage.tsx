@@ -1,7 +1,12 @@
 import "../styles/LandingPage.css";
 import { useState } from "react";
 import { data } from "../data";
-import { chartData, chartOptions, seatData, candidateData } from "../helper/types";
+import {
+  chartData,
+  chartOptions,
+  seatData,
+  candidateData,
+} from "../helper/types";
 
 import BarChart from "../components/BarChart";
 import PieChart from "../components/PieChart";
@@ -33,7 +38,6 @@ function LandingPage() {
     });
 
     sendRequest("/MitgliederDesLandtages", "GET").then((data) => {
-      console.log(data);
       const candidateData: candidateData[] = data.map((elem: any) => ({
         party: elem.kurzbezeichnung,
         wahlkreis: elem.wahlkreisname,
