@@ -129,7 +129,7 @@ function DistrictResult({ id }: { id: string }) {
         {
           label: "Stimmen in Prozent",
           data: stimmkreisParteiErgebnisse!.map((elem) =>
-            (elem.diffstimmenrel * 100).toFixed(1)
+            (Number(elem.diffstimmenrel) * 100).toFixed(1)
           ),
           backgroundColor: stimmkreisParteiErgebnisse!.map(
             (elem) => elem.parteiFarbe

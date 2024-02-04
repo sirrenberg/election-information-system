@@ -1,12 +1,6 @@
 import "../styles/LandingPage.css";
 import { useState } from "react";
-import { data } from "../data";
-import {
-  chartData,
-  chartOptions,
-  seatData,
-  candidateData,
-} from "../helper/types";
+import { chartData, seatData } from "../helper/types";
 
 import BarChart from "../components/BarChart";
 import PieChart from "../components/PieChart";
@@ -18,7 +12,6 @@ function LandingPage() {
   const { sendRequest } = useAPI();
 
   const [seatData, setSeatData] = useState<seatData[]>([]);
-  const [candidateData, setCandidateData] = useState<candidateData[]>([]);
 
   useEffect(() => {
     sendRequest("/seats", "GET").then((data) => {
@@ -32,20 +25,7 @@ function LandingPage() {
       // sort by seats descending
       seatData.sort((a, b) => b.seats - a.seats);
 
-      console.log(seatData);
-
       setSeatData(seatData);
-    });
-
-    sendRequest("/MitgliederDesLandtages", "GET").then((data) => {
-      const candidateData: candidateData[] = data.map((elem: any) => ({
-        party: elem.kurzbezeichnung,
-        wahlkreis: elem.wahlkreisname,
-        name: elem.kandidatennamen,
-        stimmkreis: elem.stimmkreisid + " " + elem.stimmkreisname,
-      }));
-
-      setCandidateData(candidateData);
     });
   }, []);
 

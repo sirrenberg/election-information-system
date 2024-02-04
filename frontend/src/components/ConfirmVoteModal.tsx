@@ -93,7 +93,7 @@ function ConfirmVoteModal({
                   },
                   voter.token
                 )
-                  .then((data) => {
+                  .then(() => {
                     toast.success("Stimmzettel erfolgreich abgegeben", {
                       autoClose: 5000,
                     });

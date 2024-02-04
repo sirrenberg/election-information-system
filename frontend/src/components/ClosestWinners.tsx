@@ -1,20 +1,19 @@
-import React, { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { useAPI } from "../hooks/useAPI";
 import { useEffect } from "react";
-import { groupBy } from "lodash";
-import { chartData, ueberhangData, knappsteSiegerData } from "../helper/types";
+import { groupBy } from "../helper/misc";
+import { knappsteSiegerData } from "../helper/types";
 
 function ClosestWinners() {
   const { sendRequest } = useAPI();
   const [selectedParty, setSelectedParty] = useState("");
-  const [knappsteSiegerData, setKnappsteSiegerData] = useState<
-    knappsteSiegerData[]
-  >([]);
   const [groupedData, setGroupedData] = useState<{
     [key: string]: knappsteSiegerData[];
   }>({});
 
-  const handleChange = (event) => {
+  const handleChange = (event: {
+    target: { value: SetStateAction<string> };
+  }) => {
     setSelectedParty(event.target.value);
   };
 
@@ -32,7 +31,6 @@ function ClosestWinners() {
         })
       );
 
-      setKnappsteSiegerData(knappsteSiegerData);
       setGroupedData(groupBy(knappsteSiegerData, "partei"));
     });
   }, []);

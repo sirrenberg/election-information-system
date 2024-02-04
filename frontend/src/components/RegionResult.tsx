@@ -1,8 +1,6 @@
-import BarChart from "./BarChart";
 import PieChart from "./PieChart";
 import "../styles/RegionResult.css";
 import { chartData } from "../helper/types";
-import { data } from "../data";
 import { useEffect, useState } from "react";
 import { useAPI } from "../hooks/useAPI";
 import { stimmen } from "../helper/types";

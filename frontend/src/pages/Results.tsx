@@ -3,7 +3,7 @@ import HamburgerMenu from "../components/HamburgerMenu";
 import DistrictResult from "../components/DistrictResult";
 import RegionResult from "../components/RegionResult";
 import { useEffect, useState } from "react";
-import { menuEntry } from "../helper/types";
+import { menuEntry, stimmkreis } from "../helper/types";
 import { groupBy } from "../helper/misc";
 import { useAPI } from "../hooks/useAPI";
 import { useParams } from "react-router-dom";
@@ -24,8 +24,8 @@ function Results() {
   const [menuData, setMenuData] = useState<menuEntry[]>([]);
 
   useEffect(() => {
-    sendRequest("/stimmkreise", "GET").then((data) => {
-      const groupedData = groupBy(data, "wahlkreisname");
+    sendRequest("/stimmkreise", "GET").then((data: stimmkreis[]) => {
+      const groupedData = groupBy(data, (item) => item.wahlkreisid);
 
       // convert into menuEntry
       const menuData: menuEntry[] = [];

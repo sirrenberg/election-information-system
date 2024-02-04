@@ -1,18 +1,11 @@
-function groupBy(array, key) {
-  return array.reduce((acc, obj) => {
-    const groupKey = obj[key];
-
-    // Check if the key already exists in the accumulator
-    if (!acc[groupKey]) {
-      // If not, create a new array for the key
-      acc[groupKey] = [];
-    }
-
-    // Push the current object to the array for the key
-    acc[groupKey].push(obj);
-
-    return acc;
-  }, {});
+function groupBy<T, K extends keyof any>(
+  array: T[],
+  getKey: (item: T) => K
+): Record<K, T[]> {
+  return array.reduce((accumulator, item) => {
+    const key = getKey(item);
+    accumulator[key] = [...(accumulator[key] || []), item];
+    return accumulator;
+  }, {} as Record<K, T[]>);
 }
-
 export { groupBy };

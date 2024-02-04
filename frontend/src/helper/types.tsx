@@ -2,7 +2,7 @@ type chartData = {
   labels: string[];
   datasets: {
     label: string;
-    data: number[];
+    data: number[] | string[];
     backgroundColor: string[];
   }[];
 };
@@ -10,11 +10,18 @@ type chartData = {
 type chartOptions = {
   responsive: boolean;
   maintainAspectRatio: boolean;
+  plugins?: {
+    legend: {
+      display: boolean;
+    };
+  };
 };
 
 type stimmkreis = {
   id: number;
   name: string;
+  wahlkreisid: string;
+  wahlkreisname: string;
 };
 
 type menuEntry = {

@@ -1,7 +1,8 @@
 // ListWithButtons.js
 import ListItem from "./ListItem";
+import { menuEntry } from "../helper/types";
 
-const ListWithButtons = ({ data }) => {
+function ListWithButtons({ data }: { data: menuEntry[] }) {
   return (
     <ul className="hm-list">
       {data.map((item, index) => (
@@ -11,6 +12,6 @@ const ListWithButtons = ({ data }) => {
       ))}
     </ul>
   );
-};
+}
 
 export default ListWithButtons;
