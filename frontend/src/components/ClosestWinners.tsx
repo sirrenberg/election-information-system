@@ -39,8 +39,9 @@ function ClosestWinners() {
 
   return (
     <div className="close-winners-container overview-section">
-      <h2 className="page-title">Knappste Sieger</h2>
-      <p>
+      <h2 className="overview-section-title">Knappste Sieger</h2>
+
+      <p className="closest-winners-explanation">
         Wählen Sie eine Partei aus, um die zehn knappsten Sieger für diese
         Partei anzuzeigen. Wenn diese Partei keine 10 Direktmandate erzielen
         konnte, werden entsprechend viele knappste Verlierer angezeigt.

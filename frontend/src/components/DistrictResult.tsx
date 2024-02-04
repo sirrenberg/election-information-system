@@ -234,7 +234,7 @@ function DistrictResult({ id }: { id: string }) {
       <div className="district-res-charts">
         <div className="district-res-section">
           <h2 className="district-res-subtitle">
-            Anzahl der Stimmen (absolut)
+            Anzahl der Gesamtstimmen (absolut)
           </h2>
           <div className="chart-container">
             <BarChart chartData={getTotalVotesChartData()} />
@@ -242,7 +242,7 @@ function DistrictResult({ id }: { id: string }) {
         </div>
         <div className="district-res-section">
           <h2 className="district-res-subtitle">
-            Stimmendifferenz zur vorherigen Wahl (absolut)
+            Gesamtstimmendifferenz zur vorherigen Wahl (absolut)
           </h2>
           <div className="chart-container">
             <BarChart
