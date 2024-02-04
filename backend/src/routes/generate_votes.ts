@@ -19,7 +19,6 @@ router.post("/", async (req, res) => {
           kandidiert_erststimmen ke
       WHERE
           ke.anzahlStimmen > 0  -- Termination condition based on the anzahlStimmen in AggregierteStimmkreisergebnisse
-      AND ke.datum = '2023-10-08'        -- Comment out to choose particular stimmkreis
 
       UNION ALL
 
@@ -55,7 +54,6 @@ router.post("/", async (req, res) => {
           kandidiert_zweitstimmen kz
       WHERE
           kz.anzahlStimmen > 0  -- Termination condition based on the anzahlStimmen in AggregierteStimmkreisergebnisse
-      AND kz.datum = '2023-10-08'        -- Comment out to choose particular stimmkreis
 
       UNION ALL
 
