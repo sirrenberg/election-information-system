@@ -135,6 +135,13 @@ type stimmen = {
   parteiFarbe: string;
 };
 
+type analysisData = {
+  partei: string,
+  anteilStimmen: number,
+  anteilstudentenproeinwohner: number,
+  schuldendienstproeinwohner: number,
+};
+
 export type {
   chartData,
   chartOptions,
@@ -151,4 +158,5 @@ export type {
   Candidate,
   stimmkreisSieger,
   stimmen,
+  analysisData,
 };

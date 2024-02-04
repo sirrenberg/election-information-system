@@ -4,6 +4,7 @@ import { ueberhangData } from "../helper/types";
 import { useAPI } from "../hooks/useAPI";
 import { useEffect } from "react";
 import ClosestWinners from "../components/ClosestWinners";
+import AdditionalResearch from "../components/AdditionalResearch";
 
 function Overview() {
   const { sendRequest } = useAPI();
@@ -27,6 +28,7 @@ function Overview() {
   return (
     <div className="overview-container content-page">
       <h1 className="page-title">Overview</h1>
+      <AdditionalResearch />
       <ClosestWinners />
       <div className="close-winners-container overview-section">
         <h2 className="overview-section-title">Überhang-/Ausgleichmandate*</h2>
