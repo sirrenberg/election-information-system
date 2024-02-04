@@ -92,13 +92,15 @@ function Vote() {
       <h1 className="page-title">
         Stimmzettel zur Landtagswahl am 8. Oktober 2023
       </h1>
-      <h2>
-        Stimmkreis: {voter.stimmkreis.id} - {voter.stimmkreis.name}
-      </h2>
-      <h2>
-        Wahlkreis: {voter.wahlkreis.id} - {voter.wahlkreis.name}
-      </h2>
-      <p>Wähler: {voter.first_name + " " + voter.last_name}</p>
+      <div className="voter-info">
+        <h2>
+          Stimmkreis: {voter.stimmkreis.id} - {voter.stimmkreis.name}
+        </h2>
+        <h2>
+          Wahlkreis: {voter.wahlkreis.id} - {voter.wahlkreis.name}
+        </h2>
+        <p>Wähler: {voter.first_name + " " + voter.last_name}</p>
+      </div>
 
       <div className="votes-container">
         <h2>

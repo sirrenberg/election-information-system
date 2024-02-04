@@ -5,6 +5,20 @@
   justify-content: center;
   margin: 0 10px;
   width: 100%;
+  border: 3px #848484;
+  border-style: solid none;
+  padding: 20px 0;
+}
+
+.voter-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  margin: 10px;
+  width: 50%;
+  padding: 20px;
+  height: 125px;
 }
 
 .first-vote-buttons {
@@ -53,6 +67,7 @@
 
 .input-container label {
   cursor: pointer;
+  text-align: right;
 }
 
 .input-container:hover {
