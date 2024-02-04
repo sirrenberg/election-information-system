@@ -21,26 +21,6 @@ DROP TABLE IF EXISTS last_names CASCADE;
 DROP TABLE IF EXISTS voter_hashes CASCADE;
 
 
-CREATE TABLE IF NOT EXISTS wahlberechtigte(
-    waehlerid VARCHAR(128) PRIMARY KEY,
-    vorname VARCHAR(64),
-    nachname VARCHAR(64),
-    passwort_hash TEXT NOT NULL,
-    stimmkreisid INT REFERENCES stimmkreise(stimmkreisid)
-);
-
---TODO: Wie können wir das sinnvoll umsetzen?
--- save as hashed value if the person has voted
-CREATE TABLE IF NOT EXISTS hatgewaehlt(
-    hashvalue VARCHAR(64),
-    hatgewaehlt BOOLEAN
-);
-
-CREATE TABLE IF NOT EXISTS stimmkreise(
-    stimmkreisid INT PRIMARY KEY,
-    name VARCHAR(64),
-    wahlkreisid INT REFERENCES wahlkreise(wahlkreisid)
-);
 
 CREATE TABLE IF NOT EXISTS wahlkreise(
     wahlkreisid INT PRIMARY KEY,
@@ -49,6 +29,21 @@ CREATE TABLE IF NOT EXISTS wahlkreise(
     anteilStudentenProEinwohner FLOAT,
     schuldenDienstProEinwohner FLOAT
 );
+--TODO: Wie können wir das sinnvoll umsetzen?
+CREATE TABLE IF NOT EXISTS stimmkreise(
+    stimmkreisid INT PRIMARY KEY,
+    name VARCHAR(64),
+    wahlkreisid INT REFERENCES wahlkreise(wahlkreisid)
+);
+
+CREATE TABLE IF NOT EXISTS wahlberechtigte(
+    waehlerid VARCHAR(128) PRIMARY KEY,
+    vorname VARCHAR(64),
+    nachname VARCHAR(64),
+    passwort_hash TEXT NOT NULL,
+    stimmkreisid INT REFERENCES stimmkreise(stimmkreisid)
+);
+
 
 CREATE TABLE IF NOT EXISTS anzahlStimmberechtigteUndWaehler(
     stimmkreisid INT  REFERENCES stimmkreise(stimmkreisid),
