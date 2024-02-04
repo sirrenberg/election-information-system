@@ -231,55 +231,87 @@ router.get("/single_votes", async (req, res) => {
 
     const { rows: anzStimmen } = await pool.query(
       `
-    WITH 
-    erststimmenProStimmkreisSingle as (
-      SELECT ks.stimmkreisid, ks.datum, sum(ks.anzahlStimmen) as anzahlStimmen
-      FROM kandidiert_erststimmen ks
-      GROUP BY ks.stimmkreisid, ks.datum
-  ),
-    zweitstimmenProStimmkreisSingle as (
-      SELECT zs.stimmkreisid, zs.datum, sum(zs.anzahlStimmen) as anzahlStimmen
-      FROM kandidiert_zweitstimmen zs
-      GROUP BY zs.stimmkreisid, zs.datum
-  ),
-    gesamtstimmenProStimmkreisSingle as (
-      SELECT COALESCE(ks.stimmkreisid, zs.stimmkreisid) as stimmkreisid, 
-              COALESCE(ks.datum, zs.datum) as datum,
-                  COALESCE(ks.anzahlStimmen, 0) + COALESCE(zs.anzahlStimmen, 0) as anzahlStimmen
-      FROM erststimmenProStimmkreisSingle ks
-      FULL OUTER JOIN zweitstimmenProStimmkreisSingle zs ON ks.stimmkreisid = zs.stimmkreisid AND ks.datum = zs.datum
-  ),
-  pgesamtStimmenProParteiProStimmkreis as (
-    SELECT gsp.parteiid, gsp.parteiname,
-             gsp.kurzbezeichnung, gsp.farbe, 
-                gsp.datum, gsp.stimmkreisid,
-                    (gsp.anzahlStimmen * 1.00) / gs.anzahlStimmen  as prozentualStimmen
-    FROM gesamtstimmenProStimmkreisSingle gs, gesamtStimmenProParteiProStimmkreis gsp 
-    WHERE gs.stimmkreisid = gsp.stimmkreisid AND gs.datum = gsp.datum 
-),
-    stimmenFürParteien AS(
-      SELECT g.parteiname, g.kurzbezeichnung, g.farbe, g.anzahlstimmen, p.prozentualstimmen, g.datum
-        FROM 
-          gesamtStimmenProParteiProStimmkreis g
-          JOIN pgesamtStimmenProParteiProStimmkreis p 
-          ON g.parteiid = p.parteiid AND p.datum = g.datum AND p.stimmkreisid = g.stimmkreisid
-        WHERE g.stimmkreisid = ${stimmkreisid} AND (g.datum = '${dateCurrentElection}' OR g.datum = '${datePrevElection}')
-    )
-    
-    SELECT 
-      coalesce(s1.parteiname,s2.parteiname) AS parteiname,
-      coalesce(s1.kurzbezeichnung,s2.kurzbezeichnung) AS kurzbezeichnung,
-      coalesce(s1.farbe,s2.farbe) AS farbe,
-      coalesce(s1.anzahlstimmen,0) AS anzahlstimmen,
-      coalesce(s1.prozentualstimmen,0) AS prozentualstimmen,
-      coalesce(s1.anzahlstimmen,0) - coalesce(s2.anzahlstimmen,0) AS diffStimmenAbsolut,
-      coalesce(s1.prozentualstimmen,0) - coalesce(s2.prozentualstimmen,0) AS diffStimmenRel
-    FROM 
-      (SELECT * FROM stimmenFürParteien WHERE datum = '${dateCurrentElection}') s1
-      FULL OUTER JOIN
-      (SELECT * FROM stimmenFürParteien WHERE datum = '${datePrevElection}') s2
-      ON s1.kurzbezeichnung = s2.kurzbezeichnung
-    ORDER BY anzahlstimmen DESC
+      WITH generated_kandidiert_erststimmen AS(
+        SELECT e.kandidatenid, e.stimmkreisid, e.datum, count(e.*) AS anzahlStimmen
+        FROM erststimmen e
+        GROUP BY e.kandidatenid, e.stimmkreisid, e.datum
+      ),
+      generated_kandidiert_zweitstimmen AS(
+        SELECT z.kandidatenid, z.stimmkreisid, z.datum, count(z.*) AS anzahlStimmen
+        FROM zweitstimmen z
+        GROUP BY z.kandidatenid, z.stimmkreisid, z.datum 
+      ),
+      generated_erststimmenProParteiProStimmkreis as (
+          SELECT p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, ks.datum, ks.stimmkreisid, sum(ks.anzahlStimmen) as anzahlstimmen
+          FROM generated_kandidiert_erststimmen ks, kandidaten k, parteien p 
+              WHERE ks.kandidatenid = k.kandidatenid and k.parteiid = p.parteiid
+          GROUP BY p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, ks.datum, ks.stimmkreisid
+      ),
+      generated_zweitstimmenProParteiProStimmkreis as (
+          SELECT p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, zs.datum, zs.stimmkreisid, sum(zs.anzahlStimmen) as anzahlstimmen
+          FROM generated_kandidiert_zweitstimmen zs, kandidaten k, parteien p
+              WHERE zs.kandidatenid = k.kandidatenid and k.parteiid = p.parteiid
+          GROUP BY p.parteiid, p.parteiname, p.kurzbezeichnung, p.farbe, zs.datum, zs.stimmkreisid
+      ),
+      generated_gesamtStimmenProParteiProStimmkreis AS (
+          SELECT COALESCE(ks.parteiid, zs.parteiid) as parteiid, 
+                  COALESCE(ks.parteiname, zs.parteiname) as parteiname,
+                   COALESCE(ks.kurzbezeichnung, zs.kurzbezeichnung) as kurzbezeichnung,
+                    COALESCE(ks.farbe, zs.farbe) as farbe,
+                    COALESCE(ks.datum, zs.datum) as datum,
+                    COALESCE(ks.stimmkreisid, zs.stimmkreisid) as stimmkreisid,
+                     COALESCE(ks.anzahlStimmen, 0) + COALESCE(zs.anzahlStimmen, 0) as anzahlStimmen
+          FROM generated_erststimmenProParteiProStimmkreis ks 
+          FULL OUTER JOIN generated_zweitstimmenProParteiProStimmkreis zs 
+                              ON ks.parteiid = zs.parteiid AND ks.stimmkreisid=zs.stimmkreisid AND ks.datum=zs.datum  
+      ),
+      generated_erststimmenProStimmkreis as (
+          SELECT ks.stimmkreisid, ks.datum, sum(ks.anzahlStimmen) as anzahlStimmen
+          FROM generated_kandidiert_erststimmen ks
+          GROUP BY ks.stimmkreisid, ks.datum
+      ),
+      generated_zweitstimmenProStimmkreis as (
+          SELECT zs.stimmkreisid, zs.datum, sum(zs.anzahlStimmen) as anzahlStimmen
+          FROM generated_kandidiert_zweitstimmen zs
+          GROUP BY zs.stimmkreisid, zs.datum
+      ),
+      generated_gesamtstimmenProStimmkreis as (
+          SELECT COALESCE(ks.stimmkreisid, zs.stimmkreisid) as stimmkreisid, 
+                  COALESCE(ks.datum, zs.datum) as datum,
+                      COALESCE(ks.anzahlStimmen, 0) + COALESCE(zs.anzahlStimmen, 0) as anzahlStimmen
+          FROM generated_erststimmenProStimmkreis ks
+          FULL OUTER JOIN generated_zweitstimmenProStimmkreis zs ON ks.stimmkreisid = zs.stimmkreisid AND ks.datum = zs.datum
+      ),
+      generated_pgesamtStimmenProParteiProStimmkreis as (
+          SELECT gsp.parteiid, gsp.parteiname,
+                   gsp.kurzbezeichnung, gsp.farbe, 
+                      gsp.datum, gsp.stimmkreisid,
+                          (gsp.anzahlStimmen * 1.00) / gs.anzahlStimmen  as prozentualStimmen
+          FROM generated_gesamtstimmenProStimmkreis gs, generated_gesamtStimmenProParteiProStimmkreis gsp 
+          WHERE gs.stimmkreisid = gsp.stimmkreisid AND gs.datum = gsp.datum 
+      ),
+      generated_stimmenFürParteien AS(
+            SELECT g.parteiname, g.kurzbezeichnung, g.farbe, g.anzahlstimmen, p.prozentualstimmen, g.datum
+              FROM 
+                generated_gesamtStimmenProParteiProStimmkreis g
+                JOIN generated_pgesamtStimmenProParteiProStimmkreis p 
+                ON g.parteiid = p.parteiid AND p.datum = g.datum AND p.stimmkreisid = g.stimmkreisid
+              WHERE g.stimmkreisid = ${stimmkreisid} AND (g.datum = '${dateCurrentElection}' OR g.datum = '${datePrevElection}')
+      )
+      SELECT 
+         coalesce(s1.parteiname,s2.parteiname) AS parteiname,
+         coalesce(s1.kurzbezeichnung,s2.kurzbezeichnung) AS kurzbezeichnung,
+         coalesce(s1.farbe,s2.farbe) AS farbe,
+         coalesce(s1.anzahlstimmen,0) AS anzahlstimmen,
+         coalesce(s1.prozentualstimmen,0) AS prozentualstimmen,
+         coalesce(s1.anzahlstimmen,0) - coalesce(s2.anzahlstimmen,0) AS diffStimmenAbsolut,
+         coalesce(s1.prozentualstimmen,0) - coalesce(s2.prozentualstimmen,0) AS diffStimmenRel
+      FROM 
+         (SELECT * FROM generated_stimmenFürParteien WHERE datum = '${dateCurrentElection}') s1
+         FULL OUTER JOIN
+         (SELECT * FROM generated_stimmenFürParteien WHERE datum = '${datePrevElection}') s2
+         ON s1.kurzbezeichnung = s2.kurzbezeichnung
+      ORDER BY anzahlstimmen DESC      
     `
     );
 
