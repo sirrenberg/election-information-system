@@ -10,17 +10,6 @@ import { useAPI } from "../hooks/useAPI";
 import { useEffect } from "react";
 
 function LandingPage() {
-  const [userData, setUserData] = useState({
-    labels: data.map((elem) => elem.party),
-    datasets: [
-      {
-        label: "Seats",
-        data: data.map((elem) => elem.seats),
-        backgroundColor: data.map((elem) => elem.color),
-      },
-    ],
-  } as chartData);
-
   const { sendRequest } = useAPI();
 
   const [seatData, setSeatData] = useState<seatData[]>([]);

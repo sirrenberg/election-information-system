@@ -4,17 +4,11 @@ import pool from "../db.js";
 
 const router = express.Router();
 
-function isPositiveWholeNumber(value: string): boolean {
-  return /^\d+$/.test(value);
-}
-
 router.get("/", async (req, res) => {
   try {
-    const stimmkreisid: string = req.query.stimmkreisid as string;
+    const stimmkreisid: string = req.query.id as string;
     const dateCurrentElection: string = req.query.date_current_election as string;
     const datePrevElection: string = req.query.date_prev_election as string;
-    //const { date_current_election, date_prev_election, stimmkreisid } = req.query;
-    // check that the parameters are in the correct format and prevent SQL injection
     if (stimmkreisid === undefined || dateCurrentElection === undefined || datePrevElection === undefined) {
       res.status(400).send("Bad Request");
       return;

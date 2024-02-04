@@ -17,19 +17,8 @@ function DistrictResult({ id }: { id: string }) {
   const [stimmkreisParteiErgebnisse, setStimmkreisParteiErgebnisse] = useState<stimmkreisParteiErgebnis[]>();
   const [stimmkreisSieger, setStimmkreisSieger] = useState<stimmkreisSieger>();
 
-  const [userData, _] = useState({
-    labels: data.map((elem) => elem.party),
-    datasets: [
-      {
-        label: "Seats",
-        data: data.map((elem) => elem.seats),
-        backgroundColor: data.map((elem) => elem.color),
-      },
-    ],
-  } as chartData);
-
   useEffect(() => {
-    sendRequest(`/stimmkreisuebersicht?date_current_election=${date_current_election}&date_prev_election=${date_prev_election}&stimmkreisid=${id}`, "GET").then((data) => {
+    sendRequest(`/stimmkreisuebersicht?date_current_election=${date_current_election}&date_prev_election=${date_prev_election}&id=${id}`, "GET").then((data) => {
       console.log(data);
 
       const elem = data.direktkandidat[0];

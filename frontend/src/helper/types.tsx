@@ -122,6 +122,12 @@ type stimmkreisSieger = {
   gesamtstimmensiegerstimmen: number,
 };
 
+type stimmen = {
+  parteiname: string,
+  anzahlStimmen: number,
+  parteiFarbe: string,
+};
+
 export type {
   chartData,
   chartOptions,
@@ -137,4 +143,5 @@ export type {
   Voter,
   Candidate,
   stimmkreisSieger,
+  stimmen,
 };
