@@ -25,7 +25,7 @@ function Results() {
 
   useEffect(() => {
     sendRequest("/stimmkreise", "GET").then((data: stimmkreis[]) => {
-      const groupedData = groupBy(data, (item) => item.wahlkreisid);
+      const groupedData = groupBy(data, (item) => item.wahlkreisname);
 
       // convert into menuEntry
       const menuData: menuEntry[] = [];

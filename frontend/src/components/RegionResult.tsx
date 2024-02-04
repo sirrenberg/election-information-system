@@ -64,7 +64,9 @@ function RegionResult({ id }: { id: string }) {
   if (!wahlkreisStimmen || !wahlkreisName) return <div>Loading...</div>;
   return (
     <div className="region-res-container">
-      <h1 className="region-title">{id} - {wahlkreisName}</h1>
+      <h1 className="page-title">
+        {id} - {wahlkreisName}
+      </h1>
       <div className="region-res-charts">
         <div className="region-res-section">
           <h2 className="region-res-subtitle">Erststimmen</h2>
