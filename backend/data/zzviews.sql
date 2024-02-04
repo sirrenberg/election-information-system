@@ -16,6 +16,12 @@ DROP MATERIALIZED VIEW IF EXISTS zweitstimmenProParteiProStimmkreis CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS gesamtStimmenProParteiProStimmkreis CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS pgesamtStimmenProParteiProStimmkreis CASCADE;
 DROP MATERIALIZED VIEW IF EXISTS stimmenUnterschiedProParteiProStimmkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS erststimmenSiegerStimmkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS sumZweitstimmenStimmkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS zweitStimmenSiegerStimmkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS summeGesammtstimmenStimmkreis CASCADE;
+DROP MATERIALIZED VIEW IF EXISTS gesammtStimmenSiegerStimmkreis CASCADE;
+
 
 
 CREATE MATERIALIZED VIEW erststimmenProKandidatProWahlkreis as (
