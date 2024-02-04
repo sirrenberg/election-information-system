@@ -1,4 +1,4 @@
-INSERT INTO Stimmkreise VALUES
+INSERT INTO Stimmkreise(wahlkreisid, stimmkreisid, name) VALUES
 (901,101,'München-Hadern'),
 (901,102,'München-Bogenhausen'),
 (901,103,'München-Giesing'),

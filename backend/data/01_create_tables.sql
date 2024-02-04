@@ -31,9 +31,9 @@ CREATE TABLE IF NOT EXISTS wahlkreise(
 );
 --TODO: Wie können wir das sinnvoll umsetzen?
 CREATE TABLE IF NOT EXISTS stimmkreise(
+    wahlkreisid INT REFERENCES wahlkreise(wahlkreisid),
     stimmkreisid INT PRIMARY KEY,
-    name VARCHAR(64),
-    wahlkreisid INT REFERENCES wahlkreise(wahlkreisid)
+    name VARCHAR(64)
 );
 
 CREATE TABLE IF NOT EXISTS wahlberechtigte(
@@ -94,14 +94,6 @@ CREATE TABLE IF NOT EXISTS zweitstimmen(
     kandidatenid INT REFERENCES kandidaten(kandidatenid),
     stimmkreisid INT REFERENCES stimmkreise(stimmkreisid),
     datum DATE              --datum der wahl, nicht der stimmabgabe.
-);
-
-CREATE TABLE IF NOT EXISTS first_names(
-    name VARCHAR(64) PRIMARY KEY
-);
-
-CREATE TABLE IF NOT EXISTS last_names(
-    name VARCHAR(64) PRIMARY KEY
 );
 
 CREATE TABLE IF NOT EXISTS voter_hashes(
