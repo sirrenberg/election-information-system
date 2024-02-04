@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS wahlberechtigte(
     vorname VARCHAR(64),
     nachname VARCHAR(64),
     passwort_hash TEXT NOT NULL,
-    stimmkreisid INT
+    stimmkreisid INT FOREIGN KEY REFERENCES stimmkreise(stimmkreisid),
 );
 
 --TODO: Wie können wir das sinnvoll umsetzen?
@@ -37,9 +37,9 @@ CREATE TABLE IF NOT EXISTS hatgewaehlt(
 );
 
 CREATE TABLE IF NOT EXISTS stimmkreise(
-    wahlkreisid INT,
     stimmkreisid INT PRIMARY KEY,
     name VARCHAR(64)
+    wahlkreisid INT FOREIGN KEY REFERENCES wahlkreise(wahlkreisid),
 );
 
 CREATE TABLE IF NOT EXISTS wahlkreise(
@@ -51,21 +51,12 @@ CREATE TABLE IF NOT EXISTS wahlkreise(
 );
 
 CREATE TABLE IF NOT EXISTS anzahlStimmberechtigteUndWaehler(
-    stimmkreisid INT,
+    stimmkreisid INT FOREIGN KEY REFERENCES stimmkreise(stimmkreisid),
     datum DATE,
     anzahlStimmberechtigte INT,
     anzahlWaehler INT,
     PRIMARY KEY (stimmkreisid, datum)
 );
-
-CREATE TABLE IF NOT EXISTS anzahlWaehler(
-    stimmkreisid INT,
-    datum DATE,
-    anzahlWaehler INT,
-    PRIMARY KEY (stimmkreisid, datum)
-);
-
-
 
 CREATE TABLE IF NOT EXISTS parteien(
     parteiid INT PRIMARY KEY,
@@ -77,7 +68,7 @@ CREATE TABLE IF NOT EXISTS parteien(
 CREATE TABLE IF NOT EXISTS kandidaten(
     kandidatenid INT PRIMARY KEY,
     kandidatennamen VARCHAR(128),
-    parteiid INT
+    parteiid INT FOREIGN KEY REFERENCES parteien(parteiid)
 );
 
 CREATE TABLE IF NOT EXISTS kandidiert_erststimmen(
@@ -98,15 +89,15 @@ CREATE TABLE IF NOT EXISTS kandidiert_zweitstimmen(
 
 CREATE TABLE IF NOT EXISTS erststimmen(
     stimmeid SERIAL PRIMARY KEY,
-    kandidatenid INT,
-    stimmkreisid INT,
+    kandidatenid INT FOREIGN KEY REFERENCES kandidaten(kandidatenid),
+    stimmkreisid INT FOREIGN KEY REFERENCES stimmkreise(stimmkreisid),
     datum DATE               --datum der wahl, nicht der stimmabgabe.
 );
 
 CREATE TABLE IF NOT EXISTS zweitstimmen(
     stimmeid SERIAL PRIMARY KEY,
-    kandidatenid INT,
-    stimmkreisid INT,
+    kandidatenid INT FOREIGN KEY REFERENCES kandidaten(kandidatenid),
+    stimmkreisid INT FOREIGN KEY REFERENCES stimmkreise(stimmkreisid),
     datum DATE              --datum der wahl, nicht der stimmabgabe.
 );
 
