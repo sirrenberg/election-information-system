@@ -31,7 +31,7 @@ function ClosestWinners() {
         })
       );
 
-      setGroupedData(groupBy(knappsteSiegerData, "partei"));
+      setGroupedData(groupBy(knappsteSiegerData, (item) => item.partei));
     });
   }, []);
 

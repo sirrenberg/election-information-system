@@ -1,20 +1,14 @@
 import "../styles/Overview.css";
 import { useState } from "react";
-import ScatterChart from "../components/ScatterChart";
-import { chartData, ueberhangData, knappsteSiegerData } from "../helper/types";
+import { ueberhangData } from "../helper/types";
 import { useAPI } from "../hooks/useAPI";
 import { useEffect } from "react";
-import { groupBy } from "lodash";
 import ClosestWinners from "../components/ClosestWinners";
 
 function Overview() {
   const { sendRequest } = useAPI();
 
   const [ueberhangData, setUeberhangData] = useState<ueberhangData[]>([]);
-  const [knappsteSiegerData, setKnappsteSiegerData] = useState<
-    knappsteSiegerData[]
-  >([]);
-  const [groupedData, setGroupedData] = useState<any[]>([]);
 
   useEffect(() => {
     sendRequest("/ueberhang_mandate", "GET").then((data) => {

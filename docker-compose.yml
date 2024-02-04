@@ -21,16 +21,16 @@ services:
     networks:
       - election-network
 
-#  frontend:
-#    build:
-#      context: ./frontend
-#    ports:
-#      - "5173:5173"
-#    depends_on:
-#      - backend
-#    restart: always
-#    networks:
-#      - election-network
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    restart: always
+    networks:
+      - election-network
 
 networks:
   election-network:

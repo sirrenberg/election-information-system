@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 
-const StyledTextField = styled(TextField)(({ theme }) => ({
+const StyledTextField = styled(TextField)(() => ({
   width: 1000,
   marginBottom: "2em",
   // input text color
