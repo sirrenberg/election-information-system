@@ -20,6 +20,8 @@ import loginRoutes from "./routes/login.js";
 import loadData from "./routes/loadData.js";
 import wahlberechtigeRoutes from "./routes/wahlberechtigte.js";
 import voteRoutes from "./routes/vote.js";
+import generateVoteRoutes from "./routes/generate_votes.js";
+import updateAggregatedDataRoutes from "./routes/updateAggregatedData.js";
 
 dotenv.config();
 
@@ -52,6 +54,8 @@ app.use("/ueberhang_mandate", ueberhangsMandateRoutes);
 app.use("/knappste-sieger-und-zweite", knappsteSiegerRoutes);
 app.use("/stimmkreisuebersicht", stimmkreisUebersichtRoutes);
 app.use("/wahlberechtigte", wahlberechtigeRoutes);
+app.use("/generate_votes", generateVoteRoutes);
+app.use("/update_aggregated_data", updateAggregatedDataRoutes);
 
 app.use("/init", loadData);
 

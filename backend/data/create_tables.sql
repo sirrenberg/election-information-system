@@ -97,17 +97,17 @@ CREATE TABLE IF NOT EXISTS kandidiert_zweitstimmen(
 );
 
 CREATE TABLE IF NOT EXISTS erststimmen(
+    stimmeid SERIAL PRIMARY KEY,
     kandidatenid INT,
     stimmkreisid INT,
-    datum DATE, --datum der wahl, nicht der stimmabgabe.
-    PRIMARY KEY (datum, kandidatenid, stimmkreisid)
+    datum DATE               --datum der wahl, nicht der stimmabgabe.
 );
 
 CREATE TABLE IF NOT EXISTS zweitstimmen(
+    stimmeid SERIAL PRIMARY KEY,
     kandidatenid INT,
     stimmkreisid INT,
-    datum DATE, --datum der wahl, nicht der stimmabgabe.
-    PRIMARY KEY (datum, kandidatenid, stimmkreisid)
+    datum DATE              --datum der wahl, nicht der stimmabgabe.
 );
 
 CREATE TABLE IF NOT EXISTS first_names(
