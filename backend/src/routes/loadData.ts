@@ -1,6 +1,5 @@
 import express from "express";
 import pool from "../db.js";
-import { v4 } from "uuid";
 import fs from "fs";
 import path from "path";
 
