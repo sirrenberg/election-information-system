@@ -1,8 +1,7 @@
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { useAPI } from "../hooks/useAPI";
 import { useEffect } from "react";
-import { groupBy } from "../helper/misc";
-import { knappsteSiegerData, analysisData, chartData, chartOptions } from "../helper/types";
+import { analysisData, chartOptions } from "../helper/types";
 import { Scatter } from "react-chartjs-2";
 
 function AdditionalResearch() {
