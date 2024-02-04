@@ -319,16 +319,24 @@ router.get("/single_votes", async (req, res) => {
 
     const { rows: stimmkreissieger } = await pool.query(
       `
-      WITH
-      
-      erststimmenSiegerStimmkreis as (
+      WITH generated_kandidiert_erststimmen AS(
+        SELECT e.kandidatenid, e.stimmkreisid, e.datum, count(e.*) AS anzahlStimmen
+        FROM erststimmen e
+        GROUP BY e.kandidatenid, e.stimmkreisid, e.datum
+      ),
+      generated_kandidiert_zweitstimmen AS(
+        SELECT z.kandidatenid, z.stimmkreisid, z.datum, count(z.*) AS anzahlStimmen
+        FROM zweitstimmen z
+        GROUP BY z.kandidatenid, z.stimmkreisid, z.datum 
+      ),
+      generated_erststimmenSiegerStimmkreis as (
         SELECT
           k.parteiid,
           p.kurzbezeichnung,
           k1.stimmkreisid,
           k1.anzahlstimmen
         FROM
-          kandidiert_erststimmen k1
+          generated_kandidiert_erststimmen k1
           INNER JOIN
           kandidaten k
           ON
@@ -337,21 +345,20 @@ router.get("/single_votes", async (req, res) => {
           ON p.parteiid = k.parteiid
         WHERE
           NOT EXISTS (
-            SELECT 1
-            FROM kandidiert_erststimmen k2
-            WHERE 
-              k2.anzahlstimmen > k1.anzahlstimmen 
-              AND k2.stimmkreisid = k1.stimmkreisid 
-              AND k1.datum = k2.datum
+          SELECT 1
+          FROM generated_kandidiert_erststimmen k2
+          WHERE 
+            k2.anzahlstimmen > k1.anzahlstimmen 
+            AND k2.stimmkreisid = k1.stimmkreisid 
+            AND k1.datum = k2.datum
           )
           AND
-            k1.datum = '2023-10-08'
-      ),
-
-      sumZweitstimmenStimmkreis AS (
+          k1.datum = '2023-10-08'
+        ),
+      generated_sumZweitstimmenStimmkreis AS (
         SELECT kz.datum, p.parteiid, p.kurzbezeichnung, stimmkreisid, sum(anzahlstimmen) AS anzahlstimmen
         FROM 
-          kandidiert_zweitstimmen kz
+          generated_kandidiert_zweitstimmen kz
           JOIN
           kandidaten k
           ON kz.kandidatenid = k.kandidatenid
@@ -362,26 +369,55 @@ router.get("/single_votes", async (req, res) => {
           kz.datum = '2023-10-08'
         GROUP BY p.parteiid, stimmkreisid, kz.datum
         ORDER BY stimmkreisid
+        ),
+        generated_zweitStimmenSiegerStimmkreis AS (
+          SELECT
+            szs1.parteiid,
+            szs1.stimmkreisid,
+            szs1.anzahlstimmen,
+            szs1.kurzbezeichnung
+          FROM
+            generated_sumZweitstimmenStimmkreis szs1
+          WHERE
+            NOT EXISTS (
+              SELECT 1
+              FROM generated_sumZweitstimmenStimmkreis szs2
+              WHERE 
+                szs2.anzahlstimmen > szs1.anzahlstimmen 
+                AND szs2.stimmkreisid = szs1.stimmkreisid
+            )
+        ),
+      generated_summeGesammtstimmenStimmkreis AS(
+          SELECT 
+            (ke.anzahlstimmen + szs.anzahlstimmen) AS anzahlstimmen, 
+            szs.parteiid, 
+            szs.kurzbezeichnung,
+            szs.stimmkreisid
+          FROM
+            generated_kandidiert_erststimmen ke
+            INNER JOIN kandidaten k ON ke.kandidatenid = k.kandidatenid
+            INNER JOIN generated_sumZweitstimmenStimmkreis szs
+            ON szs.stimmkreisid = ke.stimmkreisid AND k.parteiid = szs.parteiid AND ke.datum = szs.datum
+          WHERE
+            ke.datum = '2023-10-08'	
       ),
-
-      gesammtStimmenSiegerStimmkreis AS (
+      generated_gesammtStimmenSiegerStimmkreis AS (
         SELECT
           sgs1.parteiid,
           sgs1.stimmkreisid,
           sgs1.anzahlstimmen,
           sgs1.kurzbezeichnung
         FROM
-          summeGesammtstimmenStimmkreis sgs1
+          generated_summeGesammtstimmenStimmkreis sgs1
         WHERE
           NOT EXISTS (
-            SELECT 1
-            FROM summeGesammtstimmenStimmkreis sgs2
-            WHERE 
-              sgs2.anzahlstimmen > sgs1.anzahlstimmen 
-              AND sgs2.stimmkreisid = sgs1.stimmkreisid
+          SELECT 1
+          FROM generated_summeGesammtstimmenStimmkreis sgs2
+          WHERE 
+            sgs2.anzahlstimmen > sgs1.anzahlstimmen 
+            AND sgs2.stimmkreisid = sgs1.stimmkreisid
           )
-      )
-
+        )
       SELECT 
         erststimmenSieger.kurzbezeichnung AS erststimmenSiegerPartei,
         erststimmenSieger.anzahlstimmen AS erststimmenSiegerStimmen,
@@ -390,11 +426,9 @@ router.get("/single_votes", async (req, res) => {
         gesamtstimmenSieger.kurzbezeichnung AS gesamtstimmenSiegerPartei,
         gesamtstimmenSieger.anzahlstimmen AS gesamtstimmenSiegerStimmen
       FROM 
-        (SELECT kurzbezeichnung, anzahlstimmen FROM erststimmenSiegerStimmkreis WHERE stimmkreisid = ${stimmkreisid}) erststimmenSieger,
-        (SELECT kurzbezeichnung, anzahlstimmen FROM zweitStimmenSiegerStimmkreis WHERE stimmkreisid = ${stimmkreisid}) zweitstimmenSieger,
-        (SELECT kurzbezeichnung, anzahlstimmen FROM gesammtStimmenSiegerStimmkreis WHERE stimmkreisid = ${stimmkreisid}) gesamtstimmenSieger
-	
-
+        (SELECT kurzbezeichnung, anzahlstimmen FROM generated_erststimmenSiegerStimmkreis WHERE stimmkreisid = ${stimmkreisid}) erststimmenSieger,
+        (SELECT kurzbezeichnung, anzahlstimmen FROM generated_zweitStimmenSiegerStimmkreis WHERE stimmkreisid = ${stimmkreisid}) zweitstimmenSieger,
+        (SELECT kurzbezeichnung, anzahlstimmen FROM generated_gesammtStimmenSiegerStimmkreis WHERE stimmkreisid = ${stimmkreisid}) gesamtstimmenSieger
       `
     );
     res.json({
