@@ -23,40 +23,49 @@ export default function Login() {
   const { setVoter } = context;
 
   function loginUser(credentials: Credentials) {
-    sendRequest("/login", "POST", credentials).then((response) => {
-      const { accessToken, voter } = response;
+    sendRequest("/login", "POST", credentials)
+      .then((response) => {
+        const { accessToken, voter } = response;
 
-      const timer = 2000;
+        const timer = 2000;
 
-      if (accessToken) {
-        const voter_to_add = {
-          id: voter.id,
-          first_name: voter.first_name,
-          last_name: voter.last_name,
-          stimmkreis: {
-            id: voter.stimmkreis.id,
-            name: voter.stimmkreis.name,
-          },
-          wahlkreis: {
-            id: voter.wahlkreis.id,
-            name: voter.wahlkreis.name,
-          },
-          token: accessToken,
-        };
+        if (accessToken) {
+          const voter_to_add = {
+            id: voter.id,
+            first_name: voter.first_name,
+            last_name: voter.last_name,
+            stimmkreis: {
+              id: voter.stimmkreis.id,
+              name: voter.stimmkreis.name,
+            },
+            wahlkreis: {
+              id: voter.wahlkreis.id,
+              name: voter.wahlkreis.name,
+            },
+            token: accessToken,
+          };
 
-        setVoter(voter_to_add);
+          setVoter(voter_to_add);
 
-        toast.success("Erfolgreich eingeloggt", {
-          autoClose: timer,
+          toast.error("Fehler beim Einloggen", {
+            autoClose: timer,
+          });
+          toast.success("Erfolgreich eingeloggt", {
+            autoClose: timer,
+          });
+
+          delay(timer).then(() => navigate("/vote"));
+        } else {
+          throw new Error("Fehler beim Login");
+        }
+      })
+
+      .catch((error) => {
+        console.error("Error:", error);
+        toast.error("Login fehlgeschlagen", {
+          autoClose: 5000,
         });
-
-        delay(timer).then(() => navigate("/vote"));
-      } else {
-        toast.error("Fehler beim Einloggen", {
-          autoClose: timer,
-        });
-      }
-    });
+      });
   }
 
   function handleSubmit(e: FormEvent) {

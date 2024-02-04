@@ -2,6 +2,7 @@ import express from "express";
 import pool from "../db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 import containsOnlyWhitelistChars from "../whitelisting.js";
 
@@ -54,6 +55,25 @@ router.post("/", async (req, res) => {
           expiresIn: "10m",
         }
       );
+
+      // check if voter has already voted
+      // hash voterid
+      const hashedVoterId = crypto
+        .createHash("sha256")
+        .update(req.body.id)
+        .digest("hex");
+
+      const { rowCount: voteCount } = await pool.query(
+        `SELECT * FROM voter_hashes WHERE hashvalue = $1`,
+        [hashedVoterId]
+      );
+
+      if (voteCount && voteCount > 0) {
+        res.status(403).send({
+          error: "User already voted",
+        });
+        return;
+      }
 
       const voter = {
         id: rows[0].waehlerid,

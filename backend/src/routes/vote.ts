@@ -13,8 +13,6 @@ router.post("/", async (req, res) => {
     selectedListCandidateId,
   } = req.body;
 
-  console.log(req.body);
-
   if (!voterId || !stimmkreisid) {
     res.status(400).send({
       error: "Invalid input",
@@ -61,8 +59,6 @@ router.post("/", async (req, res) => {
     `SELECT * FROM voter_hashes WHERE hashvalue = $1`,
     [hashedVoterId]
   );
-
-  console.log("voteCount", voteCount);
 
   if (voteCount && voteCount > 0) {
     res.status(403).send({
