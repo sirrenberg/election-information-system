@@ -10,8 +10,8 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   try {
     await pool.query(`
-      DELETE FROM kandidiert_erststimmen WHERE datum = '2023-10-08';
-      DELETE FROM kandidiert_zweitstimmen WHERE datum = '2023-10-08';
+      DELETE FROM kandidiert_erststimmen;
+      DELETE FROM kandidiert_zweitstimmen;
       
       INSERT INTO kandidiert_erststimmen (kandidatenid, stimmkreisid, datum, anzahlStimmen)
       SELECT kandidatenid, stimmkreisid, datum, COUNT(*) as anzahlStimmen
