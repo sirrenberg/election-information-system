@@ -1,6 +1,5 @@
 # election-information-system
 
-
 ## Create a Docker image with build
 ```
 docker build -t <my-docker-image-name> .

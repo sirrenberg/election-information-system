@@ -9,9 +9,8 @@ import {
   stimmkreisParteiErgebnis,
   stimmkreisSieger,
 } from "../helper/types";
-import DistrictResultFromSingleVotes from "./DistrictResultFromSingleVotes";
 
-function DistrictResult({ id }: { id: string }) {
+function DistrictResultFromSingleVotes({ id }: { id: string }) {
   const date_current_election = "2023-10-08";
   const date_prev_election = "2018-10-14";
 
@@ -24,7 +23,7 @@ function DistrictResult({ id }: { id: string }) {
 
   useEffect(() => {
     sendRequest(
-      `/stimmkreisuebersicht?date_current_election=${date_current_election}&date_prev_election=${date_prev_election}&id=${id}`,
+      `/stimmkreisuebersicht/single_votes?date_current_election=${date_current_election}&date_prev_election=${date_prev_election}&id=${id}`,
       "GET"
     ).then((data) => {
       const elem = data.direktkandidat[0];
@@ -273,9 +272,6 @@ function DistrictResult({ id }: { id: string }) {
           </div>
         </div>
       </div>
-
-      <h1>Stimmkreisübersicht aus den Einzelstimmen:</h1>
-      <DistrictResultFromSingleVotes id={id} />
     </div>
   );
 }
