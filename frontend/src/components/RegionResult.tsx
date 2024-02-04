@@ -10,6 +10,7 @@ import { stimmen } from "../helper/types";
 function RegionResult({ id }: { id: string }) {
   const { sendRequest } = useAPI();
 
+  const [wahlkreisName, setWahlkreisName] = useState<string>(""); // data[id]
   const [wahlkreisStimmen, setWahlkreisStimmen] = useState<{
     [key: string]: stimmen[];
   }>();
@@ -17,6 +18,8 @@ function RegionResult({ id }: { id: string }) {
   useEffect(() => {
     sendRequest(`/wahlkreisuebersicht?id=${id}`, "GET").then((data) => {
       console.log(data);
+
+      setWahlkreisName(data.wahlkreisname);
 
       const erststimmen: stimmen[] = data.erststimmen.map((elem: any) => ({
         parteiname: elem.kurzbezeichnung,
@@ -60,10 +63,10 @@ function RegionResult({ id }: { id: string }) {
     return chartData;
   }
 
-  if (!wahlkreisStimmen) return <div>Loading...</div>;
+  if (!wahlkreisStimmen || !wahlkreisName) return <div>Loading...</div>;
   return (
     <div className="region-res-container">
-      <h1 className="region-title">{id} - Wahlkreis Name</h1>
+      <h1 className="region-title">{id} - {wahlkreisName}</h1>
       <div className="region-res-charts">
         <div className="region-res-section">
           <h2 className="region-res-subtitle">Erststimmen</h2>

@@ -16,6 +16,14 @@ router.get("/", async (req, res) => {
       res.status(400).send("Bad Request");
       return;
     }
+    const { rows: wahlkreisname } = await pool.query(
+      `
+      SELECT w.wahlkreisname
+      FROM wahlkreise w
+      WHERE wahlkreisid = ${wahlkreisid}
+      `
+    );
+
     const { rows: erststimmen } = await pool.query(
     `
     SELECT p.kurzbezeichnung, sum(k1.anzahlstimmen) AS anzahlstimmen, p.farbe
@@ -68,7 +76,7 @@ router.get("/", async (req, res) => {
           sk.wahlkreisid, anzahlstimmen DESC
       `
     );
-    res.json({"erststimmen": erststimmen, "zweitstimmen" : zweitstimmen, "gesamtstimmen": gesamtstimmen});
+    res.json({"wahlkreisname": wahlkreisname[0].wahlkreisname, "erststimmen": erststimmen, "zweitstimmen" : zweitstimmen, "gesamtstimmen": gesamtstimmen});
   } catch (error) {
     console.error(error);
     res.status(500).send("Server Error");
