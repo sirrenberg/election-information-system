@@ -9,7 +9,6 @@ import {
   stimmkreisParteiErgebnis,
   stimmkreisSieger,
 } from "../helper/types";
-import DistrictResultFromSingleVotes from "./DistrictResultFromSingleVotes";
 
 function DistrictResult({ id }: { id: string }) {
   const date_current_election = "2023-10-08";
@@ -273,9 +272,6 @@ function DistrictResult({ id }: { id: string }) {
           </div>
         </div>
       </div>
-
-      <h1>Stimmkreisübersicht aus den Einzelstimmen:</h1>
-      <DistrictResultFromSingleVotes id={id} />
     </div>
   );
 }
