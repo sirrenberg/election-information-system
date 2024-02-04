@@ -47,9 +47,6 @@ export default function Login() {
 
           setVoter(voter_to_add);
 
-          toast.error("Fehler beim Einloggen", {
-            autoClose: timer,
-          });
           toast.success("Erfolgreich eingeloggt", {
             autoClose: timer,
           });

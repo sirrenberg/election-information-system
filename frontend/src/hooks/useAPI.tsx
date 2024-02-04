@@ -16,8 +16,6 @@ export function useAPI() {
       },
     })
       .then((res) => {
-        console.log(res.status);
-
         if (res.status !== 200 && res.status !== 201) {
           throw new Error(
             `Request failed with status ${res.status}: ${res.statusText}`

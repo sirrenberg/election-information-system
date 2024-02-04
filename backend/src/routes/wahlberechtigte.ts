@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
 
     res.status(200).json({ id, first_name, last_name, stimmkreis_id });
   } catch (err) {
-    console.log(err);
+    console.error(err);
 
     res.status(500).send();
   }

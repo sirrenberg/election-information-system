@@ -24,13 +24,10 @@ function SeatDistribution() {
       // sort by seats descending
       seatData.sort((a, b) => b.seats - a.seats);
 
-      console.log(seatData);
-
       setSeatData(seatData);
     });
 
     sendRequest("/MitgliederDesLandtages", "GET").then((data) => {
-      console.log(data);
       const candidateData: candidateData[] = data.map((elem: any) => ({
         party: elem.kurzbezeichnung,
         wahlkreis: elem.wahlkreisname,

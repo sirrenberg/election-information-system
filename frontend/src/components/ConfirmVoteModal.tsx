@@ -88,8 +88,8 @@ function ConfirmVoteModal({
                   {
                     voterId: voter.id,
                     stimmkreisid: voter.stimmkreis.id,
-                    directCandidate: selectedDirectCandidateId,
-                    listCandidate: selectedListCandidateId,
+                    selectedDirectCandidateId,
+                    selectedListCandidateId,
                   },
                   voter.token
                 )
