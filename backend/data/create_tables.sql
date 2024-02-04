@@ -1,6 +1,6 @@
 --TODO: USE DB NORMALIZER TO NORMALIZE THIS DB!!!!
 --TODO: Create matelialized views for the results of the election
---TODO: PRIMARY KEY? FOREIGN KEY? HINZUFÜGEN ODER NICHT?
+--TODO: PRIMARY KEY? ? HINZUFÜGEN ODER NICHT?
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS wahlberechtigte(
     vorname VARCHAR(64),
     nachname VARCHAR(64),
     passwort_hash TEXT NOT NULL,
-    stimmkreisid INT FOREIGN KEY REFERENCES stimmkreise(stimmkreisid),
+    stimmkreisid INT REFERENCES stimmkreise(stimmkreisid)
 );
 
 --TODO: Wie können wir das sinnvoll umsetzen?
@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS hatgewaehlt(
 
 CREATE TABLE IF NOT EXISTS stimmkreise(
     stimmkreisid INT PRIMARY KEY,
-    name VARCHAR(64)
-    wahlkreisid INT FOREIGN KEY REFERENCES wahlkreise(wahlkreisid),
+    name VARCHAR(64),
+    wahlkreisid INT REFERENCES wahlkreise(wahlkreisid)
 );
 
 CREATE TABLE IF NOT EXISTS wahlkreise(
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS wahlkreise(
 );
 
 CREATE TABLE IF NOT EXISTS anzahlStimmberechtigteUndWaehler(
-    stimmkreisid INT FOREIGN KEY REFERENCES stimmkreise(stimmkreisid),
+    stimmkreisid INT  REFERENCES stimmkreise(stimmkreisid),
     datum DATE,
     anzahlStimmberechtigte INT,
     anzahlWaehler INT,
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS parteien(
 CREATE TABLE IF NOT EXISTS kandidaten(
     kandidatenid INT PRIMARY KEY,
     kandidatennamen VARCHAR(128),
-    parteiid INT FOREIGN KEY REFERENCES parteien(parteiid)
+    parteiid INT REFERENCES parteien(parteiid)
 );
 
 CREATE TABLE IF NOT EXISTS kandidiert_erststimmen(
@@ -89,15 +89,15 @@ CREATE TABLE IF NOT EXISTS kandidiert_zweitstimmen(
 
 CREATE TABLE IF NOT EXISTS erststimmen(
     stimmeid SERIAL PRIMARY KEY,
-    kandidatenid INT FOREIGN KEY REFERENCES kandidaten(kandidatenid),
-    stimmkreisid INT FOREIGN KEY REFERENCES stimmkreise(stimmkreisid),
+    kandidatenid INT REFERENCES kandidaten(kandidatenid),
+    stimmkreisid INT REFERENCES stimmkreise(stimmkreisid),
     datum DATE               --datum der wahl, nicht der stimmabgabe.
 );
 
 CREATE TABLE IF NOT EXISTS zweitstimmen(
     stimmeid SERIAL PRIMARY KEY,
-    kandidatenid INT FOREIGN KEY REFERENCES kandidaten(kandidatenid),
-    stimmkreisid INT FOREIGN KEY REFERENCES stimmkreise(stimmkreisid),
+    kandidatenid INT REFERENCES kandidaten(kandidatenid),
+    stimmkreisid INT REFERENCES stimmkreise(stimmkreisid),
     datum DATE              --datum der wahl, nicht der stimmabgabe.
 );
 
