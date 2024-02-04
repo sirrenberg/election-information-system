@@ -5,7 +5,7 @@ import PieChart from "./PieChart";
 import { chartData } from "../helper/types";
 import { useEffect, useState } from "react";
 import { useAPI } from "../hooks/useAPI";
-import { stimmkreisuebersicht, stimmkreisParteiErgebnis } from "../helper/types";
+import { stimmkreisuebersicht, stimmkreisParteiErgebnis, stimmkreisSieger } from "../helper/types";
 
 function DistrictResult({ id }: { id: string }) {
   const date_current_election = "2023-10-08";
@@ -15,6 +15,7 @@ function DistrictResult({ id }: { id: string }) {
   const {sendRequest} = useAPI();
   const [stimmkreisuebersicht, setStimmkreisuebersicht] = useState<stimmkreisuebersicht>();
   const [stimmkreisParteiErgebnisse, setStimmkreisParteiErgebnisse] = useState<stimmkreisParteiErgebnis[]>();
+  const [stimmkreisSieger, setStimmkreisSieger] = useState<stimmkreisSieger>();
 
   const [userData, _] = useState({
     labels: data.map((elem) => elem.party),
@@ -61,6 +62,17 @@ function DistrictResult({ id }: { id: string }) {
       }));
       console.log("Parteiergebnisse: " + spe[0].parteiname + " " + spe[0].anzahlStimmen + " " + spe[0].parteiFarbe);
       setStimmkreisParteiErgebnisse(spe);
+
+      const sieger = data.stimmkreissieger[0]
+      const sks: stimmkreisSieger = {
+        erststimmensieger: sieger.erststimmensiegerpartei,
+        erststimmensiegerstimmen: Number(sieger.erststimmensiegerstimmen),
+        zweitstimmensieger: sieger.zweitstimmensiegerpartei,
+        zweitstimmensiegerstimmen: Number(sieger.zweitstimmensiegerstimmen),
+        gesamtstimmensieger: sieger.gesamtstimmensiegerpartei,
+        gesamtstimmensiegerstimmen: Number(sieger.gesamtstimmensiegerstimmen),
+      };
+      setStimmkreisSieger(sks);
     });
   },[id]);
 
@@ -154,8 +166,29 @@ function DistrictResult({ id }: { id: string }) {
           </table>
         </div>
       </div>
-      <p>* in Klammern sind jeweils die Änderungen zum Vorjahr angegeben.</p>
+      <p>* In Klammern sind jeweils die Änderungen zum Vorjahr angegeben.</p>
 
+      <div className="district-info-tables">
+        <div className="district-table-container">
+          <table className="district-table info-table">
+            <thead>
+              <tr>
+                <th>Siegerpartei Erststimmen**</th>
+                <th>Siegerpartei Zweitstimmen**</th>
+                <th>Siegerpartei Gesamtstimmen**</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{stimmkreisSieger?.erststimmensieger} ({stimmkreisSieger?.erststimmensiegerstimmen})</td>
+                <td>{stimmkreisSieger?.zweitstimmensieger} ({stimmkreisSieger?.zweitstimmensiegerstimmen})</td>
+                <td>{stimmkreisSieger?.gesamtstimmensieger} ({stimmkreisSieger?.gesamtstimmensiegerstimmen})</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p>** In Klammern ist jeweils die Anzahl der Erst-, Zweit- und Gesamtstimmen angegeben.</p>
 
       <div className="district-res-charts">
         <div className="district-res-section">

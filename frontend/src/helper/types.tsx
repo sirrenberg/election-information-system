@@ -113,6 +113,15 @@ type Candidate = {
   farbe: string;
 };
 
+type stimmkreisSieger = {
+  erststimmensieger: string,
+  erststimmensiegerstimmen: number,
+  zweitstimmensieger: string,
+  zweitstimmensiegerstimmen: number,
+  gesamtstimmensieger: string,
+  gesamtstimmensiegerstimmen: number,
+};
+
 export type {
   chartData,
   chartOptions,
@@ -127,4 +136,5 @@ export type {
   Credentials,
   Voter,
   Candidate,
+  stimmkreisSieger,
 };

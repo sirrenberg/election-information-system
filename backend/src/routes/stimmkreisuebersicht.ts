@@ -95,7 +95,25 @@ router.get("/", async (req, res) => {
     ORDER BY anzahlstimmen DESC
     `
     );
-    res.json({"direktkandidat": direktkandidat, "stimmen" : anzStimmen});
+
+    const { rows: stimmkreissieger } = await pool.query(
+      `
+      SELECT 
+        erststimmenSieger.kurzbezeichnung AS erststimmenSiegerPartei,
+        erststimmenSieger.anzahlstimmen AS erststimmenSiegerStimmen,
+        zweitstimmenSieger.kurzbezeichnung AS zweitstimmenSiegerPartei,
+        zweitstimmenSieger.anzahlstimmen AS zweitstimmenSiegerStimmen,
+        gesamtstimmenSieger.kurzbezeichnung AS gesamtstimmenSiegerPartei,
+        gesamtstimmenSieger.anzahlstimmen AS gesamtstimmenSiegerStimmen
+      FROM 
+        (SELECT kurzbezeichnung, anzahlstimmen FROM erststimmenSiegerStimmkreis WHERE stimmkreisid = ${stimmkreisid}) erststimmenSieger,
+        (SELECT kurzbezeichnung, anzahlstimmen FROM zweitStimmenSiegerStimmkreis WHERE stimmkreisid = ${stimmkreisid}) zweitstimmenSieger,
+        (SELECT kurzbezeichnung, anzahlstimmen FROM gesammtStimmenSiegerStimmkreis WHERE stimmkreisid = ${stimmkreisid}) gesamtstimmenSieger
+	
+
+      `
+    );
+    res.json({"direktkandidat": direktkandidat, "stimmen" : anzStimmen, "stimmkreissieger": stimmkreissieger});
   } catch (error) {
     console.error(error);
     res.status(500).send("Server Error");

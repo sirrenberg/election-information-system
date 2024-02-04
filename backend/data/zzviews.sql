@@ -156,7 +156,104 @@ CREATE MATERIALIZED VIEW stimmenUnterschiedProParteiProStimmkreis as (
 );
 
 
-----------------------------
+-------- (Q4 Gesammtstimmen) ------------------
+
+-- die Kandidaten, die ihren Stimmkreis gewonnen haben
+CREATE MATERIALIZED VIEW erststimmenSiegerStimmkreis as (
+		SELECT
+			k.parteiid,
+			p.kurzbezeichnung,
+			k1.stimmkreisid,
+			k1.anzahlstimmen
+		FROM
+			kandidiert_erststimmen k1
+			INNER JOIN
+			kandidaten k
+			ON
+			k.kandidatenid = k1.kandidatenid
+			INNER JOIN parteien p
+			ON p.parteiid = k.parteiid
+		WHERE
+			NOT EXISTS (
+				SELECT 1
+				FROM kandidiert_erststimmen k2
+				WHERE 
+					k2.anzahlstimmen > k1.anzahlstimmen 
+					AND k2.stimmkreisid = k1.stimmkreisid 
+					AND k1.datum = k2.datum
+			)
+			AND
+				k1.datum = '2023-10-08'
+	);
+
+    --summe Zweitstimmen pro Partei pro Stimmkreis
+CREATE MATERIALIZED VIEW sumZweitstimmenStimmkreis AS (
+		SELECT kz.datum, p.parteiid, p.kurzbezeichnung, stimmkreisid, sum(anzahlstimmen) AS anzahlstimmen
+		FROM 
+			kandidiert_zweitstimmen kz
+			JOIN
+			kandidaten k
+			ON kz.kandidatenid = k.kandidatenid
+			JOIN
+			parteien p
+			ON k.parteiid = p.parteiid
+		WHERE
+			kz.datum = '2023-10-08'
+		GROUP BY p.parteiid, stimmkreisid, kz.datum
+		ORDER BY stimmkreisid
+	);
+
+CREATE MATERIALIZED VIEW zweitStimmenSiegerStimmkreis AS (
+		SELECT
+			szs1.parteiid,
+			szs1.stimmkreisid,
+			szs1.anzahlstimmen,
+			szs1.kurzbezeichnung
+		FROM
+			sumZweitstimmenStimmkreis szs1
+		WHERE
+			NOT EXISTS (
+				SELECT 1
+				FROM sumZweitstimmenStimmkreis szs2
+				WHERE 
+					szs2.anzahlstimmen > szs1.anzahlstimmen 
+					AND szs2.stimmkreisid = szs1.stimmkreisid
+			)
+	);
+
+	--summe Gesammtstimmen pro Partei pro Stimmkreis
+CREATE MATERIALIZED VIEW summeGesammtstimmenStimmkreis AS(
+		SELECT 
+			(ke.anzahlstimmen + szs.anzahlstimmen) AS anzahlstimmen, 
+			szs.parteiid, 
+			szs.kurzbezeichnung,
+			szs.stimmkreisid
+		FROM
+			kandidiert_erststimmen ke
+			INNER JOIN kandidaten k ON ke.kandidatenid = k.kandidatenid
+			INNER JOIN sumZweitstimmenStimmkreis szs
+			ON szs.stimmkreisid = ke.stimmkreisid AND k.parteiid = szs.parteiid AND ke.datum = szs.datum
+		WHERE
+			ke.datum = '2023-10-08'	
+	);
+
+CREATE MATERIALIZED VIEW gesammtStimmenSiegerStimmkreis AS (
+		SELECT
+			sgs1.parteiid,
+			sgs1.stimmkreisid,
+			sgs1.anzahlstimmen,
+			sgs1.kurzbezeichnung
+		FROM
+			summeGesammtstimmenStimmkreis sgs1
+		WHERE
+			NOT EXISTS (
+				SELECT 1
+				FROM summeGesammtstimmenStimmkreis sgs2
+				WHERE 
+					sgs2.anzahlstimmen > sgs1.anzahlstimmen 
+					AND sgs2.stimmkreisid = sgs1.stimmkreisid
+			)
+	);
 
 /*CREATE MATERIALIZED VIEW waehlerProWahlkreis as (
     SELECT s.wahlkreisid, a.datum, sum(a.anzahlwaehler) as waehler
