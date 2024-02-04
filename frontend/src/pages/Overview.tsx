@@ -4,19 +4,20 @@ import ScatterChart from "../components/ScatterChart";
 import { chartData, ueberhangData, knappsteSiegerData } from "../helper/types";
 import { useAPI } from "../hooks/useAPI";
 import { useEffect } from "react";
-import { groupBy } from 'lodash';
+import { groupBy } from "lodash";
 import ClosestWinners from "./ClosestWinners";
 
 function Overview() {
   const { sendRequest } = useAPI();
 
   const [ueberhangData, setUeberhangData] = useState<ueberhangData[]>([]);
-  const [knappsteSiegerData, setKnappsteSiegerData] = useState<knappsteSiegerData[]>([]);
+  const [knappsteSiegerData, setKnappsteSiegerData] = useState<
+    knappsteSiegerData[]
+  >([]);
   const [groupedData, setGroupedData] = useState<any[]>([]);
 
   useEffect(() => {
     sendRequest("/ueberhang_mandate", "GET").then((data) => {
-      console.log(data);
       const ueberhangData: ueberhangData[] = data.map((elem: any) => ({
         wahlkreis: elem.wahlkreis,
         partei: elem.partei,
@@ -57,7 +58,11 @@ function Overview() {
             ))}
           </tbody>
         </table>
-        <p className="overview-section-subtitle">*es werden nur Parteien angezeigt, die im neu gewählten Landtag vertreten sind. Alle anderen Parteien haben weder Direkt- noch Überhang-oder Ausgleichmandate erzielt.</p>
+        <p className="overview-section-subtitle">
+          *es werden nur Parteien angezeigt, die im neu gewählten Landtag
+          vertreten sind. Alle anderen Parteien haben weder Direkt- noch
+          Überhang-oder Ausgleichmandate erzielt.
+        </p>
       </div>
 
       {/* <div className="student-stats-container overview-section">

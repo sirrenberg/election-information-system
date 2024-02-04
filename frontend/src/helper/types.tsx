@@ -58,30 +58,30 @@ type knappsteSiegerData = {
   tag: string;
 };
 
-type stimmkreisuebersicht ={
-  beteiligung: number,
-  kandidatenname: string,
-  kurzbezeichnung: string,
-  anzahlStimmenFürKandidat: number,
-  anzahlWaehlerStimmkreis: number,
-  anzahlStimmberechtigteStimmkreis: number,
-  stimmkreisname: string,
-  diffBeteiligung: number,
-  letzterDirektkandidat: string,
-  parteiLetzterDirektkandidat: string,
-  diffStimmen: number,
-  diffWaehler: number,
-  diffStimmberechtigte: number,
+type stimmkreisuebersicht = {
+  beteiligung: number;
+  kandidatenname: string;
+  kurzbezeichnung: string;
+  anzahlStimmenFürKandidat: number;
+  anzahlWaehlerStimmkreis: number;
+  anzahlStimmberechtigteStimmkreis: number;
+  stimmkreisname: string;
+  diffBeteiligung: number;
+  letzterDirektkandidat: string;
+  parteiLetzterDirektkandidat: string;
+  diffStimmen: number;
+  diffWaehler: number;
+  diffStimmberechtigte: number;
 };
 
 type stimmkreisParteiErgebnis = {
-  parteiname: string,
-  kurzbezeichnung: string,
-  anzahlStimmen: number,
-  anzahlStimmenRelativ: number,
-  parteiFarbe: string,
-  diffstimmenabsolut: string,
-  diffstimmenrel: string,
+  parteiname: string;
+  kurzbezeichnung: string;
+  anzahlStimmen: number;
+  anzahlStimmenRelativ: number;
+  parteiFarbe: string;
+  diffstimmenabsolut: string;
+  diffstimmenrel: string;
 };
 
 type Credentials = {
@@ -114,18 +114,18 @@ type Candidate = {
 };
 
 type stimmkreisSieger = {
-  erststimmensieger: string,
-  erststimmensiegerstimmen: number,
-  zweitstimmensieger: string,
-  zweitstimmensiegerstimmen: number,
-  gesamtstimmensieger: string,
-  gesamtstimmensiegerstimmen: number,
+  erststimmensieger: string;
+  erststimmensiegerstimmen: number;
+  zweitstimmensieger: string;
+  zweitstimmensiegerstimmen: number;
+  gesamtstimmensieger: string;
+  gesamtstimmensiegerstimmen: number;
 };
 
 type stimmen = {
-  parteiname: string,
-  anzahlStimmen: number,
-  parteiFarbe: string,
+  parteiname: string;
+  anzahlStimmen: number;
+  parteiFarbe: string;
 };
 
 export type {

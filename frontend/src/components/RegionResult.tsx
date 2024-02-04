@@ -7,12 +7,12 @@ import { useEffect, useState } from "react";
 import { useAPI } from "../hooks/useAPI";
 import { stimmen } from "../helper/types";
 
-
 function RegionResult({ id }: { id: string }) {
+  const { sendRequest } = useAPI();
 
-  const {sendRequest} = useAPI();
-
-  const[wahlkreisStimmen, setWahlkreisStimmen] = useState<{[key:string]: stimmen[]}>();
+  const [wahlkreisStimmen, setWahlkreisStimmen] = useState<{
+    [key: string]: stimmen[];
+  }>();
 
   useEffect(() => {
     sendRequest(`/wahlkreisuebersicht?id=${id}`, "GET").then((data) => {
@@ -37,17 +37,18 @@ function RegionResult({ id }: { id: string }) {
       }));
 
       setWahlkreisStimmen({
-        'erststimmen': erststimmen,
-        'zweitstimmen': zweitstimmen,
-        'gesamtstimmen': gesamtstimmen,
+        erststimmen: erststimmen,
+        zweitstimmen: zweitstimmen,
+        gesamtstimmen: gesamtstimmen,
       });
     });
-  }
-  , [id]);
+  }, [id]);
 
-  function getChartData(s:stimmen[]): chartData {
+  function getChartData(s: stimmen[]): chartData {
     const chartData: chartData = {
-      labels: s!.filter(elem => elem.anzahlStimmen !== 0).map((elem) => elem.parteiname),
+      labels: s!
+        .filter((elem) => elem.anzahlStimmen !== 0)
+        .map((elem) => elem.parteiname),
       datasets: [
         {
           label: "Stimmen",
@@ -59,7 +60,7 @@ function RegionResult({ id }: { id: string }) {
     return chartData;
   }
 
-  if(!wahlkreisStimmen) return <div>Loading...</div>;
+  if (!wahlkreisStimmen) return <div>Loading...</div>;
   return (
     <div className="region-res-container">
       <h1 className="region-title">{id} - Wahlkreis Name</h1>
@@ -79,7 +80,9 @@ function RegionResult({ id }: { id: string }) {
         <div className="region-res-section">
           <h2 className="region-res-subtitle">Gesamtstimmen</h2>
           <div className="chart-container">
-            <PieChart chartData={getChartData(wahlkreisStimmen.gesamtstimmen)} />
+            <PieChart
+              chartData={getChartData(wahlkreisStimmen.gesamtstimmen)}
+            />
           </div>
         </div>
       </div>
