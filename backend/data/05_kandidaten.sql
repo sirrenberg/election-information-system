@@ -1,4 +1,4 @@
-INSERT INTO kandidaten VALUES 
+INSERT INTO kandidaten(kandidatenid, kandidatennamen, parteiid) VALUES 
 (-1, 'Sonstige', 1),
 (-2, 'Sonstige', 2),
 (-3, 'Sonstige', 3),

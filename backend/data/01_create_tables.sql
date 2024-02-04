@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS wahlberechtigte(
 
 
 CREATE TABLE IF NOT EXISTS anzahlStimmberechtigteUndWaehler(
-    stimmkreisid INT  REFERENCES stimmkreise(stimmkreisid),
+    stimmkreisid INT REFERENCES stimmkreise(stimmkreisid),
     datum DATE,
     anzahlStimmberechtigte INT,
     anzahlWaehler INT,

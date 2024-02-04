@@ -1,4 +1,4 @@
-INSERT INTO kandidiert_erststimmen VALUES 
+INSERT INTO kandidiert_erststimmen(kandidatenid, stimmkreisid, datum, anzahlStimmen) VALUES 
 (904101, 402, '2018-10-14', 22948),
 (904103, 403, '2018-10-14', 37015),
 (904104, 404, '2018-10-14', 24795),
